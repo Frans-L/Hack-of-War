@@ -14,18 +14,16 @@ class HackOfWar extends ApplicationAdapter {
   private var shapeRender: ShapeRenderer = _
   private var cam: OrthographicCamera = _
   private var viewPort: Viewport = _
-
-  val world_width = 2280
-  val world_height = 1440
+  private var world: World = _
 
   override def create() {
 
     batch = new SpriteBatch
     shapeRender = new ShapeRenderer
 
-    //2280 x 1440
+    world = new World(1920, 1080, 2280, 1440)
     cam = new OrthographicCamera()
-    viewPort = new ExtendViewport(1920, 1080, 2280, 1440, cam)
+    viewPort = new ExtendViewport(world.width, world.height, world.maxWidth, world.maxHeight, cam)
     viewPort.apply()
 
   }
@@ -43,6 +41,12 @@ class HackOfWar extends ApplicationAdapter {
     batch.end()
 
     shapeRender.begin(ShapeType.Line)
+
+    shapeRender.setColor(1, 0, 1, 1)
+    shapeRender.circle(0, 0, 25)
+    shapeRender.rect(world.left, world.maxDown, world.width - 1, world.maxHeight - 1)
+    shapeRender.rect(world.maxLeft, world.down, world.maxWidth - 1, world.height - 1)
+
     shapeRender.end()
   }
 
