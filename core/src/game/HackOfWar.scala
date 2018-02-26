@@ -1,11 +1,11 @@
 package game
 
-import com.badlogic.gdx.ApplicationAdapter
-import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.{Application, ApplicationAdapter, Gdx}
 import com.badlogic.gdx.graphics.{GL20, OrthographicCamera, Texture}
 import com.badlogic.gdx.graphics.g2d.{Sprite, SpriteBatch}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
+import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport._
 
 class HackOfWar extends ApplicationAdapter {
@@ -16,38 +16,55 @@ class HackOfWar extends ApplicationAdapter {
   private var viewPort: Viewport = _
   private var world: World = _
 
+  private var game: Game = _
+  private var ticker: Ticker = _
+
   override def create() {
 
+    //creates draw batches
     batch = new SpriteBatch
     shapeRender = new ShapeRenderer
 
+    //sets world and camera
     world = new World(1920, 1080, 2280, 1440)
     cam = new OrthographicCamera()
     viewPort = new ExtendViewport(world.width, world.height, world.maxWidth, world.maxHeight, cam)
     viewPort.apply()
 
+    //creates the game
+    ticker = new Ticker(TimeUtils.millis())
+    game = new Game(world)
+
   }
 
   override def render() {
 
+
+    //updates camera
     cam.update()
     batch.setProjectionMatrix(cam.combined)
     shapeRender.setProjectionMatrix(cam.combined)
 
+    //clear screen
     Gdx.gl.glClearColor(1, 1, 1, 1)
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
+    //update game
+    ticker.update(TimeUtils.millis())
+    game.update(ticker)
+
+    //draw
     batch.begin()
     batch.end()
-
     shapeRender.begin(ShapeType.Line)
 
-    shapeRender.setColor(1, 0, 1, 1)
-    shapeRender.circle(0, 0, 25)
-    shapeRender.rect(world.left, world.maxDown, world.width - 1, world.maxHeight - 1)
-    shapeRender.rect(world.maxLeft, world.down, world.maxWidth - 1, world.height - 1)
+    game.draw(shapeRender)
 
     shapeRender.end()
+
+    Gdx.app.setLogLevel(Application.LOG_DEBUG)
+
+
   }
 
   override def resize(width: Int, height: Int): Unit = {

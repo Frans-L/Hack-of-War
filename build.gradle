@@ -43,6 +43,7 @@ project(":desktop") {
     }
 }
 
+
 project(":android") {
     apply plugin: "android"
 
@@ -61,6 +62,7 @@ project(":android") {
     }
 }
 
+
 project(":ios") {
     apply plugin: "java"
     apply plugin: "robovm"
@@ -75,6 +77,7 @@ project(":ios") {
         compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-ios"
     }
 }
+
 
 project(":core") {
     apply plugin: "java"
