@@ -11,20 +11,27 @@ import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
   */
 class Game(ticker: Ticker, world: World) {
 
-  private var batch: SpriteBatch = _
-  private var shapeRender: ShapeRenderer = _
-  private var cam: OrthographicCamera = _
-  private var viewPort: Viewport = _
+  //sets the drawing batches
+  private val batch: SpriteBatch = new SpriteBatch
+  private val shapeRender: ShapeRenderer = new ShapeRenderer
 
-  val a: ActiveObject = new ActiveObject(ticker, 0.0, 0.0)
+  //sets the game camera
+  private val cam: OrthographicCamera = new OrthographicCamera()
+  private val viewPort: Viewport = new ExtendViewport(world.width, world.height, world.maxWidth, world.maxHeight, cam)
+  viewPort.apply()
 
-  create() //initializes the game
+  //sets the ui
+  private val gameUI: UI.GameUI = new UI.GameUI(ticker, world)
+
+  val a: GameObject.ActiveObject = new GameObject.ActiveObject(ticker, 0.0, 0.0)
 
   def draw(): Unit = {
 
+    batch.setProjectionMatrix(cam.combined)
     batch.begin()
     batch.end()
 
+    shapeRender.setProjectionMatrix(cam.combined)
     shapeRender.begin(ShapeType.Line)
 
     shapeRender.setColor(1, 0, 1, 1)
@@ -33,6 +40,9 @@ class Game(ticker: Ticker, world: World) {
     shapeRender.rect(world.maxLeft, world.down, world.maxWidth - 1, world.height - 1)
     a.draw(shapeRender)
 
+    shapeRender.setColor(0, 0.75f, 0.75f, 1)
+    gameUI.draw(shapeRender)
+
     shapeRender.end()
 
   }
@@ -40,27 +50,14 @@ class Game(ticker: Ticker, world: World) {
   def update(): Unit = {
 
     cam.update()
-    batch.setProjectionMatrix(cam.combined)
-    shapeRender.setProjectionMatrix(cam.combined)
-
 
     a.update()
   }
 
-
-  def create(): Unit = {
-    //creates draw batches
-    batch = new SpriteBatch
-    shapeRender = new ShapeRenderer
-
-    //sets camera and viewport
-    cam = new OrthographicCamera()
-    viewPort = new ExtendViewport(world.width, world.height, world.maxHeight, world.maxHeight, cam)
-    viewPort.apply()
-  }
-
-
   def resize(width: Int, height: Int): Unit = {
+
+    gameUI.resize(width, height)
+
     viewPort.update(width, height, true)
     cam.position.set(0, 0, 0)
     cam.update()
