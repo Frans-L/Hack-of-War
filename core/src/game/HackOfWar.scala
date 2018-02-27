@@ -1,12 +1,9 @@
 package game
 
-import com.badlogic.gdx.{Application, ApplicationAdapter, Gdx}
+import com.badlogic.gdx.{Application, ApplicationAdapter, Gdx, InputMultiplexer}
 import com.badlogic.gdx.graphics.{GL20, OrthographicCamera, Texture}
-import com.badlogic.gdx.graphics.g2d.{Sprite, SpriteBatch}
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.utils.TimeUtils
-import com.badlogic.gdx.utils.viewport._
+
 
 class HackOfWar extends ApplicationAdapter {
 
@@ -15,12 +12,19 @@ class HackOfWar extends ApplicationAdapter {
   private var game: Game = _
   private var ticker: Ticker = _
 
+  private var inputMultiplexer: InputMultiplexer = _
+
   override def create() {
 
     //creates the game
     ticker = new Ticker(TimeUtils.millis())
     world = new World(1920, 1080, 2280, 1440)
     game = new Game(ticker, world)
+
+    //sets the touch listener
+    inputMultiplexer = new InputMultiplexer()
+    game.inputProcessors.foreach(p => inputMultiplexer.addProcessor(p))
+    Gdx.input.setInputProcessor(inputMultiplexer)
 
     Gdx.app.setLogLevel(Application.LOG_DEBUG)
 

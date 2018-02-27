@@ -1,4 +1,4 @@
-package game.GameObject
+package game.objects
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.Ticker

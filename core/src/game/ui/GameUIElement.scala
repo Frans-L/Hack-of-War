@@ -1,4 +1,4 @@
-package game.UI
+package game.ui
 
 import game.GameElement
 
@@ -13,3 +13,4 @@ trait GameUIElement extends GameElement {
   var enabled: Boolean = true
 
 }
+

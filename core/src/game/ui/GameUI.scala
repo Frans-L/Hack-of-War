@@ -1,9 +1,11 @@
-package game.UI
+package game.ui
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import game._
+import game.ui.listener.ButtonListener
 
 import scala.collection.mutable
 
@@ -18,9 +20,11 @@ class GameUI(ticker: Ticker, world: World) extends GameElement {
     world.width, world.height, world.maxWidth, world.maxHeight, cam)
   viewPort.apply()
 
+  //sets the input listener
+  val inputListener: UIInputListener = new UIInputListener(cam)
+
   //UI elements
   private val elements: mutable.ArrayBuffer[GameUIElement] = new mutable.ArrayBuffer[GameUIElement]()
-
 
   create()
 
@@ -37,6 +41,8 @@ class GameUI(ticker: Ticker, world: World) extends GameElement {
 
   def create(): Unit = {
     elements += new UICard(0, 0, 100, 100)
+
+    inputListener.buttonListener += elements.last.asInstanceOf[ButtonListener]
   }
 
   def resize(width: Int, height: Int): Unit = {

@@ -1,10 +1,12 @@
 package game
 
+import com.badlogic.gdx.{Gdx, InputMultiplexer, InputProcessor}
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
+import game.objects.ActiveObject
 
 /**
   * Created by Frans on 26/02/2018.
@@ -17,13 +19,15 @@ class Game(ticker: Ticker, world: World) {
 
   //sets the game camera
   private val cam: OrthographicCamera = new OrthographicCamera()
-  private val viewPort: Viewport = new ExtendViewport(world.width, world.height, world.maxWidth, world.maxHeight, cam)
+  private val viewPort: Viewport = new ExtendViewport(
+    world.width, world.height, world.maxWidth, world.maxHeight, cam)
   viewPort.apply()
 
   //sets the ui
-  private val gameUI: UI.GameUI = new UI.GameUI(ticker, world)
+  private val gameUI: ui.GameUI = new ui.GameUI(ticker, world)
 
-  val a: GameObject.ActiveObject = new GameObject.ActiveObject(ticker, 0.0, 0.0)
+
+  val a: ActiveObject = new ActiveObject(ticker, 0.0, 0.0)
 
   def draw(): Unit = {
 
@@ -62,5 +66,9 @@ class Game(ticker: Ticker, world: World) {
     cam.position.set(0, 0, 0)
     cam.update()
   }
+
+
+  //return all inputProcessors aka input listeners
+  def inputProcessors: Vector[InputProcessor] = Vector[InputProcessor](gameUI.inputListener)
 
 }
