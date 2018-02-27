@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 /**
   * Created by Frans on 26/02/2018.
   */
-class ActiveObject(var posX: Double, var posY: Double) extends GameObject {
+class ActiveObject(ticker: Ticker, var posX: Double, var posY: Double) extends GameObject {
 
-  override def update(ticker: Ticker): Unit = {
+  override def update(): Unit = {
     if (enabled) {
 
       posX += 0.01d * ticker.elapsed

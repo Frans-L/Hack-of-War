@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
   */
 trait GameElement {
 
-  def update(ticker: Ticker): Unit
+  def update(): Unit
 
   def draw(shapeRender: ShapeRenderer): Unit
 
