@@ -22,9 +22,11 @@ class HackOfWar extends ApplicationAdapter {
     game = new Game(ticker, world)
 
     //sets the touch listener
+    /*
     inputMultiplexer = new InputMultiplexer()
-    game.inputProcessors.foreach(p => inputMultiplexer.addProcessor(p))
+    inputMultiplexer.addProcessor(game.inputProcessors)
     Gdx.input.setInputProcessor(inputMultiplexer)
+    */
 
     Gdx.app.setLogLevel(Application.LOG_DEBUG)
 

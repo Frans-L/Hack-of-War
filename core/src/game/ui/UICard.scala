@@ -1,34 +1,18 @@
 package game.ui
 
-import com.badlogic.gdx.{Application, Gdx}
+import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.Vector3
-import game.ui.listener.{ButtonListener, CardListener}
-
+import com.badlogic.gdx.scenes.scene2d.{Actor, Touchable}
 
 /**
-  * Created by Frans on 27/02/2018.
+  * Created by Frans on 28/02/2018.
   */
-class UICard(var posX: Double, var posY: Double, var width: Double, var height: Double) extends GameUIElement with CardListener {
+class UICard(shapeRenderer: ShapeRenderer) extends Actor {
 
-  override def update(): Unit = ???
+  override def draw(batch: Batch, fl: Float): Unit = {
 
-  override def draw(shapeRender: ShapeRenderer): Unit = {
-    if (visible) {
+    shapeRenderer.rect(getX, getY, getWidth, getHeight)
 
-      shapeRender.rect(posX.toInt, posY.toInt, width.toInt, height.toInt)
-    }
   }
 
-  def touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean = ???
-
-  override def touchUp(touchPos: Vector3, pointer: Int, button: Int): Boolean = {
-    Gdx.app.log("touchUp", "x: " + touchPos.x + " y: " + touchPos.y)
-    false
-  }
-
-  override def touchDown(touchPos: Vector3, pointer: Int, button: Int): Boolean = {
-    Gdx.app.log("touchDown", "x: " + touchPos.x + " y: " + touchPos.y)
-    false
-  }
 }
