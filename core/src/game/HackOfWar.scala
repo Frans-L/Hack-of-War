@@ -1,25 +1,19 @@
 package game
 
-import com.badlogic.gdx.{Application, ApplicationAdapter, Gdx, InputMultiplexer}
-import com.badlogic.gdx.graphics.{GL20, OrthographicCamera, Texture}
-import com.badlogic.gdx.utils.TimeUtils
+import com.badlogic.gdx._
 
 
-class HackOfWar extends ApplicationAdapter {
+class HackOfWar extends Game {
 
-
-  private var world: World = _
-  private var game: Game = _
-  private var ticker: Ticker = _
 
   private var inputMultiplexer: InputMultiplexer = _
+
+  private var screenDimensions: World = new World(1920, 1080, 2280, 1440)
+
 
   override def create() {
 
     //creates the game
-    ticker = new Ticker(TimeUtils.millis())
-    world = new World(1920, 1080, 2280, 1440)
-    game = new Game(ticker, world)
 
     //sets the touch listener
     /*
@@ -30,23 +24,19 @@ class HackOfWar extends ApplicationAdapter {
 
     Gdx.app.setLogLevel(Application.LOG_DEBUG)
 
+
+    this.setScreen(new StartLoading(
+      () => this.setScreen(new MainGame(screenDimensions))
+    ))
+
+
   }
 
   override def render() {
-
-    //clear screen
-    Gdx.gl.glClearColor(1, 1, 1, 1)
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-
-    //update game
-    ticker.update(TimeUtils.millis())
-    game.update()
-    game.draw()
-
-
+    super.render()
   }
 
   override def resize(width: Int, height: Int): Unit = {
-    game.resize(width, height)
+
   }
 }
