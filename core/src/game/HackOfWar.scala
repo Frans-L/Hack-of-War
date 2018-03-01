@@ -37,6 +37,6 @@ class HackOfWar extends Game {
   }
 
   override def resize(width: Int, height: Int): Unit = {
-
+    super.resize(width, height)
   }
 }

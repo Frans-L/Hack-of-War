@@ -92,6 +92,7 @@ class MainGame(screenDim: World) extends Screen {
     viewport.update(width, height, true)
     cam.position.set(0, 0, 0)
     cam.update()
+
   }
 
 
