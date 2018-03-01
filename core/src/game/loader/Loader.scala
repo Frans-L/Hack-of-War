@@ -1,29 +1,26 @@
-package game
+package game.loader
 
-import com.badlogic.gdx.{Gdx, Screen}
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.assets.loaders.TextureAtlasLoader
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.{Gdx, Screen}
 
 /**
   * Created by Frans on 28/02/2018.
   */
-class StartLoading(nextScreen: () => Unit) extends Screen {
+class Loader(target: Loadable, nextScreen: () => Unit) extends Screen {
 
   val manager: AssetManager = new AssetManager()
 
-  manager.load("graphics.atlas", classOf[TextureAtlas])
+  target.load.foreach(i => manager.load(i._1, i._2)) //load all elements
 
   override def render(delta: Float): Unit = {
 
-    if (manager.update()){
-
-
-
+    if (manager.update()) {
+      target.finished(manager)
       nextScreen()
     }
     else
-      Gdx.app.log("Loading...", "" + manager.getProgress)
+      Gdx.app.log("Loading...", "" + (delta * 1000).toInt + " ms")
   }
 
   override def resume(): Unit = Unit

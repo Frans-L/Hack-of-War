@@ -1,19 +1,20 @@
 package game
 
 import com.badlogic.gdx.{Gdx, InputMultiplexer, InputProcessor, Screen}
-import com.badlogic.gdx.graphics.{GL20, OrthographicCamera}
+import com.badlogic.gdx.graphics.{FPSLogger, GL20, OrthographicCamera}
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
-import game.objects.ActiveObject
+import game.loader.GameTextures
+import game.objects.{ActiveObject, Soldier}
 import game.ui.GameUI
 
 /**
   * Created by Frans on 26/02/2018.
   */
-class MainGame(screenDim: World) extends Screen {
+class MainGame(textures: GameTextures, screenDim: World) extends Screen {
 
   private val ticker = new Ticker(TimeUtils.millis()) //everything should be time dependent
 
@@ -29,22 +30,25 @@ class MainGame(screenDim: World) extends Screen {
   viewport.apply()
 
   //sets the ui
-  private val gameUI: GameUI = new GameUI(ticker, screenDim, viewport, shapeRender)
+  private val gameUI: GameUI = new GameUI(ticker, textures, screenDim, viewport, shapeRender)
 
-  val a: ActiveObject = new ActiveObject(ticker, 0.0, 0.0)
+  val fPSLogger: FPSLogger = new FPSLogger
 
+  val a: ActiveObject = Soldier.create(ticker, textures)
 
   //called every frame
   override def render(delta: Float): Unit = {
 
     //clears the screen
-    Gdx.gl.glClearColor(1, 1, 1, 1)
+    Gdx.gl.glClearColor(74 / 255f, 96 / 255f, 112 / 255f, 1)
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
     //updates game
     ticker.update(TimeUtils.millis())
     this.update()
     this.draw()
+
+    fPSLogger.log()
 
   }
 
@@ -63,6 +67,7 @@ class MainGame(screenDim: World) extends Screen {
 
     batch.setProjectionMatrix(cam.combined)
     batch.begin()
+    a.draw(batch)
     batch.end()
 
     shapeRender.setProjectionMatrix(cam.combined)

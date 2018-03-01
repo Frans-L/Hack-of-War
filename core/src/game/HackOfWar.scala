@@ -1,6 +1,7 @@
 package game
 
 import com.badlogic.gdx._
+import game.loader.{GameTextures, Loader}
 
 
 class HackOfWar extends Game {
@@ -24,10 +25,13 @@ class HackOfWar extends Game {
 
     Gdx.app.setLogLevel(Application.LOG_DEBUG)
 
+    val textures = new GameTextures()
 
-    this.setScreen(new StartLoading(
-      () => this.setScreen(new MainGame(screenDimensions))
-    ))
+    this.setScreen(
+      new Loader(
+        textures,
+        () => this.setScreen(new MainGame(textures, screenDimensions))
+      ))
 
 
   }

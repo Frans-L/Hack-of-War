@@ -1,17 +1,21 @@
 package game.objects
 
+import com.badlogic.gdx.graphics.g2d.{Batch, Sprite, TextureRegion}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.Ticker
 
 /**
   * Created by Frans on 26/02/2018.
   */
-class ActiveObject(ticker: Ticker, var posX: Double, var posY: Double) extends GameObject {
+class ActiveObject(ticker: Ticker, sprite: Sprite) extends GameObject {
+
+  var posX: Double = 0
+  var posY: Double = 0
 
   override def update(): Unit = {
     if (enabled) {
 
-      posX += 0.01d * ticker.elapsed
+      posX += 0.03d * ticker.elapsed
 
       /*
       Gdx.app.setLogLevel(Application.LOG_DEBUG)
@@ -19,14 +23,27 @@ class ActiveObject(ticker: Ticker, var posX: Double, var posY: Double) extends G
       Gdx.app.log("tmp", "Ticker: " + ticker.elapsed)
       */
 
+      sprite.setPosition(posX.toFloat, posY.toFloat)
     }
+  }
+
+  def setSize(w: Float, h: Float): Unit = {
+    sprite.setSize(w, h)
+    sprite.setOriginCenter()
   }
 
   override def draw(shapeRender: ShapeRenderer): Unit = {
     if (visible) {
-      shapeRender.circle(posX.toInt, posY.toInt, 50)
+      shapeRender.circle(sprite.getX.toInt, sprite.getY.toInt, 30)
+    }
+  }
+
+  override def draw(batch: Batch): Unit = {
+    if (visible) {
+      sprite.draw(batch)
     }
   }
 
 
 }
+
