@@ -1,7 +1,9 @@
-package game
+package game.main
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import game.World
 import game.loader.GameTextures
 import game.objects.{GameObject, StaticObject}
 
@@ -24,8 +26,8 @@ class Map(world: World, textures: GameTextures) extends GameObject {
 
   private val collAccuracy = 20 //collisionAccuracy
   private val collMap = Array.ofDim[Boolean](
-    world.width / collAccuracy,
-    world.height / collAccuracy)
+    world.maxWidth / collAccuracy + 1,
+    world.maxHeight / collAccuracy + 1)
 
   initializeMap()
   createCollisionMap()
@@ -39,8 +41,10 @@ class Map(world: World, textures: GameTextures) extends GameObject {
   }
 
   def collide(x: Float, y: Float): Boolean = {
-    if (world.isInside(x, y))
-      collMap((x / collAccuracy + 0.5f).toInt)((y / collAccuracy + 0.5f).toInt)
+    if (world.isInside(x + 0.5f, y + 0.5f))
+      collMap(
+        ((-world.maxLeft + x) / collAccuracy + 0.5f).toInt)(
+        ((-world.maxDown + y) / collAccuracy + 0.5f).toInt)
     else
       false
   }

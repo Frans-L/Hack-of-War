@@ -1,15 +1,16 @@
-package game
+package game.main
 
-import com.badlogic.gdx.{Gdx, InputMultiplexer, InputProcessor, Screen}
-import com.badlogic.gdx.graphics.{FPSLogger, GL20, OrthographicCamera}
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
+import com.badlogic.gdx.graphics.{FPSLogger, GL20, OrthographicCamera}
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
+import com.badlogic.gdx.{Gdx, Screen}
 import game.loader.GameTextures
 import game.objects.{ActiveObject, Soldier}
 import game.ui.GameUI
+import game.{Ticker, World}
 
 /**
   * Created by Frans on 26/02/2018.
@@ -29,11 +30,16 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
     screenDim.maxWidth, screenDim.maxHeight, cam)
   viewport.apply()
 
-  //sets the ui
-  private val gameUI: GameUI = new GameUI(ticker, textures, screenDim, viewport, shapeRender)
-
   //sets the map
   private val map: Map = new Map(screenDim, textures)
+
+  //sets the players
+  private val players: Vector[Player] = Vector(new Player(ticker, map))
+
+  //sets the ui
+  private val gameUI: GameUI =
+    new GameUI(ticker, textures, screenDim, viewport, players.head, shapeRender)
+
 
   val fPSLogger: FPSLogger = new FPSLogger
 
@@ -69,7 +75,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   def draw(): Unit = {
 
     batch.setProjectionMatrix(cam.combined)
-    
+
     batch.begin()
     a.draw(batch)
     map.draw(batch)
@@ -94,6 +100,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   def update(): Unit = {
 
     cam.update()
+    gameUI.update()
     a.update()
 
   }
