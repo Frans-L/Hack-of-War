@@ -10,7 +10,7 @@ class Ticker(startTick: Long) {
   private var lastTick: Long = 0
 
   //Time since last update (ms)
-  def elapsed: Int = (tick - lastTick).toInt
+  def delta: Int = (tick - lastTick).toInt
 
   //Time since the ticker started (ms)
   def total: Long = tick

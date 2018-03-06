@@ -3,7 +3,7 @@ package game.main
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import game.World
+import game.{GameElement, World}
 import game.loader.GameTextures
 import game.objects.{GameObject, StaticObject}
 
@@ -20,7 +20,7 @@ object Map {
 /**
   * Created by Frans on 06/03/2018.
   */
-class Map(world: World, textures: GameTextures) extends GameObject {
+class Map(world: World, textures: GameTextures) extends GameElement {
 
   private val elements: mutable.Buffer[StaticObject] = mutable.Buffer[StaticObject]()
 

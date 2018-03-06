@@ -17,6 +17,8 @@ object Card {
   */
 class Card(owner: Player) {
 
+  var used = false
+
   private var uiElement: Option[UICard] = None
 
   //returns true if ui exists
@@ -25,8 +27,9 @@ class Card(owner: Player) {
   }
 
   //creates ui element for the card
-  def uiCreate(gameTextures: GameTextures): UICard = {
-    uiElement = Some(new UICard(gameTextures.atlas.createSprite(Card.background)))
+  def uiCreate(ticker: Ticker, gameTextures: GameTextures): UICard = {
+    uiElement = Some(
+      new UICard(ticker, gameTextures.atlas.createSprite(Card.background)))
     this.addListeners()
     uiElement.get
   }
@@ -56,8 +59,16 @@ class Card(owner: Player) {
   //tries to use the card
   private def use(x: Float, y: Float): Unit = {
     if (owner.useCard(this, x, y)) {
+      uiElement.foreach(_.startUseAnim(() => destroy()))
       Gdx.app.log("card", "used")
     }
+  }
+
+
+  def destroy(): Unit = {
+    uiElement.foreach(_.remove()) //remove UI element
+    used = true //mark that card can be destroyed
+    owner.hand += new Card(owner) //new card to the player
   }
 
 }

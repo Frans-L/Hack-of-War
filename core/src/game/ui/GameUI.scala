@@ -27,16 +27,17 @@ class GameUI(ticker: Ticker, gameTextures: GameTextures,
     //if a new card in a hand
     player.hand.foreach(c => {
       if(!c.uiExists){
-        val card = c.uiCreate(gameTextures)
+        val card = c.uiCreate(ticker, gameTextures)
         card.setPosition(10, 10)
         card.setBounds(0, world.down, 150, 225)
         card.setTouchable(Touchable.enabled)
         card.updateSprite()
         stage.addActor(card)
-
-        Gdx.app.log("card", "wtf")
       }
     })
+
+    //updates stage elements
+    stage.act()
 
   }
 

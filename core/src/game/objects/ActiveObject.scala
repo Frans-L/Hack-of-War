@@ -15,7 +15,7 @@ class ActiveObject(ticker: Ticker, sprite: Sprite) extends GameObject {
   override def update(): Unit = {
     if (enabled) {
 
-      posX += 0.03d * ticker.elapsed
+      posX += 0.03d * ticker.delta
 
       /*
       Gdx.app.setLogLevel(Application.LOG_DEBUG)

@@ -100,6 +100,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   def update(): Unit = {
 
     cam.update()
+    players.foreach(_.update())
     gameUI.update()
     a.update()
 
