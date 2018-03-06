@@ -2,6 +2,7 @@ package game.objects
 
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.{Polygon, Rectangle, Shape2D}
 
 /**
   * Created by Frans on 06/03/2018.
@@ -11,9 +12,12 @@ class StaticObject(posX: Float, posY: Float,
                    borderW: Float, borderH: Float,
                    sprite: Sprite) extends GameObject {
 
+  var shape: Shape2D = new Rectangle(posX, posY, width, height)
+
   sprite.setSize(width - borderW * 2, height - borderH * 2f)
   sprite.setOriginCenter()
   sprite.setPosition(posX - borderW, posY - borderH)
+
 
   //Get location next to this object
   def nextToX: Float = this.posX + this.width
@@ -27,6 +31,6 @@ class StaticObject(posX: Float, posY: Float,
     if (visible) {
       sprite.draw(batch)
     }
-
   }
+
 }
