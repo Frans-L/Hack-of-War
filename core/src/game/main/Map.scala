@@ -40,6 +40,7 @@ class Map(world: World, textures: GameTextures) extends GameObject {
     elements.foreach(_.draw(batch))
   }
 
+  //returns true if collided
   def collide(x: Float, y: Float): Boolean = {
     if (world.isInside(x + 0.5f, y + 0.5f))
       collMap(
@@ -49,6 +50,7 @@ class Map(world: World, textures: GameTextures) extends GameObject {
       false
   }
 
+  //creates the static collision map from 'elements'
   private def createCollisionMap(): Unit = {
     for (x <- collMap.indices) {
       for (y <- collMap.head.indices) {
@@ -58,6 +60,7 @@ class Map(world: World, textures: GameTextures) extends GameObject {
     }
   }
 
+  //creates the map
   private def initializeMap(): Unit = {
 
     //Down border
