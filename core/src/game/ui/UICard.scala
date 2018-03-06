@@ -12,7 +12,7 @@ import game.loader.GameTextures
   */
 class UICard(sprite: Sprite, shapeRenderer: ShapeRenderer) extends Actor {
 
-  private var dragPos: Vector3 = new Vector3(0, 0, 0)
+  private var dragPos: Vector2 = new Vector2(0, 0)
 
   this.addListener(new InputListener() {
     override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean = {
@@ -41,7 +41,7 @@ class UICard(sprite: Sprite, shapeRenderer: ShapeRenderer) extends Actor {
   }
 
   private def startDrag(x: Float, y: Float): Unit = {
-    dragPos = new Vector3(x, y, 0)
+    dragPos = new Vector2(x, y)
   }
 
   private def drag(x: Float, y: Float): Unit = {

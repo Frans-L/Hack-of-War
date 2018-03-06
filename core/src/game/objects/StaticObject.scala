@@ -12,12 +12,11 @@ class StaticObject(posX: Float, posY: Float,
                    borderW: Float, borderH: Float,
                    sprite: Sprite) extends GameObject {
 
-  var shape: Shape2D = new Rectangle(posX, posY, width, height)
-
   sprite.setSize(width - borderW * 2, height - borderH * 2f)
   sprite.setOriginCenter()
   sprite.setPosition(posX - borderW, posY - borderH)
 
+  private var shape = new Rectangle(posX, posY, width, height)
 
   //Get location next to this object
   def nextToX: Float = this.posX + this.width
@@ -31,6 +30,10 @@ class StaticObject(posX: Float, posY: Float,
     if (visible) {
       sprite.draw(batch)
     }
+  }
+
+  def contains(x: Float, y: Float): Boolean = {
+    shape.contains(x, y)
   }
 
 }

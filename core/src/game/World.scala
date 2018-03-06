@@ -15,6 +15,7 @@ class World(val width: Int, val height: Int, val maxWidth: Int, val maxHeight: I
   val maxUp: Int = maxHeight / 2
   val maxDown: Int = -maxHeight / 2 + 1
 
-  val a: Long = 0x0000000000000000L
+  def isInside(x: Float, y: Float): Boolean =
+    !(x < maxLeft || x > maxRight || y < maxDown || y > maxUp)
 
 }

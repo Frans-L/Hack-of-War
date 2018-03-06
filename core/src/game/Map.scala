@@ -20,9 +20,15 @@ object Map {
   */
 class Map(world: World, textures: GameTextures) extends GameObject {
 
-  val elements: mutable.Buffer[StaticObject] = mutable.Buffer[StaticObject]()
+  private val elements: mutable.Buffer[StaticObject] = mutable.Buffer[StaticObject]()
 
-  createMap()
+  private val collAccuracy = 20 //collisionAccuracy
+  private val collMap = Array.ofDim[Boolean](
+    world.width / collAccuracy,
+    world.height / collAccuracy)
+
+  initializeMap()
+  createCollisionMap()
 
   override def update(): Unit = ???
 
@@ -32,8 +38,23 @@ class Map(world: World, textures: GameTextures) extends GameObject {
     elements.foreach(_.draw(batch))
   }
 
+  def collide(x: Float, y: Float): Boolean = {
+    if (world.isInside(x, y))
+      collMap((x / collAccuracy + 0.5f).toInt)((y / collAccuracy + 0.5f).toInt)
+    else
+      false
+  }
 
-  private def createMap(): Unit = {
+  private def createCollisionMap(): Unit = {
+    for (x <- collMap.indices) {
+      for (y <- collMap.head.indices) {
+        collMap(x)(y) = elements.exists(
+          _.contains(world.maxLeft + x * collAccuracy, world.maxDown + y * collAccuracy))
+      }
+    }
+  }
+
+  private def initializeMap(): Unit = {
 
     //Down border
     var height: Float = 160 + 180
