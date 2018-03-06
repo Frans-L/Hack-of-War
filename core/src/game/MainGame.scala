@@ -32,6 +32,9 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   //sets the ui
   private val gameUI: GameUI = new GameUI(ticker, textures, screenDim, viewport, shapeRender)
 
+  //sets the map
+  private val map: Map = new Map(screenDim, textures)
+
   val fPSLogger: FPSLogger = new FPSLogger
 
   val a: ActiveObject = Soldier.create(ticker, textures)
@@ -66,8 +69,10 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   def draw(): Unit = {
 
     batch.setProjectionMatrix(cam.combined)
+    
     batch.begin()
     a.draw(batch)
+    map.draw(batch)
     batch.end()
 
     shapeRender.setProjectionMatrix(cam.combined)

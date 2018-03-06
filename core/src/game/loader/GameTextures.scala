@@ -28,6 +28,9 @@ object GameTextures {
   object Units {
     val unit1 = "unit1"
     val card1 = "card1"
+    val mapBorderShort = "mapBorderShort"
+    val mapBorderWide = "mapBorderWide"
+    val mapBorder = "mapBorder"
   }
 
 }

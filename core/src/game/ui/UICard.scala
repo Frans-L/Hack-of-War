@@ -36,7 +36,7 @@ class UICard(sprite: Sprite, shapeRenderer: ShapeRenderer) extends Actor {
   override def draw(batch: Batch, fl: Float): Unit = {
 
     sprite.draw(batch)
-    shapeRenderer.rect(getX, getY, getWidth, getHeight)
+    //shapeRenderer.rect(getX, getY, getWidth, getHeight)
 
   }
 
