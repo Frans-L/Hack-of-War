@@ -85,10 +85,13 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
     shapeRender.begin(ShapeType.Line)
 
     shapeRender.setColor(1, 0, 1, 1)
+    
+    /*
     shapeRender.circle(0, 0, 25)
     shapeRender.rect(screenDim.left, screenDim.maxDown, screenDim.width - 1, screenDim.maxHeight - 1)
     shapeRender.rect(screenDim.maxLeft, screenDim.down, screenDim.maxWidth - 1, screenDim.height - 1)
     a.draw(shapeRender)
+     */
 
     shapeRender.setColor(0, 0.75f, 0.75f, 1)
     gameUI.draw(shapeRender)

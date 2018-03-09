@@ -1,6 +1,7 @@
 package game.main
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.{GameElement, Ticker}
@@ -17,6 +18,9 @@ class Player(ticker: Ticker, map: Map) extends GameElement {
   val hand: mutable.Buffer[Card] = mutable.Buffer[Card]()
 
   hand.append(new Card(this))
+  hand.append(new Card(this))
+  hand.append(new Card(this))
+  hand.append(new Card(this))
 
 
   override def update(): Unit = {
@@ -24,6 +28,7 @@ class Player(ticker: Ticker, map: Map) extends GameElement {
     //remove used cards
     for (i <- hand.indices.reverse)
       if (hand(i).used) hand.remove(i)
+
 
   }
 

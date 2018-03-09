@@ -9,8 +9,8 @@ import game.Ticker
   */
 class ActiveObject(ticker: Ticker, sprite: Sprite) extends GameObject {
 
-  var posX: Double = 0
-  var posY: Double = 0
+  var posX: Double = -300
+  var posY: Double = 100
 
   override def update(): Unit = {
     if (enabled) {

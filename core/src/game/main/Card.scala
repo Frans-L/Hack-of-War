@@ -19,7 +19,7 @@ class Card(owner: Player) {
 
   var used = false
 
-  private var uiElement: Option[UICard] = None
+  var uiElement: Option[UICard] = None
 
   //returns true if ui exists
   def uiExists: Boolean = {
