@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, InputListener}
 import game.Ticker
 import game.loader.GameTextures
-import game.ui.UICard
+import game.ui.{GameUI, UICard}
 
 object Card {
 
@@ -59,8 +59,10 @@ class Card(owner: Player) {
   //tries to use the card
   private def use(x: Float, y: Float): Unit = {
     if (owner.useCard(this, x, y)) {
-      uiElement.foreach(_.startUseAnim(() => destroy()))
+      uiElement.foreach(_.startUseAnim(x, y, () => destroy()))
       Gdx.app.log("card", "used")
+    } else {
+      uiElement.foreach(_.backToStart()) //back to start pos
     }
   }
 

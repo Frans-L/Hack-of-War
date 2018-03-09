@@ -64,7 +64,7 @@ class Map(world: World, textures: GameTextures) extends GameElement {
   private def initializeMap(): Unit = {
 
     //Down border
-    var height: Float = 160 + 180
+    var height: Float = 200 + 180
     var y: Float = world.maxDown
     var x: Float = world.maxLeft
     for (i <- 0 to 8) {
@@ -84,6 +84,19 @@ class Map(world: World, textures: GameTextures) extends GameElement {
       elements += new StaticObject(
         x, y,
         345 - ((i % 2) * 165), height, 1, 0,
+        textures.atlas.createSprite(Map.mapBorder))
+
+      x = elements.last.nextToX
+    }
+
+
+    //middle
+    y = 0
+    x = world.left + 345 + 180
+    for (i <- 0 to 1) {
+      elements += new StaticObject(
+        x, y,
+        435, 75, 1, 0,
         textures.atlas.createSprite(Map.mapBorder))
 
       x = elements.last.nextToX

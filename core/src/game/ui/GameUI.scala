@@ -3,6 +3,7 @@ package game.ui
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.{Gdx, InputProcessor}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, InputListener, Stage, Touchable}
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
@@ -26,10 +27,10 @@ class GameUI(ticker: Ticker, gameTextures: GameTextures,
 
     //if a new card in a hand
     player.hand.foreach(c => {
-      if(!c.uiExists){
+      if (!c.uiExists) {
         val card = c.uiCreate(ticker, gameTextures)
-        card.setPosition(10, 10)
-        card.setBounds(0, world.down, 150, 225)
+        card.setBounds(0, world.down, 170, 270)
+        card.startPos = new Vector2(0,world.down)
         card.setTouchable(Touchable.enabled)
         card.updateSprite()
         stage.addActor(card)

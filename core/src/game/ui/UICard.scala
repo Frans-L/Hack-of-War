@@ -22,7 +22,9 @@ object UICard {
   */
 class UICard(ticker: Ticker, sprite: Sprite) extends Actor {
 
-  private var dragPos: Vector2 = new Vector2(0, 0)
+  var startPos: Vector2 = new Vector2(0, 0) //tells the spot to stay when not moved
+
+  private var dragPos: Vector2 = new Vector2(0, 0) //the pos which were touched
 
   def updateSprite(): Unit = {
     sprite.setBounds(
@@ -42,13 +44,19 @@ class UICard(ticker: Ticker, sprite: Sprite) extends Actor {
 
   }
 
-  def startUseAnim(finish: () => Unit): Unit = {
-    val animTime = 500 / 1000f
+
+  //animation when the card is used
+  def startUseAnim(x: Float, y: Float, finish: () => Unit): Unit = {
+    val animTime = 400 / 1000f
+
+    this.setTouchable(Touchable.disabled) //disable touch actions
 
     val anim = Actions.sequence(
       Actions.parallel(
-        Actions.moveTo(this.getX + getWidth / 2, this.getY + getHeight / 2, animTime),
-        Actions.scaleTo(0, 0, animTime)),
+        Actions.moveTo(x, y,
+          animTime, Interpolation.pow2In),
+        Actions.scaleTo(0, 0,
+          animTime, Interpolation.pow2In)),
       Actions.run(new Runnable {
         override def run(): Unit = finish()
       }))
@@ -57,18 +65,52 @@ class UICard(ticker: Ticker, sprite: Sprite) extends Actor {
 
   //called when drag starts
   def startDrag(x: Float, y: Float): Unit = {
-    dragPos = new Vector2(x, y)
+
+    val animTime = 200 / 1000f
+    val scale = 0.5f
+
+    dragPos = new Vector2(getWidth / 2f, getHeight / 2f)
+
+    val anim = Actions.parallel(
+      Actions.scaleTo(scale, scale, animTime, Interpolation.pow2),
+      Actions.moveBy(
+        x - getWidth * scale / 2f,
+        y - getHeight * scale / 2f, animTime, Interpolation.pow2))
+    addAction(anim)
   }
 
   //updates sprite pos
   def drag(x: Float, y: Float): Unit = {
-    this.setPosition(this.getX + x - dragPos.x, this.getY + y - dragPos.y)
+
+    this.setPosition(
+      this.getX + (x - dragPos.x) * getScaleX,
+      this.getY + (y - dragPos.y) * getScaleY)
   }
 
   //stops the drag and returns final pos
   def stopDrag(x: Float, y: Float): (Float, Float) = {
-    this.setPosition(this.getX + x - dragPos.x, this.getY + y - dragPos.y)
-    (this.getX, this.getY)
+    this.setPosition(
+      this.getX + (x - dragPos.x),
+      this.getY + (y - dragPos.y))
+
+    (this.getX + dragPos.x * getScaleX, this.getY + dragPos.y * getScaleY)
+  }
+
+
+  //returns to the original spot with animation
+  def backToStart(): Unit = {
+    val animTime = 500 / 1000f
+
+    this.setTouchable(Touchable.disabled) //disable touch actions
+
+    val anim = Actions.sequence(
+      Actions.parallel(
+        Actions.moveTo(startPos.x, startPos.y, animTime, Interpolation.pow2In),
+        Actions.scaleTo(1f, 1f, animTime, Interpolation.pow2In)),
+      Actions.run(new Runnable {
+        override def run(): Unit = setTouchable(Touchable.enabled) //disable touch actions
+      }))
+    this.addAction(anim)
   }
 
 
