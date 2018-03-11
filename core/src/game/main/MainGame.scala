@@ -33,8 +33,10 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   //sets the map
   private val map: Map = new Map(screenDim, textures)
 
+  private val collDetect: CollisionDetector = new CollisionDetector(map)
+
   //sets the players
-  private val players: Vector[Player] = Vector(new Player(ticker, textures, map))
+  private val players: Vector[Player] = Vector(new Player(ticker, textures, collDetect))
 
   //sets the ui
   private val gameUI: GameUI =

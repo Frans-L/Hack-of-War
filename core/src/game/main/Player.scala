@@ -13,7 +13,7 @@ import scala.collection.mutable
 /**
   * Created by Frans on 06/03/2018.
   */
-class Player(ticker: Ticker, textures: GameTextures, map: Map) extends GameElement {
+class Player(ticker: Ticker, textures: GameTextures, collDetect: CollisionDetector) extends GameElement {
 
   private val deck: mutable.Buffer[Card] = mutable.Buffer[Card]()
   val hand: mutable.Buffer[Card] = mutable.Buffer[Card]()
@@ -36,6 +36,8 @@ class Player(ticker: Ticker, textures: GameTextures, map: Map) extends GameEleme
 
     for (i <- units.indices.reverse) {
       units(i).update()
+
+      if (units(i).removed) units.remove(i)
     }
 
   }
@@ -44,7 +46,7 @@ class Player(ticker: Ticker, textures: GameTextures, map: Map) extends GameEleme
   def useCard(card: Card, posX: Float, posY: Float): Boolean = {
 
     //the card can be used
-    if (!map.collide(posX, posY)) {
+    if (!collDetect.map.collide(posX, posY)) {
       true
     } else {
       false
@@ -52,7 +54,7 @@ class Player(ticker: Ticker, textures: GameTextures, map: Map) extends GameEleme
   }
 
   def spawnUnit(x: Float, y: Float): Unit = {
-    units += Soldier.create(ticker, textures, x, y)
+    units += Soldier.create(ticker, textures, collDetect, x, y)
   }
 
   override def draw(shapeRender: ShapeRenderer): Unit = ???

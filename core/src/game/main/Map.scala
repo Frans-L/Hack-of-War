@@ -3,7 +3,8 @@ package game.main
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import game.{GameElement, World}
+import com.badlogic.gdx.math.{Polygon, Rectangle, Shape2D}
+import game.{GameElement, Utils, World}
 import game.loader.GameTextures
 import game.objects.{GameObject, StaticObject}
 
@@ -28,6 +29,8 @@ class Map(world: World, textures: GameTextures) extends GameElement {
   private val collMap = Array.ofDim[Boolean](
     world.maxWidth / collAccuracy + 1,
     world.maxHeight / collAccuracy + 1)
+
+  val collPolygons: mutable.Buffer[Polygon] = mutable.Buffer[Polygon]()
 
   initializeMap()
   createCollisionMap()
@@ -67,20 +70,24 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     var height: Float = 200 + 180
     var y: Float = world.maxDown
     var x: Float = world.maxLeft
-    for (i <- 0 to 8) {
+    collPolygons += Utils.rectanglePolygon(x, y, world.maxWidth, height)
+
+    for (i <- 0 to 8) { //to create collisionMap
       elements += new StaticObject(
         x, y,
         345 - ((i % 2) * 165), height, 1, 0,
         textures.atlas.createSprite(Map.mapBorder))
-
       x = elements.last.nextToX
     }
+
 
     //Up border
     height = 50 + 180
     y = world.maxUp - height
     x = world.maxLeft
-    for (i <- 0 to 8) {
+    collPolygons += Utils.rectanglePolygon(x, y, world.maxWidth, height)
+
+    for (i <- 0 to 8) { //to create collisionMap
       elements += new StaticObject(
         x, y,
         345 - ((i % 2) * 165), height, 1, 0,
@@ -93,10 +100,14 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     //middle
     y = 0
     x = world.left + 345 + 180
-    for (i <- 0 to 1) {
+    var width = 435
+    height = 75
+    collPolygons += Utils.rectanglePolygon(x, y, width, height)
+
+    for (i <- 0 to 1) { //to create collisionMap
       elements += new StaticObject(
         x, y,
-        435, 75, 1, 0,
+        width, height, 1, 0,
         textures.atlas.createSprite(Map.mapBorder))
 
       x = elements.last.nextToX

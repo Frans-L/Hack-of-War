@@ -2,17 +2,32 @@ package game.objects
 
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite, TextureRegion}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import game.Ticker
+import game.{Ticker, Utils}
+import game.main.CollisionDetector
 
 /**
   * Created by Frans on 26/02/2018.
   */
-class ActiveObject(ticker: Ticker, sprite: Sprite, var posX: Float, var posY: Float) extends GameObject {
+class ActiveObject(ticker: Ticker, sprite: Sprite, collDetect: CollisionDetector,
+                   x: Float, y: Float, w: Float, h: Float) extends GameObject {
+
+  var removed: Boolean = false
+
+  sprite.setSize(w, h)
+  sprite.setOriginCenter()
+  var body = Utils.rectanglePolygon(x, y, w, h)
+
+  collDetect.addShape(body)
 
   override def update(): Unit = {
     if (enabled) {
 
-      posX += 0.06f * ticker.delta
+
+      if (!collDetect.collide(body) && body.getX < 1920/2f)
+        body.setPosition(body.getX + 0.1f * ticker.delta, body.getY)
+      else
+        destroy()
+
 
       /*
       Gdx.app.setLogLevel(Application.LOG_DEBUG)
@@ -20,13 +35,17 @@ class ActiveObject(ticker: Ticker, sprite: Sprite, var posX: Float, var posY: Fl
       Gdx.app.log("tmp", "Ticker: " + ticker.elapsed)
       */
 
-      sprite.setPosition(posX, posY)
+      sprite.setPosition(body.getX, body.getY)
     }
   }
 
-  def setSize(w: Float, h: Float): Unit = {
-    sprite.setSize(w, h)
-    sprite.setOriginCenter()
+
+  //destroys collisions map and marks that this can be cleaned
+  def destroy(): Unit = {
+    collDetect.removeShape(body)
+    removed = true
+    visible = false
+    enabled = false
   }
 
   override def draw(shapeRender: ShapeRenderer): Unit = {
