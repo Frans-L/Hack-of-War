@@ -7,15 +7,12 @@ import game.Ticker
 /**
   * Created by Frans on 26/02/2018.
   */
-class ActiveObject(ticker: Ticker, sprite: Sprite) extends GameObject {
-
-  var posX: Double = -300
-  var posY: Double = 100
+class ActiveObject(ticker: Ticker, sprite: Sprite, var posX: Float, var posY: Float) extends GameObject {
 
   override def update(): Unit = {
     if (enabled) {
 
-      posX += 0.03d * ticker.delta
+      posX += 0.06f * ticker.delta
 
       /*
       Gdx.app.setLogLevel(Application.LOG_DEBUG)
@@ -23,7 +20,7 @@ class ActiveObject(ticker: Ticker, sprite: Sprite) extends GameObject {
       Gdx.app.log("tmp", "Ticker: " + ticker.elapsed)
       */
 
-      sprite.setPosition(posX.toFloat, posY.toFloat)
+      sprite.setPosition(posX, posY)
     }
   }
 

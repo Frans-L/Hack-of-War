@@ -59,11 +59,17 @@ class Card(owner: Player) {
   //tries to use the card
   private def use(x: Float, y: Float): Unit = {
     if (owner.useCard(this, x, y)) {
-      uiElement.foreach(_.startUseAnim(x, y, () => destroy()))
+      uiElement.foreach(_.startUseAnim(x, y, () => action(x, y)))
       Gdx.app.log("card", "used")
     } else {
       uiElement.foreach(_.backToStart()) //back to start pos
     }
+  }
+
+  //card's action that is called when the card is used
+  private def action(x: Float, y: Float): Unit = {
+    owner.spawnUnit(x, y)
+    destroy()
   }
 
 

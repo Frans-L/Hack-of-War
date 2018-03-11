@@ -34,7 +34,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   private val map: Map = new Map(screenDim, textures)
 
   //sets the players
-  private val players: Vector[Player] = Vector(new Player(ticker, map))
+  private val players: Vector[Player] = Vector(new Player(ticker, textures, map))
 
   //sets the ui
   private val gameUI: GameUI =
@@ -42,8 +42,6 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
 
 
   val fPSLogger: FPSLogger = new FPSLogger
-
-  val a: ActiveObject = Soldier.create(ticker, textures)
 
   //called every frame
   override def render(delta: Float): Unit = {
@@ -77,7 +75,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
     batch.setProjectionMatrix(cam.combined)
 
     batch.begin()
-    a.draw(batch)
+    players.foreach(_.draw(batch))
     map.draw(batch)
     batch.end()
 
@@ -85,7 +83,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
     shapeRender.begin(ShapeType.Line)
 
     shapeRender.setColor(1, 0, 1, 1)
-    
+
     /*
     shapeRender.circle(0, 0, 25)
     shapeRender.rect(screenDim.left, screenDim.maxDown, screenDim.width - 1, screenDim.maxHeight - 1)
@@ -105,7 +103,6 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
     cam.update()
     players.foreach(_.update())
     gameUI.update()
-    a.update()
 
   }
 

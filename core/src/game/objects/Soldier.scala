@@ -11,9 +11,9 @@ object Soldier {
   val texture: String = GameTextures.Units.unit1
 
 
-  def create(ticker: Ticker, gameTextures: GameTextures): ActiveObject = {
-    val obj: ActiveObject = new ActiveObject(ticker, gameTextures.atlas.createSprite(texture))
-    obj.setSize(100 / 2f, 75 / 2)
+  def create(ticker: Ticker, textures: GameTextures, x: Float, y: Float): ActiveObject = {
+    val obj: ActiveObject = new ActiveObject(ticker, textures.atlas.createSprite(texture), x, y)
+    obj.setSize(100 / 1.5f, 75 / 1.5f)
     obj
   }
 
