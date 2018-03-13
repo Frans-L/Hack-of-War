@@ -12,6 +12,11 @@ import game.objects.{ActiveObject, Soldier}
 import game.ui.GameUI
 import game.{Ticker, World}
 
+object MainGame {
+
+  var debugViewPort: Viewport = _
+}
+
 /**
   * Created by Frans on 26/02/2018.
   */
@@ -32,6 +37,8 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
     screenDim.width, screenDim.height,
     screenDim.maxWidth, screenDim.maxHeight, cam)
   viewport.apply()
+
+  MainGame.debugViewPort = viewport
 
   //sets the map
   private val map: Map = new Map(screenDim, textures)
@@ -98,6 +105,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
 
     shapeRender.setColor(0, 0.75f, 0.75f, 1)
     gameUI.draw(shapeRender)
+    players.foreach(_.draw(shapeRender))
 
     shapeRender.end()
 

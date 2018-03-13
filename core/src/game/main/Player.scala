@@ -57,7 +57,9 @@ class Player(textures: GameTextures, collDetect: CollisionDetector) extends Game
     units += Soldier.create(ticker, textures, collDetect, x, y)
   }
 
-  override def draw(shapeRender: ShapeRenderer): Unit = ???
+  override def draw(shapeRender: ShapeRenderer): Unit = {
+    units.foreach(_.draw(shapeRender)) //for a debug at the moment
+  }
 
   override def draw(batch: Batch): Unit = {
     units.foreach(_.draw(batch)) //draw units

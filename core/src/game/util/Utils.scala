@@ -20,6 +20,16 @@ object Utils {
     p
   }
 
+  //creates polygon that is shaped rectangle, the first point is the origin
+  def trianglePolygon(x2: Float, y2: Float, x3: Float, y3: Float): Polygon = {
+    val p: Polygon = new Polygon(Array(
+      0, 0,
+      x2, y2,
+      x3, y3))
+
+    p
+  }
+
   //converts rectangle to polygon
   def rectangleToPolygon(r: Rectangle): Polygon = {
     val p: Polygon = new Polygon(Array(

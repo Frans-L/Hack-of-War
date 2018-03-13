@@ -17,6 +17,7 @@ abstract class GameObject extends GameElement {
 
   val pos: Vector2
   val size: Vector2
+  val origin: Vector2 = Vector2e(0, 0)
   val scale: Vector2 = Vector2e(1f, 1f)
   var angle: Float = 0f //degrees
 
@@ -24,10 +25,10 @@ abstract class GameObject extends GameElement {
 
   //Updates sprite location, rotation and size
   def updateSprite(): Unit = {
-    sprite.setBounds(pos.x, pos.y, size.width, size.height)
+    sprite.setOrigin(origin.x, origin.y)
+    sprite.setBounds(pos.x - origin.x, pos.y - origin.y, size.width, size.height)
     sprite.setScale(scale.x, scale.y)
     sprite.setRotation(angle)
-    sprite.setOriginCenter()
   }
 
   //Returns scaled width
