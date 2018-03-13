@@ -17,7 +17,10 @@ import game.{Ticker, World}
   */
 class MainGame(textures: GameTextures, screenDim: World) extends Screen {
 
-  private val ticker = new Ticker(TimeUtils.millis()) //everything should be time dependent
+
+  //sets the ticker => everything should be time dependent
+  private val ticker = new Ticker(TimeUtils.millis())
+  Ticker.defaultTicker = ticker //to future gameElements
 
   //sets the drawing batches
   private val batch: SpriteBatch = new SpriteBatch
@@ -36,11 +39,11 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   private val collDetect: CollisionDetector = new CollisionDetector(map)
 
   //sets the players
-  private val players: Vector[Player] = Vector(new Player(ticker, textures, collDetect))
+  private val players: Vector[Player] = Vector(new Player(textures, collDetect))
 
   //sets the ui
   private val gameUI: GameUI =
-    new GameUI(ticker, textures, screenDim, viewport, players.head, shapeRender)
+    new GameUI(textures, screenDim, viewport, players.head, shapeRender)
 
 
   val fPSLogger: FPSLogger = new FPSLogger

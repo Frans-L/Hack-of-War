@@ -15,7 +15,7 @@ object Soldier {
   def create(ticker: Ticker, textures: GameTextures, collDetect: CollisionDetector,
              x: Float, y: Float): ActiveObject = {
     val obj: ActiveObject = new ActiveObject(
-      ticker, textures.atlas.createSprite(texture), collDetect,
+      textures.atlas.createSprite(texture), collDetect,
       x, y, 100 / 1.5f, 75 / 1.5f)
     obj
   }

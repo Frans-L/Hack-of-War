@@ -15,7 +15,7 @@ import game.{GameElement, Ticker, World}
 /**
   * Created by Frans on 28/02/2018.
   */
-class GameUI(ticker: Ticker, gameTextures: GameTextures,
+class GameUI(gameTextures: GameTextures,
              world: World, viewport: Viewport,
              player: Player,
              shapeRenderer: ShapeRenderer) extends GameElement {

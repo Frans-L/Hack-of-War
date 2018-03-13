@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Polygon, Rectangle, Shape2D}
 import game.{GameElement, Utils, World}
 import game.loader.GameTextures
-import game.objects.{GameObject, StaticObject}
+import game.objects.{GameObject, VisualObject}
 
 import scala.collection.mutable
 
@@ -23,7 +23,7 @@ object Map {
   */
 class Map(world: World, textures: GameTextures) extends GameElement {
 
-  private val elements: mutable.Buffer[StaticObject] = mutable.Buffer[StaticObject]()
+  private val elements: mutable.Buffer[GameObject] = mutable.Buffer[GameObject]()
 
   private val collAccuracy = 20 //collisionAccuracy
   private val collMap = Array.ofDim[Boolean](
@@ -57,7 +57,7 @@ class Map(world: World, textures: GameTextures) extends GameElement {
   private def createCollisionMap(): Unit = {
     for (x <- collMap.indices) {
       for (y <- collMap.head.indices) {
-        collMap(x)(y) = elements.exists(
+        collMap(x)(y) = collPolygons.exists(
           _.contains(world.maxLeft + x * collAccuracy, world.maxDown + y * collAccuracy))
       }
     }
@@ -73,7 +73,7 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     collPolygons += Utils.rectanglePolygon(x, y, world.maxWidth, height)
 
     for (i <- 0 to 8) { //to create collisionMap
-      elements += new StaticObject(
+      elements += new VisualObject(
         x, y,
         345 - ((i % 2) * 165), height, 1, 0,
         textures.atlas.createSprite(Map.mapBorder))
@@ -88,7 +88,7 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     collPolygons += Utils.rectanglePolygon(x, y, world.maxWidth, height)
 
     for (i <- 0 to 8) { //to create collisionMap
-      elements += new StaticObject(
+      elements += new VisualObject(
         x, y,
         345 - ((i % 2) * 165), height, 1, 0,
         textures.atlas.createSprite(Map.mapBorder))
@@ -102,10 +102,10 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     x = world.left + 345 + 180
     var width = 435
     height = 75
-    collPolygons += Utils.rectanglePolygon(x, y, width, height)
+    collPolygons += Utils.rectanglePolygon(x, y, width*2, height)
 
     for (i <- 0 to 1) { //to create collisionMap
-      elements += new StaticObject(
+      elements += new VisualObject(
         x, y,
         width, height, 1, 0,
         textures.atlas.createSprite(Map.mapBorder))

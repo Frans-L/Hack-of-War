@@ -1,5 +1,14 @@
 package game
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.utils.TimeUtils
+
+
+object Ticker {
+
+  var defaultTicker: Ticker = _
+
+}
 
 /**
   * Created by Frans on 26/02/2018.
@@ -15,9 +24,16 @@ class Ticker(startTick: Long) {
   //Time since the ticker started (ms)
   def total: Long = tick
 
+  //Updates the time
   def update(currentTick: Long): Unit = {
     lastTick = tick
     tick = currentTick - startTick
+  }
+
+  //Resets the total time
+  def reset(currentTick: Long): Unit = {
+    tick = currentTick
+    lastTick = currentTick
   }
 
 

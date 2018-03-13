@@ -13,7 +13,7 @@ import scala.collection.mutable
 /**
   * Created by Frans on 06/03/2018.
   */
-class Player(ticker: Ticker, textures: GameTextures, collDetect: CollisionDetector) extends GameElement {
+class Player(textures: GameTextures, collDetect: CollisionDetector) extends GameElement {
 
   private val deck: mutable.Buffer[Card] = mutable.Buffer[Card]()
   val hand: mutable.Buffer[Card] = mutable.Buffer[Card]()
@@ -37,7 +37,7 @@ class Player(ticker: Ticker, textures: GameTextures, collDetect: CollisionDetect
     for (i <- units.indices.reverse) {
       units(i).update()
 
-      if (units(i).removed) units.remove(i)
+      if (units(i).deleted) units.remove(i)
     }
 
   }

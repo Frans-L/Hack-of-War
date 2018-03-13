@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
   */
 trait GameElement {
 
-  def update(): Unit
+  var ticker: Ticker = Ticker.defaultTicker //sets the ticker to default
+
+  def update(): Unit //updates the element using the ticker
 
   def draw(shapeRender: ShapeRenderer): Unit
 
