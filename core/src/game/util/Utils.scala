@@ -1,4 +1,4 @@
-package game
+package game.util
 
 import com.badlogic.gdx.math.{Polygon, Rectangle}
 
@@ -30,5 +30,14 @@ object Utils {
 
     p.setPosition(r.x, r.y)
     p
+  }
+
+  def normalize(x: Float, y: Float): (Float, Float) = {
+    val l = math.sqrt(x * x + y * y).toFloat
+    (x / l, y / l)
+  }
+
+  def truncate(x: Float, y: Float, max: Float) = {
+
   }
 }

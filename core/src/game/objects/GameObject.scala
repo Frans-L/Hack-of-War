@@ -1,7 +1,10 @@
 package game.objects
 
 import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.math.Vector2
 import game.GameElement
+import game.util.Vector2e
+import game.util.Vector2e._
 
 /**
   * Created by Frans on 26/02/2018.
@@ -12,31 +15,31 @@ abstract class GameObject extends GameElement {
   var enabled: Boolean = true
   var deleted: Boolean = false
 
-  var posX, posY: Float
-  var width, height: Float
-  var scaleX, scaleY: Float = 1f
+  val pos: Vector2
+  val size: Vector2
+  val scale: Vector2 = Vector2e(1f, 1f)
   var angle: Float = 0f //degrees
 
   var sprite: Sprite
 
   //Updates sprite location, rotation and size
   def updateSprite(): Unit = {
-    sprite.setBounds(posX, posY, width, height)
-    sprite.setScale(scaleX, scaleY)
+    sprite.setBounds(pos.x, pos.y, size.width, size.height)
+    sprite.setScale(scale.x, scale.y)
     sprite.setRotation(angle)
     sprite.setOriginCenter()
   }
 
   //Returns scaled width
-  def sWidth: Float = width * scaleX
+  def sWidth: Float = size.width * scale.x
 
   //Returns scaled height
-  def sHeight: Float = width * scaleX
+  def sHeight: Float = size.height * scale.y
 
   //Get X location next to this object
-  def nextToX: Float = posX + sWidth
+  def nextToX: Float = pos.x + sWidth
 
   //Get Y location next to this object
-  def nextToY: Float = posY + sHeight
+  def nextToY: Float = pos.y + sHeight
 
 }

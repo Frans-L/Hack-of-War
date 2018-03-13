@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.TimeUtils
 
 object Ticker {
 
+  //null value => if this is not set to be a Ticker, errors will appear
   var defaultTicker: Ticker = _
 
 }
