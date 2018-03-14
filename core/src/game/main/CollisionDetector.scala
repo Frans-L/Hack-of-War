@@ -1,6 +1,8 @@
 package game.main
 
-import com.badlogic.gdx.math.{Intersector, Polygon}
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.{Intersector, Polygon, Vector2}
+
 import scala.collection.mutable
 
 /**
@@ -10,13 +12,14 @@ import scala.collection.mutable
   */
 class CollisionDetector(val map: Map) {
 
-  private val shapes: mutable.Buffer[Polygon] = mutable.Buffer[Polygon]()
-  shapes ++= map.collPolygons //add map collissions
+  private val bodys: mutable.Buffer[CollisionBody] = mutable.Buffer[CollisionBody]()
+  bodys ++= map.collPolygons //add map collissions
 
-  def collide(obj: Polygon): Boolean = {
 
+  //Returns true if collided
+  def isCollided(obj: CollisionBody): Boolean = {
     var coll = false
-    for (s <- shapes if !coll) {
+    for (s <- bodys if !coll) {
       if (s != obj) {
         coll = Intersector.overlapConvexPolygons(obj, s)
       }
@@ -25,8 +28,42 @@ class CollisionDetector(val map: Map) {
     coll
   }
 
-  def addShape(p: Polygon): Unit = shapes += p
+  //Returns true if collided
+  def collide(obj: CollisionBody): Option[CollisionBody] = {
+    var coll = false
+    var body: Option[CollisionBody] = None
+    for (b <- bodys if !coll && b != obj) {
+      coll = Intersector.overlapConvexPolygons(obj, b)
+      if (coll) body = Some(b)
+    }
+    body
+  }
 
-  def removeShape(p: Polygon): Unit = shapes -= p
+  //Returns the object that is collided with the point
+  def collidePoint(obj: CollisionBody, point: Vector2): Option[CollisionBody] = {
+    var coll = false
+    var body: Option[CollisionBody] = None
+    for (b <- bodys if !coll && b != obj) {
+      coll = b.contains(point.x, point.y)
+      if (coll) body = Some(b)
+    }
+
+    body
+  }
+
+  //Returns true if the object would collide as circle
+  def collideAsCircle(obj: CollisionBody): Option[CollisionBody] = {
+    var coll = false
+    var body: Option[CollisionBody] = None
+    for (b <- bodys if !coll && b != obj) {
+      coll = b.overlapsCircle(obj)
+      if (coll) body = Some(b)
+    }
+    body
+  }
+
+  def addShape(p: CollisionBody): Unit = bodys += p
+
+  def removeShape(p: CollisionBody): Unit = bodys -= p
 
 }

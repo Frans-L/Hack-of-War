@@ -1,44 +1,36 @@
 package game.util
 
 import com.badlogic.gdx.math.{Polygon, Rectangle}
+import game.main.CollisionBody
 
 /**
   * Created by Frans on 11/03/2018.
   */
 object Utils {
 
-
-  //creates polygon that is shaped rectangle
-  def rectanglePolygon(x: Float, y: Float, w: Float, h: Float): Polygon = {
-    val p: Polygon = new Polygon(Array(
+  //Creates CollisionBody that is shaped rectangle
+  def rectangleCollBody(x: Float, y: Float, w: Float, h: Float): CollisionBody = {
+    val radius = math.max(w, h) / 2
+    val p: CollisionBody = new CollisionBody(Array(
       0, 0,
       w, 0,
       w, h,
-      0, h))
+      0, h), radius)
 
     p.setPosition(x, y)
+    p.setOrigin(w/2f, h/2f)
+
     p
   }
 
-  //creates polygon that is shaped rectangle, the first point is the origin
-  def trianglePolygon(x2: Float, y2: Float, x3: Float, y3: Float): Polygon = {
-    val p: Polygon = new Polygon(Array(
+  //Creates CollisionBody that is shaped rectangle, the first point is the origin
+  def triangleCollBody(x2: Float, y2: Float, x3: Float, y3: Float): CollisionBody = {
+    val radius = (math.sqrt(math.max(x2 * x2 + y2 * y2, x3 * x3 + y3 * y3)) / 1.5f).toFloat
+    val p: CollisionBody = new CollisionBody(Array(
       0, 0,
       x2, y2,
-      x3, y3))
+      x3, y3), radius)
 
-    p
-  }
-
-  //converts rectangle to polygon
-  def rectangleToPolygon(r: Rectangle): Polygon = {
-    val p: Polygon = new Polygon(Array(
-      0, 0,
-      r.width, 0,
-      r.width, r.height,
-      0, r.height))
-
-    p.setPosition(r.x, r.y)
     p
   }
 
@@ -47,7 +39,5 @@ object Utils {
     (x / l, y / l)
   }
 
-  def truncate(x: Float, y: Float, max: Float) = {
 
-  }
 }

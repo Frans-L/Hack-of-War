@@ -31,7 +31,7 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     world.maxWidth / collAccuracy + 1,
     world.maxHeight / collAccuracy + 1)
 
-  val collPolygons: mutable.Buffer[Polygon] = mutable.Buffer[Polygon]()
+  val collPolygons: mutable.Buffer[CollisionBody] = mutable.Buffer[CollisionBody]()
 
   initializeMap()
   createCollisionMap()
@@ -72,7 +72,7 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     var height: Float = 200 + 180
     var y: Float = world.maxDown
     var x: Float = world.maxLeft
-    collPolygons += Utils.rectanglePolygon(x, y, world.maxWidth, height)
+    collPolygons += Utils.rectangleCollBody(x, y, world.maxWidth, height)
 
     for (i <- 0 to 8) { //to create collisionMap
       elements += new VisualObject(
@@ -88,7 +88,7 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     height = 50 + 180
     y = world.maxUp - height
     x = world.maxLeft
-    collPolygons += Utils.rectanglePolygon(x, y, world.maxWidth, height)
+    collPolygons += Utils.rectangleCollBody(x, y, world.maxWidth, height)
 
     for (i <- 0 to 8) { //to create collisionMap
       elements += new VisualObject(
@@ -106,7 +106,7 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     x = world.left + 345 + 180
     var width = 435
     height = 75
-    collPolygons += Utils.rectanglePolygon(x, y, width * 2, height)
+    collPolygons += Utils.rectangleCollBody(x, y, width * 2, height)
 
     for (i <- 0 until 2) { //to create collisionMap
       elements += new VisualObject(

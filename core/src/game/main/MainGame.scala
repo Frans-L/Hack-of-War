@@ -17,6 +17,7 @@ import game.{Ticker, World}
 object MainGame {
 
   var debugViewPort: Viewport = _
+  var debugRender: ShapeRenderer = _
 }
 
 /**
@@ -32,6 +33,9 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   //sets the drawing batches
   private val batch: SpriteBatch = new SpriteBatch
   private val shapeRender: ShapeRenderer = new ShapeRenderer
+
+  MainGame.debugRender = new ShapeRenderer
+  MainGame.debugRender.setColor(1, 0, 1f, 1)
 
   //sets the game camera
   private val cam: OrthographicCamera = new OrthographicCamera()
@@ -66,14 +70,22 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
 
     //updates game
     ticker.update(TimeUtils.millis())
+
+
+    this.draw() //TODO update should be before draw, change when debug isn't needed
+
+    MainGame.debugRender.setProjectionMatrix(cam.combined)
+    MainGame.debugRender.begin(ShapeType.Line)
     this.update()
-    this.draw()
+    MainGame.debugRender.end()
+
 
 
     if (ticker.interval2) {
-      Gdx.app.log("MainGame", "Vector Pool: " + Vector2e.pool.peak)
-      fPSLogger.log()
+      Gdx.app.log("MainGame", "Vector Pool Free: " + Vector2e.freeAmount)
     }
+
+    fPSLogger.log()
 
 
   }

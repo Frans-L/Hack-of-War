@@ -3,7 +3,7 @@ package game.objects
 import com.badlogic.gdx.math.Polygon
 import game.Ticker
 import game.loader.GameTextures
-import game.main.CollisionDetector
+import game.main.{CollisionBody, CollisionDetector}
 import game.util.{Utils, Vector2e}
 
 /**
@@ -22,7 +22,7 @@ object Soldier {
     val w = 99f / scale
     val h = 75f / scale
 
-    val body: Polygon = Utils.trianglePolygon(0, h, w, h / 2f)
+    val body: CollisionBody = Utils.triangleCollBody(0, h, w, h / 2f)
 
     val obj: ActiveObject = new ActiveObject(
       textures.atlas.createSprite(texture), collDetect, body,
