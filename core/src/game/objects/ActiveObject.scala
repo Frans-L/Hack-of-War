@@ -21,9 +21,9 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
 
   val maxVelocity: Float = 0.2f
   val maxForce: Float = 0.05f
-  val mass: Float = 50f
+  val mass: Float = 100f
   val maxSeeAhead = sWidth * 2
-  val maxForceAvoid = 0.1f
+  val maxForceAvoid = 0.2f
 
   updateCollPolygon()
   collDetect.addShape(collBody)
@@ -46,10 +46,37 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
 
         val avoid = Vector2e.pool
         //if no obstacle at close distance found, try look further away
-        if (!avoidObstacles(0, avoid)) avoidObstacles(maxSeeAhead, avoid)
+        var maxAngle = avoidObstacles(0, avoid)
+        if (maxAngle.isEmpty) maxAngle = avoidObstacles(maxSeeAhead, avoid)
         steering ++ avoid
 
+
+        /*
+        maxAngle.foreach(
+          a => steering.clampAngle(a + 180, a + 360)
+        )
+        */
+
+
         velocity.mulAdd(steering, ticker.delta).limit(maxVelocity)
+
+        MainGame.setColorRed
+        //MainGame.debugRender.line(pos, pos.cpy() ++ steering.cpy() ** 5000)
+
+        if (maxAngle.isDefined) {
+          MainGame.setColorBlack
+          MainGame.debugRender.line(pos, pos.cpy() ++ steering.cpy().setAngle(maxAngle.get) ** 50000)
+          MainGame.setColorWhite
+          MainGame.debugRender.line(pos, pos.cpy() ++ steering.cpy().setAngle(maxAngle.get + 180) ** 50000)
+        }
+
+        MainGame.setColorMagenta
+
+
+        //Gdx.app.log("Active", "angle: " + velocity.angle)
+        //MainGame.debugRender.line(pos, pos.cpy() ++ velocity.cpy() ** 5000)
+
+
         pos.mulAdd(velocity, ticker.delta)
 
         angle = velocity.angle
@@ -75,23 +102,33 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
 
   //Sets the 'avoid' Vector2 to push the player around the obstacle
   //Retuns true if there were an obstacle
-  private def avoidObstacles(visionLength: Float, avoid: Vector2): Boolean = {
+  private def avoidObstacles(visionLength: Float, avoid: Vector2): Option[Float] = {
 
     val ahead = Vector2e.pool(velocity).nor **
       (visionLength * (velocity.len() / maxVelocity)) ++ pos
 
     collBody.setPosition(ahead.x - origin.x, ahead.y - origin.y)
-    val obstacle = collDetect.collideAsCircle(collBody)
+    val (obstacle, angle) = collDetect.collideAsCircle(collBody)
 
-    if(obstacle.isDefined)
+    if (obstacle.isDefined) {
       MainGame.debugRender.circle(collBody.center.x, collBody.center.y, collBody.getRadiusScaled)
+    }
+
     collBody.setPosition(pos.x - origin.x, pos.y - origin.y)
 
     //calculate the force opposite to obstacle center
     obstacle.foreach(o => ((avoid ++ pos) -- o.center).nor ** maxForceAvoid */ mass)
-    Vector2e.free(ahead)
 
-    obstacle.isDefined
+
+    if (obstacle.isDefined) {
+      //Gdx.app.log("Active", "Angle Org: " + avoid.angle)
+      //MainGame.debugRender.line(pos, pos.cpy() ++ avoid.cpy() ** 50000)
+    }
+
+
+    Vector2e.free(ahead) //free the memory
+
+    if (obstacle.isDefined) Some(angle) else None
   }
 
 

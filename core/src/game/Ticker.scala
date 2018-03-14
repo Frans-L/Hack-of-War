@@ -16,13 +16,15 @@ object Ticker {
   */
 class Ticker(startTick: Long) {
 
+  var speed: Float = 1f
+
   private var tick: Long = 0
   private var lastTick: Long = 0
 
   private var interval2s: Long = 0
 
   //Time since last update (ms)
-  def delta: Int = (tick - lastTick).toInt
+  def delta: Int = ((tick - lastTick) * speed).toInt
 
   //Time since the ticker started (ms)
   def total: Long = tick

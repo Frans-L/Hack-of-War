@@ -1,5 +1,7 @@
 package game.main
 
+import java.util.concurrent.TimeUnit
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
@@ -18,6 +20,11 @@ object MainGame {
 
   var debugViewPort: Viewport = _
   var debugRender: ShapeRenderer = _
+
+  def setColorBlack = MainGame.debugRender.setColor(0, 0, 0, 1)
+  def setColorWhite = MainGame.debugRender.setColor(1, 1, 1, 1)
+  def setColorMagenta = MainGame.debugRender.setColor(1, 0, 1, 1)
+  def setColorRed = MainGame.debugRender.setColor(1, 0, 0, 1)
 }
 
 /**
@@ -29,6 +36,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   //sets the ticker => everything should be time dependent
   private val ticker = new Ticker(TimeUtils.millis())
   Ticker.defaultTicker = ticker //to future gameElements
+  ticker.speed = 1f
 
   //sets the drawing batches
   private val batch: SpriteBatch = new SpriteBatch
@@ -87,6 +95,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
 
     fPSLogger.log()
 
+    //TimeUnit.MILLISECONDS.sleep(400)
 
   }
 

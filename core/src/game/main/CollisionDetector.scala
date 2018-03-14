@@ -51,15 +51,15 @@ class CollisionDetector(val map: Map) {
     body
   }
 
-  //Returns true if the object would collide as circle
-  def collideAsCircle(obj: CollisionBody): Option[CollisionBody] = {
-    var coll = false
+  //Returns the collided object, and the angle of the polyline
+  def collideAsCircle(obj: CollisionBody): (Option[CollisionBody], Float) = {
+    var result: (Boolean, Float) = (false, 0f) //(is collided, angle)
     var body: Option[CollisionBody] = None
-    for (b <- bodys if !coll && b != obj) {
-      coll = b.overlapsCircle(obj)
-      if (coll) body = Some(b)
+    for (b <- bodys if !result._1 && b != obj) {
+      result = b.overlapsCircle(obj)
+      if (result._1) body = Some(b)
     }
-    body
+    (body, result._2)
   }
 
   def addShape(p: CollisionBody): Unit = bodys += p
