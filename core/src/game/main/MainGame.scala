@@ -4,12 +4,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.graphics.{FPSLogger, GL20, OrthographicCamera}
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import com.badlogic.gdx.{Gdx, Screen}
 import game.loader.GameTextures
 import game.objects.{ActiveObject, Soldier}
 import game.ui.GameUI
+import game.util.Vector2e
 import game.{Ticker, World}
 
 object MainGame {
@@ -67,7 +69,12 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
     this.update()
     this.draw()
 
-    fPSLogger.log()
+
+    if (ticker.interval2) {
+      Gdx.app.log("MainGame", "Vector Pool: " + Vector2e.pool.peak)
+      fPSLogger.log()
+    }
+
 
   }
 

@@ -18,9 +18,11 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collPo
   override val origin: Vector2 = Vector2e(size.x / 2f, size.y / 2f)
 
   val velocity: Vector2 = Vector2e(0f, 0f)
-  var maxVelocity: Float = 0.2f
-  var maxForce: Float = 0.05f
-  var mass: Float = 50f
+
+  val maxVelocity: Float = 0.2f
+  val maxForce: Float = 0.05f
+  val mass: Float = 50f
+  val maxSeeAhead = 1f
 
   updateCollPolygon()
   collDetect.addShape(collPolygon)
@@ -28,7 +30,7 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collPo
   updateSprite()
 
 
-  private def target: Vector2 = MainGame.debugViewPort.unproject(Vector2e(Gdx.input.getX, Gdx.input.getY))
+  private def target: Vector2 = MainGame.debugViewPort.unproject(Vector2e.pool(Gdx.input.getX, Gdx.input.getY))
 
 
   override def update(): Unit = {
@@ -46,6 +48,7 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collPo
 
         angle = velocity.angle
 
+        Vector2e.pool.free(steering) //free the memory
       }
       else
         destroy()

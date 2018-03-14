@@ -19,6 +19,8 @@ class Ticker(startTick: Long) {
   private var tick: Long = 0
   private var lastTick: Long = 0
 
+  private var interval2s: Long = 0
+
   //Time since last update (ms)
   def delta: Int = (tick - lastTick).toInt
 
@@ -27,6 +29,11 @@ class Ticker(startTick: Long) {
 
   //Updates the time
   def update(currentTick: Long): Unit = {
+
+    //one frame delay for the interval
+    if (interval2s <= tick) interval2s = tick + 2000
+
+    //update time
     lastTick = tick
     tick = currentTick - startTick
   }
@@ -36,6 +43,10 @@ class Ticker(startTick: Long) {
     tick = currentTick
     lastTick = currentTick
   }
+
+
+  //Returns true two every two seconds
+  def interval2: Boolean = interval2s <= tick
 
 
 }
