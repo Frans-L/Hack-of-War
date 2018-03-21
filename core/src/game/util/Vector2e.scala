@@ -1,6 +1,7 @@
 package game.util
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.{Pool, Pools}
 import com.badlogic.gdx.utils.Pool.Poolable

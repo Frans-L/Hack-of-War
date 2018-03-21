@@ -13,7 +13,7 @@ import com.badlogic.gdx.{Gdx, Screen}
 import game.loader.GameTextures
 import game.objects.{ActiveObject, Soldier}
 import game.ui.GameUI
-import game.util.Vector2e
+import game.util.{Vector2e, Vector2mtv}
 import game.{Ticker, World}
 
 object MainGame {
@@ -90,7 +90,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
 
 
     if (ticker.interval2) {
-      Gdx.app.log("MainGame", "Vector Pool Free: " + Vector2e.freeAmount)
+      Gdx.app.log("MainGame", "Vector Pool Free: " + Vector2mtv.freeAmount)
     }
 
     fPSLogger.log()

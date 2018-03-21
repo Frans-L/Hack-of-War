@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Interpolation, Polygon, Vector2}
 import game.Ticker
 import game.main.{CollisionBody, CollisionDetector, MainGame}
-import game.util.{Utils, Vector2e}
+import game.util.{Utils, Vector2e, Vector2mtv}
 import game.util.Vector2e._
 
 /**
@@ -38,7 +38,12 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
   override def update(): Unit = {
     if (enabled) {
 
-      if (!collDetect.isCollided(collBody) && pos.x < 1920 / 2f) {
+      val collForce = Vector2mtv.pool()
+      if (collDetect.isCollided(collBody, collForce)) {
+
+        pos.mulAdd((collForce.normal ** collForce.depth).limit(maxVelocity), ticker.delta)
+
+      } else if (pos.x < 1920 / 2f) { //TODO: 'if' because of the debugging
 
         //move towards target
         val steering =
@@ -64,6 +69,8 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
       else
         destroy()
 
+      Vector2mtv.free(collForce)
+
       updateSprite()
       updateCollPolygon()
     }
@@ -80,22 +87,13 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
     collBody.setPosition(ahead.x - origin.x, ahead.y - origin.y)
     val (obstacle, angle) = collDetect.collideAsCircle(collBody)
 
-    if (obstacle.isDefined) {
-      MainGame.debugRender.circle(collBody.center.x, collBody.center.y, collBody.getRadiusScaled)
-    }
+    //if (obstacle.isDefined)
+    //  MainGame.debugRender.circle(collBody.center.x, collBody.center.y, collBody.getRadiusScaled)
 
     collBody.setPosition(pos.x - origin.x, pos.y - origin.y)
 
     //calculate the force opposite to obstacle center
     obstacle.foreach(o => ((avoid ++ pos) -- o.center).nor ** maxForceAvoid */ mass)
-
-
-    if (obstacle.isDefined) {
-      //Gdx.app.log("Active", "Angle Org: " + avoid.angle)
-      //MainGame.debugRender.line(pos, pos.cpy() ++ avoid.cpy() ** 50000)
-    }
-
-
     Vector2e.free(ahead) //free the memory
 
     obstacle.isDefined //returns true if collided

@@ -1,6 +1,7 @@
 package game.main
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Intersector, Polygon, Vector2}
 
 import scala.collection.mutable
@@ -13,18 +14,22 @@ import scala.collection.mutable
 class CollisionDetector(val map: Map) {
 
   private val bodys: mutable.Buffer[CollisionBody] = mutable.Buffer[CollisionBody]()
-  bodys ++= map.collPolygons //add map collissions
+  bodys ++= map.collPolygons //add map collisions
 
 
-  //Returns true if collided
-  def isCollided(obj: CollisionBody): Boolean = {
+  /** Checks if the obj is colliding with something.
+    *
+    * @param obj the collisionBody of the object
+    * @param mtv sets the minimumTranslationVector that is required to separate objects
+    * @return true if collided
+    */
+  def isCollided(obj: CollisionBody, mtv: MinimumTranslationVector = null): Boolean = {
     var coll = false
     for (s <- bodys if !coll) {
       if (s != obj) {
-        coll = Intersector.overlapConvexPolygons(obj, s)
+        coll = Intersector.overlapConvexPolygons(obj, s, mtv)
       }
     }
-
     coll
   }
 
