@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
+import com.badlogic.gdx.graphics.profiling.GLProfiler
 import com.badlogic.gdx.graphics.{FPSLogger, GL20, OrthographicCamera}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.TimeUtils
@@ -65,8 +66,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   //sets the ui
   private val gameUI: GameUI =
     new GameUI(textures, screenDim, viewport, players.head, shapeRender)
-
-
+  
   val fPSLogger: FPSLogger = new FPSLogger
 
   //called every frame
@@ -89,9 +89,10 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
 
 
 
-    if (ticker.interval2) {
-      Gdx.app.log("MainGame", "Vector Pool Free: " + Vector2mtv.freeAmount)
+    if (ticker.interval10) {
+      Gdx.app.log("MainGame", "Render calls: " + batch.renderCalls)
     }
+
 
     fPSLogger.log()
 

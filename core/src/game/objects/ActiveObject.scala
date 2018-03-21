@@ -45,10 +45,11 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
 
       } else if (pos.x < 1920 / 2f) { //TODO: 'if' because of the debugging
 
+
         //move towards target
         val steering =
           (((target -- pos).nor ** maxVelocity) -- velocity)
-            .limit(maxForce) */ mass
+            .limit(maxForce) / mass
 
         //if no obstacle at close distance found, try look further away
         val avoid = Vector2e.pool()
@@ -65,6 +66,7 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
 
         Vector2e.free(steering) //free the memory
         Vector2e.free(avoid)
+
       }
       else
         destroy()
@@ -93,7 +95,7 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
     collBody.setPosition(pos.x - origin.x, pos.y - origin.y)
 
     //calculate the force opposite to obstacle center
-    obstacle.foreach(o => ((avoid ++ pos) -- o.center).nor ** maxForceAvoid */ mass)
+    obstacle.foreach(o => ((avoid ++ pos) -- o.center).nor ** maxForceAvoid / mass)
     Vector2e.free(ahead) //free the memory
 
     obstacle.isDefined //returns true if collided

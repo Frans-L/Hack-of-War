@@ -45,7 +45,7 @@ object Vector2e {
 
     def **(v2: Vector2): Vector2 = v.scl(v2)
 
-    def */(i: Float): Vector2 = v.scl(1f / i)
+    def /(i: Float): Vector2 = v.scl(1f / i)
 
     def clampAngle(min: Float, max: Float): Unit = {
       val a = v.angle()
