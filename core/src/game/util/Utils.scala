@@ -18,7 +18,7 @@ object Utils {
       0, h), radius)
 
     p.setPosition(x, y)
-    p.setOrigin(w/2f, h/2f)
+    p.setOrigin(w / 2f, h / 2f)
 
     p
   }
@@ -34,10 +34,22 @@ object Utils {
     p
   }
 
+  //Normalizes a vector
   def normalize(x: Float, y: Float): (Float, Float) = {
     val l = math.sqrt(x * x + y * y).toFloat
     (x / l, y / l)
   }
+
+
+  //Returns an angle between -90 and 450, that is closed to the target
+  def closestAngle360(angle: Float, target: Float): Float = {
+    val a = absAngle(angle)
+    val dist = ((target - a) / 180).toInt * 360
+    a + dist
+  }
+
+  //Returns angle between 0 - 360
+  def absAngle(angle: Float): Float = ((angle % 360) + 360) % 360
 
 
 }

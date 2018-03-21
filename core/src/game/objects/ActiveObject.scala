@@ -3,7 +3,7 @@ package game.objects
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite, TextureRegion}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.{Polygon, Vector2}
+import com.badlogic.gdx.math.{Interpolation, Polygon, Vector2}
 import game.Ticker
 import game.main.{CollisionBody, CollisionDetector, MainGame}
 import game.util.{Utils, Vector2e}
@@ -22,8 +22,9 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
   val maxVelocity: Float = 0.2f
   val maxForce: Float = 0.05f
   val mass: Float = 100f
-  val maxSeeAhead = sWidth * 2
-  val maxForceAvoid = 0.2f
+  val maxSeeAhead: Float = sWidth * 2
+  val maxForceAvoid: Float = 0.25f
+  val maxRotateTime: Float = 150f
 
   updateCollPolygon()
   collDetect.addShape(collBody)
@@ -44,55 +45,24 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
           (((target -- pos).nor ** maxVelocity) -- velocity)
             .limit(maxForce) */ mass
 
-        val avoid = Vector2e.pool
         //if no obstacle at close distance found, try look further away
-        var maxAngle = avoidObstacles(0, avoid)
-        if (maxAngle.isEmpty) maxAngle = avoidObstacles(maxSeeAhead, avoid)
+        val avoid = Vector2e.pool()
+        val obstacleFound = avoidObstacles(0, avoid)
+        if (!obstacleFound) avoidObstacles(maxSeeAhead, avoid)
         steering ++ avoid
 
-
-        /*
-        maxAngle.foreach(
-          a => steering.clampAngle(a + 180, a + 360)
-        )
-        */
-
-
         velocity.mulAdd(steering, ticker.delta).limit(maxVelocity)
-
-        MainGame.setColorRed
-        //MainGame.debugRender.line(pos, pos.cpy() ++ steering.cpy() ** 5000)
-
-        if (maxAngle.isDefined) {
-          MainGame.setColorBlack
-          MainGame.debugRender.line(pos, pos.cpy() ++ steering.cpy().setAngle(maxAngle.get) ** 50000)
-          MainGame.setColorWhite
-          MainGame.debugRender.line(pos, pos.cpy() ++ steering.cpy().setAngle(maxAngle.get + 180) ** 50000)
-        }
-
-        MainGame.setColorMagenta
-
-
-        //Gdx.app.log("Active", "angle: " + velocity.angle)
-        //MainGame.debugRender.line(pos, pos.cpy() ++ velocity.cpy() ** 5000)
-
-
         pos.mulAdd(velocity, ticker.delta)
 
-        angle = velocity.angle
+        angle = Utils.closestAngle360(angle, velocity.angle)
+        angle = Interpolation.linear.apply(angle, velocity.angle, ticker.delta / maxRotateTime)
+        angle = Utils.absAngle(angle)
 
         Vector2e.free(steering) //free the memory
         Vector2e.free(avoid)
       }
       else
         destroy()
-
-
-      /*
-      Gdx.app.setLogLevel(Application.LOG_DEBUG)
-      Gdx.app.log("tmp", "posX: " + posX)
-      Gdx.app.log("tmp", "Ticker: " + ticker.elapsed)
-      */
 
       updateSprite()
       updateCollPolygon()
@@ -101,8 +71,8 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
 
 
   //Sets the 'avoid' Vector2 to push the player around the obstacle
-  //Retuns true if there were an obstacle
-  private def avoidObstacles(visionLength: Float, avoid: Vector2): Option[Float] = {
+  //Returns true if there were an obstacle
+  private def avoidObstacles(visionLength: Float, avoid: Vector2): Boolean = {
 
     val ahead = Vector2e.pool(velocity).nor **
       (visionLength * (velocity.len() / maxVelocity)) ++ pos
@@ -128,7 +98,7 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
 
     Vector2e.free(ahead) //free the memory
 
-    if (obstacle.isDefined) Some(angle) else None
+    obstacle.isDefined //returns true if collided
   }
 
 

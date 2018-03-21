@@ -27,7 +27,7 @@ object Vector2e {
 
   def pool(v2: Vector2): Vector2 = poolV.obtain().set(v2)
 
-  def pool: Vector2 = poolV.obtain().set(0, 0) //reset happens at this moment
+  def pool(): Vector2 = poolV.obtain().set(0, 0) //reset happens at this moment
 
   //To make it more scala
   implicit class Vector2Enhanced(v: Vector2) {
