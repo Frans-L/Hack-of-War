@@ -9,7 +9,7 @@ import game.util.Vector2e._
   * Created by Frans on 06/03/2018.
   */
 class VisualObject(val pos: Vector2, val size: Vector2,
-                   val padding: Vector2, var sprite: Sprite) extends GameObject {
+                   val padding: Vector2, var sprite: Sprite) extends GeneralObject {
 
   updateSprite()
 

@@ -17,7 +17,7 @@ object Vector2mtv {
   /**
     * Returns a reset and pooled mtvvector.
     *
-    * @return
+    * @return a minimumTranslationVector
     */
   def pool(): MinimumTranslationVector = {
     val v = poolmtvV.obtain()

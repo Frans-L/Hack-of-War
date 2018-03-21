@@ -9,7 +9,7 @@ import game.util.Vector2e._
 /**
   * Created by Frans on 26/02/2018.
   */
-abstract class GameObject extends GameElement {
+trait GeneralObject extends GameElement {
 
   var visible: Boolean = true
   var enabled: Boolean = true
@@ -23,7 +23,9 @@ abstract class GameObject extends GameElement {
 
   var sprite: Sprite
 
-  //Updates sprite location, rotation and size
+  /**
+    * Updates sprite location, rotation and size
+    */
   def updateSprite(): Unit = {
     sprite.setOrigin(origin.x, origin.y)
     sprite.setBounds(pos.x - origin.x, pos.y - origin.y, size.width, size.height)
@@ -31,16 +33,16 @@ abstract class GameObject extends GameElement {
     sprite.setRotation(angle)
   }
 
-  //Returns scaled width
+  /** Returns scaled width */
   def sWidth: Float = size.width * scale.x
 
-  //Returns scaled height
+  /** Returns scaled height */
   def sHeight: Float = size.height * scale.y
 
-  //Get X location next to this object
+  /** Get X location next to this object */
   def nextToX: Float = pos.x + sWidth
 
-  //Get Y location next to this object
+  /** Get Y location next to this object */
   def nextToY: Float = pos.y + sHeight
 
 }

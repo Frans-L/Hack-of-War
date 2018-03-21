@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Polygon, Rectangle, Shape2D}
 import game.{GameElement, World}
 import game.loader.GameTextures
-import game.objects.{GameObject, VisualObject}
+import game.objects.{GeneralObject, VisualObject}
 import game.util.{Utils, Vector2e}
 
 import scala.collection.mutable
@@ -24,7 +24,7 @@ object Map {
   */
 class Map(world: World, textures: GameTextures) extends GameElement {
 
-  private val elements: mutable.Buffer[GameObject] = mutable.Buffer[GameObject]()
+  private val elements: mutable.Buffer[GeneralObject] = mutable.Buffer[GeneralObject]()
 
   private val collAccuracy = 20 //collisionAccuracy
   private val collMap = Array.ofDim[Boolean](

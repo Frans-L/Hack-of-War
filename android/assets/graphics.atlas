@@ -4,37 +4,44 @@ size: 512,512
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+bullet
+  rotate: false
+  xy: 2, 2
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
 card1
   rotate: false
-  xy: 2, 22
+  xy: 2, 24
   size: 160, 240
   orig: 160, 240
   offset: 0, 0
   index: -1
 mapBorder
   rotate: false
-  xy: 2, 15
+  xy: 164, 77
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
 mapBorderShort
   rotate: false
-  xy: 164, 82
+  xy: 164, 84
   size: 176, 180
   orig: 180, 180
   offset: 2, 0
   index: -1
 mapBorderWide
   rotate: false
-  xy: 2, 264
+  xy: 2, 266
   size: 341, 180
   orig: 345, 180
   offset: 2, 0
   index: -1
 unit1
   rotate: false
-  xy: 345, 369
+  xy: 345, 371
   size: 99, 75
   orig: 100, 75
   offset: 0, 0

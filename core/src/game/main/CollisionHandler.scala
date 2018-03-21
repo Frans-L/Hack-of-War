@@ -11,7 +11,7 @@ import scala.collection.mutable
   *
   * Handles the physics and collision
   */
-class CollisionDetector(val map: Map) {
+class CollisionHandler(val map: Map) {
 
   private val bodys: mutable.Buffer[CollisionBody] = mutable.Buffer[CollisionBody]()
   bodys ++= map.collPolygons //add map collisions
@@ -57,14 +57,20 @@ class CollisionDetector(val map: Map) {
   }
 
   //Returns the collided object, and the angle of the polyline
-  def collideAsCircle(obj: CollisionBody): (Option[CollisionBody], Float) = {
+  def collideAsCircle(obj: CollisionBody, center: Vector2, radius: Float):
+  (Option[CollisionBody], Float) = {
+
     var result: (Boolean, Float) = (false, 0f) //(is collided, angle)
     var body: Option[CollisionBody] = None
     for (b <- bodys if !result._1 && b != obj) {
-      result = b.overlapsCircle(obj)
+      result = b.overlapsCircle(center, radius)
       if (result._1) body = Some(b)
     }
     (body, result._2)
+  }
+
+  def collideAsCircle(obj: CollisionBody): (Option[CollisionBody], Float) = {
+    collideAsCircle(obj, obj.center, obj.getRadius)
   }
 
   def addShape(p: CollisionBody): Unit = bodys += p

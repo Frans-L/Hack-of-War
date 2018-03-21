@@ -1,33 +1,31 @@
 package game.objects
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.g2d.{Batch, Sprite, TextureRegion}
+import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.{Interpolation, Polygon, Vector2}
-import game.Ticker
-import game.main.{CollisionBody, CollisionDetector, MainGame}
-import game.util.{Utils, Vector2e, Vector2mtv}
+import com.badlogic.gdx.math.{Interpolation, Vector2}
+import game.main.{CollisionBody, CollisionHandler, MainGame}
 import game.util.Vector2e._
+import game.util.{Utils, Vector2e, Vector2mtv}
 
 /**
   * Created by Frans on 26/02/2018.
   */
-class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBody: CollisionBody,
-                   val pos: Vector2, val size: Vector2) extends GameObject {
+class UnitObject(var sprite: Sprite, val collHandler: CollisionHandler, val collBody: CollisionBody,
+                 val pos: Vector2, val size: Vector2) extends PhysicsObject {
 
-  override val origin: Vector2 = Vector2e(size.x / 2f, size.y / 2f)
 
   val velocity: Vector2 = Vector2e(0f, 0f)
 
   val maxVelocity: Float = 0.2f
   val maxForce: Float = 0.05f
   val mass: Float = 100f
-  val maxSeeAhead: Float = sWidth * 2
+  val maxSeeAhead: Float = sWidth * 2f
   val maxForceAvoid: Float = 0.25f
   val maxRotateTime: Float = 150f
 
   updateCollPolygon()
-  collDetect.addShape(collBody)
+  collHandler.addShape(collBody)
 
   updateSprite()
 
@@ -35,16 +33,18 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
   private def target: Vector2 = MainGame.debugViewPort.unproject(Vector2e.pool(Gdx.input.getX, Gdx.input.getY))
 
 
+  /**
+    * Updates the object collision, physics, AI etc...
+    */
   override def update(): Unit = {
     if (enabled) {
 
       val collForce = Vector2mtv.pool()
-      if (collDetect.isCollided(collBody, collForce)) {
+      if (collHandler.isCollided(collBody, collForce)) {
 
         pos.mulAdd((collForce.normal ** collForce.depth).limit(maxVelocity), ticker.delta)
 
-      } else if (pos.x < 1920 / 2f) { //TODO: 'if' because of the debugging
-
+      } else if (pos.x < 1920 / 2f - 150) { //TODO: 'if' because of the debugging
 
         //move towards target
         val steering =
@@ -54,17 +54,26 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
         //if no obstacle at close distance found, try look further away
         val avoid = Vector2e.pool()
         val obstacleFound = avoidObstacles(0, avoid)
-        if (!obstacleFound) avoidObstacles(maxSeeAhead, avoid)
+
+        //if enough speed, try to look further away
+        if (!obstacleFound && velocity.len2() > 0.001f ) {
+          avoidObstacles(maxSeeAhead, avoid)
+        }
+
+        //updates steering to avoid obstacles
         steering ++ avoid
 
+        //moves object
         velocity.mulAdd(steering, ticker.delta).limit(maxVelocity)
         pos.mulAdd(velocity, ticker.delta)
 
+        //rotates smoothly towards moving direction
         angle = Utils.closestAngle360(angle, velocity.angle)
         angle = Interpolation.linear.apply(angle, velocity.angle, ticker.delta / maxRotateTime)
         angle = Utils.absAngle(angle)
 
-        Vector2e.free(steering) //free the memory
+        //free the memory
+        Vector2e.free(steering)
         Vector2e.free(avoid)
 
       }
@@ -79,20 +88,26 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
   }
 
 
-  //Sets the 'avoid' Vector2 to push the player around the obstacle
-  //Returns true if there were an obstacle
+  /** Check if obstacles are ahead. Sets the 'avoid' Vector2 to
+    * push the player around the obstacle
+    *
+    * @param visionLength distance to look ahead
+    * @param avoid        a Vector2 that is set to push the player away from the obstacle
+    * @return true if there were an obstacle
+    */
   private def avoidObstacles(visionLength: Float, avoid: Vector2): Boolean = {
 
     val ahead = Vector2e.pool(velocity).nor **
       (visionLength * (velocity.len() / maxVelocity)) ++ pos
 
-    collBody.setPosition(ahead.x - origin.x, ahead.y - origin.y)
-    val (obstacle, angle) = collDetect.collideAsCircle(collBody)
+    //checks collision in the wanted pos
+    val visionPos = Vector2e.pool(ahead.x - origin.x, ahead.y - origin.y)
+    val (obstacle, angle) =
+      collHandler.collideAsCircle(collBody, ahead, collBody.getRadiusScaled)
+    Vector2e.free(visionPos) //free the memory
 
-    //if (obstacle.isDefined)
-    //  MainGame.debugRender.circle(collBody.center.x, collBody.center.y, collBody.getRadiusScaled)
-
-    collBody.setPosition(pos.x - origin.x, pos.y - origin.y)
+    //draws debug circle
+    //MainGame.debugRender.circle(ahead.x, ahead.y, collBody.getRadiusScaled)
 
     //calculate the force opposite to obstacle center
     obstacle.foreach(o => ((avoid ++ pos) -- o.center).nor ** maxForceAvoid / mass)
@@ -102,19 +117,14 @@ class ActiveObject(var sprite: Sprite, collDetect: CollisionDetector, val collBo
   }
 
 
-  //Destroys collisions map and marks that this can be cleaned
-  def destroy(): Unit = {
-    collDetect.removeShape(collBody)
+  /**
+    * Destroys collisions map and marks that this can be cleaned
+    */
+  override def destroy(): Unit = {
+    collHandler.removeShape(collBody)
     deleted = true
   }
 
-  //Updates collPolygons location, rotation and scale
-  def updateCollPolygon(): Unit = {
-    collBody.setPosition(pos.x - origin.x, pos.y - origin.y)
-    collBody.setScale(scale.x, scale.y)
-    collBody.setRotation(angle)
-    collBody.setOrigin(origin.x, origin.y)
-  }
 
   override def draw(shapeRender: ShapeRenderer): Unit = {
     if (visible) {

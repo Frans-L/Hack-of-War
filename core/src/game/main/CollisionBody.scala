@@ -12,7 +12,9 @@ class CollisionBody(vertices: Array[Float], private var radius: Float)
   //caches the center point vector
   private val centerVector: Vector2 = Vector2e(0, 0)
 
-  //setters and getters to match with coding style of Polygon
+  /**
+    * Setters and getters to match with coding style of Polygon
+    */
   def getRadius: Float = radius
 
   def getRadiusScaled: Float = radius * math.max(getScaleX, getScaleY)
@@ -26,26 +28,32 @@ class CollisionBody(vertices: Array[Float], private var radius: Float)
   def asVertices: Array[Float] = getTransformedVertices
 
 
-  //Moves the body
+  /** Moves the body */
   def moveBy(v: Vector2): Unit = setPosition(getX + v.x, getY + v.y)
 
-  //Moves the body
   def moveBy(v: Vector2, mult: Float): Unit = setPosition(getX + v.x * mult, getY + v.y * mult)
 
 
-  //returns true if collided and angle of the collided polyline
+  /** Returns true if collided and angle of the collided polyline */
   def overlapsCircle(collBody: CollisionBody): (Boolean, Float) = {
     overlapsCircle(collBody.center, collBody.getRadiusScaled)
   }
 
-  //Inspired by https://stackoverflow.com/questions/15323719/circle-and-polygon-collision-with-libgdx
-  private def overlapsCircle(center: Vector2, r: Float): (Boolean, Float) = {
+
+  /**
+    * Inspired by https://stackoverflow.com/questions/15323719/circle-and-polygon-collision-with-libgdx
+    *
+    * @param center center of the circle
+    * @param r      radius
+    * @return (isOverlapping, angle)
+    */
+  def overlapsCircle(center: Vector2, r: Float): (Boolean, Float) = {
     val r2: Float = r * r
 
     val verts: Array[Float] = getTransformedVertices
 
-    val v1 = Vector2e.pool
-    val v2 = Vector2e.pool
+    val v1 = Vector2e.pool()
+    val v2 = Vector2e.pool()
 
     var result = false
     var angle: Float = 0
@@ -69,7 +77,7 @@ class CollisionBody(vertices: Array[Float], private var radius: Float)
         * 180d / math.Pi).toFloat
     }
 
-    ((result || contains(center)), angle)
+    (result || contains(center), angle)
   }
 
 }

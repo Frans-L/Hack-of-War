@@ -12,20 +12,23 @@ import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import com.badlogic.gdx.{Gdx, Screen}
 import game.loader.GameTextures
-import game.objects.{ActiveObject, Soldier}
 import game.ui.GameUI
 import game.util.{Vector2e, Vector2mtv}
 import game.{Ticker, World}
 
+
+/**
+  * For the debug reasons
+  */
 object MainGame {
 
   var debugViewPort: Viewport = _
   var debugRender: ShapeRenderer = _
 
-  def setColorBlack = MainGame.debugRender.setColor(0, 0, 0, 1)
-  def setColorWhite = MainGame.debugRender.setColor(1, 1, 1, 1)
-  def setColorMagenta = MainGame.debugRender.setColor(1, 0, 1, 1)
-  def setColorRed = MainGame.debugRender.setColor(1, 0, 0, 1)
+  def setColorBlack(): Unit = MainGame.debugRender.setColor(0, 0, 0, 1)
+  def setColorWhite(): Unit = MainGame.debugRender.setColor(1, 1, 1, 1)
+  def setColorMagenta(): Unit = MainGame.debugRender.setColor(1, 0, 1, 1)
+  def setColorRed(): Unit = MainGame.debugRender.setColor(1, 0, 0, 1)
 }
 
 /**
@@ -58,7 +61,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   //sets the map
   private val map: Map = new Map(screenDim, textures)
 
-  private val collDetect: CollisionDetector = new CollisionDetector(map)
+  private val collDetect: CollisionHandler = new CollisionHandler(map)
 
   //sets the players
   private val players: Vector[Player] = Vector(new Player(textures, collDetect))
@@ -66,11 +69,15 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   //sets the ui
   private val gameUI: GameUI =
     new GameUI(textures, screenDim, viewport, players.head, shapeRender)
-  
+
   val fPSLogger: FPSLogger = new FPSLogger
 
-  //called every frame
-  override def render(delta: Float): Unit = {
+
+  /**
+    * Called every frame
+    * @param delta Libgdx's mandatory parameter
+    */
+    override def render(delta: Float): Unit = {
 
     //clears the screen
     Gdx.gl.glClearColor(74 / 255f, 96 / 255f, 112 / 255f, 1)

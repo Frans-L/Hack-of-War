@@ -3,7 +3,7 @@ package game.objects
 import com.badlogic.gdx.math.Polygon
 import game.Ticker
 import game.loader.GameTextures
-import game.main.{CollisionBody, CollisionDetector}
+import game.main.{CollisionBody, CollisionHandler}
 import game.util.{Utils, Vector2e}
 
 /**
@@ -14,8 +14,8 @@ object Soldier {
   val texture: String = GameTextures.Units.unit1
 
 
-  def create(ticker: Ticker, textures: GameTextures, collDetect: CollisionDetector,
-             x: Float, y: Float): ActiveObject = {
+  def create(ticker: Ticker, textures: GameTextures, collDetect: CollisionHandler,
+             x: Float, y: Float): UnitObject = {
 
 
     val scale = 1.5f
@@ -24,7 +24,7 @@ object Soldier {
 
     val body: CollisionBody = Utils.triangleCollBody(0, h, w, h / 2f)
 
-    val obj: ActiveObject = new ActiveObject(
+    val obj: UnitObject = new UnitObject(
       textures.atlas.createSprite(texture), collDetect, body,
       Vector2e(x, y), Vector2e(w, h))
 

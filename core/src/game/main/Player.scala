@@ -6,20 +6,20 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.loader.GameTextures
 import game.{GameElement, Ticker}
-import game.objects.{ActiveObject, GameObject, Soldier}
+import game.objects.{UnitObject, GeneralObject, Soldier}
 
 import scala.collection.mutable
 
 /**
   * Created by Frans on 06/03/2018.
   */
-class Player(textures: GameTextures, collDetect: CollisionDetector) extends GameElement {
+class Player(textures: GameTextures, collDetect: CollisionHandler) extends GameElement {
 
   private val deck: mutable.Buffer[Card] = mutable.Buffer[Card]()
   val hand: mutable.Buffer[Card] = mutable.Buffer[Card]()
 
 
-  val units: mutable.Buffer[ActiveObject] = mutable.Buffer[ActiveObject]()
+  val units: mutable.Buffer[UnitObject] = mutable.Buffer[UnitObject]()
 
 
   hand.append(new Card(this))
@@ -42,7 +42,7 @@ class Player(textures: GameTextures, collDetect: CollisionDetector) extends Game
 
   }
 
-  //returns true is succeeded
+  /** Returns true is succeeded */
   def useCard(card: Card, posX: Float, posY: Float): Boolean = {
 
     //the card can be used

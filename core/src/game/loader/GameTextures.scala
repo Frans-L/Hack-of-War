@@ -27,6 +27,7 @@ object GameTextures {
 
   object Units {
     val unit1 = "unit1"
+    val bullet1 = "bullet"
     val card1 = "card1"
     val mapBorderShort = "mapBorderShort"
     val mapBorderWide = "mapBorderWide"
