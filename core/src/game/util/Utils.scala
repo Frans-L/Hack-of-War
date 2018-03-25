@@ -1,7 +1,7 @@
 package game.util
 
 import com.badlogic.gdx.math.{Polygon, Rectangle}
-import game.main.CollisionBody
+import game.main.physics.CollisionBody
 
 /**
   * Created by Frans on 11/03/2018.

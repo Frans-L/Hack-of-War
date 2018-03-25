@@ -1,4 +1,4 @@
-package game.main
+package game.main.physics
 
 import com.badlogic.gdx.math.{Intersector, Polygon, Vector2}
 import game.util.Vector2e

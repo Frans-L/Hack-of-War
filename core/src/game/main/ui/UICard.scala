@@ -1,4 +1,4 @@
-package game.ui
+package game.main.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Interpolation, Vector2, Vector3}
 import com.badlogic.gdx.scenes.scene2d.actions.{Actions, MoveToAction, ParallelAction, ScaleByAction}
 import com.badlogic.gdx.scenes.scene2d._
-import game.Ticker
 import game.loader.GameTextures
+import game.util.Ticker
 
 
 object UICard {
@@ -31,7 +31,6 @@ object UICard {
   */
 class UICard(sprite: Sprite) extends Actor {
 
-  var ticker = Ticker.defaultTicker
   private var startPos: Vector2 = new Vector2(0, 0) //tells the spot to stay when not moved
   var state = UICard.State.IDLE
   private var moved = false
@@ -170,7 +169,7 @@ class UICard(sprite: Sprite) extends Actor {
 
   //is called every frame by stage (calls method update)
   override def act(delta: Float): Unit = {
-    super.act(ticker.delta / 1000f)
+    super.act(delta)
     this.update()
   }
 

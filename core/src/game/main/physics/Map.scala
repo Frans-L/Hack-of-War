@@ -1,22 +1,20 @@
-package game.main
+package game.main.physics
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.{Polygon, Rectangle, Shape2D}
-import game.{GameElement, World}
+import game.GameElement
 import game.loader.GameTextures
-import game.objects.{GeneralObject, VisualObject}
-import game.util.{Utils, Vector2e}
+import game.main.physics.objects.BorderSprite
+import game.util.{Utils, Vector2e, World}
 
 import scala.collection.mutable
 
 
 object Map {
 
-  val mapBorder = GameTextures.Units.mapBorder
-  val mapBorderShort = GameTextures.Units.mapBorderShort
-  val mapBorderWide = GameTextures.Units.mapBorderWide
+  val mapBorder: String = GameTextures.Units.mapBorder
+  val mapBorderShort: String = GameTextures.Units.mapBorderShort
+  val mapBorderWide: String = GameTextures.Units.mapBorderWide
 }
 
 /**
@@ -24,7 +22,7 @@ object Map {
   */
 class Map(world: World, textures: GameTextures) extends GameElement {
 
-  private val elements: mutable.Buffer[GeneralObject] = mutable.Buffer[GeneralObject]()
+  private val elements: mutable.Buffer[BorderSprite] = mutable.Buffer[BorderSprite]()
 
   private val collAccuracy = 20 //collisionAccuracy
   private val collMap = Array.ofDim[Boolean](
@@ -45,7 +43,9 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     elements.foreach(_.draw(batch))
   }
 
-  //returns true if collided
+  /**
+    * Returns true if collided with static collision map
+    */
   def collide(x: Float, y: Float): Boolean = {
     if (world.isInside(x + 0.5f, y + 0.5f))
       collMap(
@@ -55,7 +55,9 @@ class Map(world: World, textures: GameTextures) extends GameElement {
       false
   }
 
-  //creates the static collision map from 'elements'
+  /**
+    * Creates a static collision map from 'elements'
+    */
   private def createCollisionMap(): Unit = {
     for (x <- collMap.indices) {
       for (y <- collMap.head.indices) {
@@ -65,7 +67,9 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     }
   }
 
-  //creates the map
+  /**
+    * Creates a map
+    */
   private def initializeMap(): Unit = {
 
     //Down border
@@ -75,7 +79,7 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     collPolygons += Utils.rectangleCollBody(x, y, world.maxWidth, height)
 
     for (i <- 0 to 8) { //to create collisionMap
-      elements += new VisualObject(
+      elements += new BorderSprite(
         Vector2e(x, y),
         Vector2e(345 - ((i % 2) * 165), height),
         Vector2e(1, 0),
@@ -91,7 +95,7 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     collPolygons += Utils.rectangleCollBody(x, y, world.maxWidth, height)
 
     for (i <- 0 to 8) { //to create collisionMap
-      elements += new VisualObject(
+      elements += new BorderSprite(
         Vector2e(x, y),
         Vector2e(345 - ((i % 2) * 165), height),
         Vector2e(1, 0),
@@ -109,7 +113,7 @@ class Map(world: World, textures: GameTextures) extends GameElement {
     collPolygons += Utils.rectangleCollBody(x, y, width * 2, height)
 
     for (i <- 0 until 2) { //to create collisionMap
-      elements += new VisualObject(
+      elements += new BorderSprite(
         Vector2e(x, y),
         Vector2e(width, height),
         Vector2e(1, 0),

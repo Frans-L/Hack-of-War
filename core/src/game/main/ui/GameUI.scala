@@ -1,4 +1,4 @@
-package game.ui
+package game.main.ui
 
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.{Gdx, InputProcessor}
@@ -9,7 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import game.loader.GameTextures
 import game.main.Player
-import game.{GameElement, Ticker, World}
+import game.GameElement
+import game.util.World
 
 
 /**
@@ -47,7 +48,7 @@ class GameUI(gameTextures: GameTextures,
 
 
     //updates stage elements
-    stage.act()
+    stage.act(ticker.delta / 1000f)
 
   }
 

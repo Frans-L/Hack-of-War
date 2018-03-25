@@ -3,6 +3,7 @@ package game
 import com.badlogic.gdx._
 import game.loader.{GameTextures, Loader}
 import game.main.MainGame
+import game.util.World
 
 
 class HackOfWar extends Game {

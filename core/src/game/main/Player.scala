@@ -6,15 +6,17 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import game.loader.GameTextures
-import game.{GameElement, Ticker}
-import game.objects.{GeneralObject, Soldier, UnitObject}
+import game.main.physics.CollisionHandler
+import game.GameElement
+import game.main.physics.objects.UnitObject
+import game.main.physics.objects.units.Soldier
 
 import scala.collection.mutable
 
 /**
   * Created by Frans on 06/03/2018.
   */
-class Player(textures: GameTextures, collDetect: CollisionHandler, index: Int) extends GameElement {
+class Player(textures: GameTextures, collHandler: CollisionHandler, index: Int) extends GameElement {
 
   private val deck: mutable.Buffer[Card] = mutable.Buffer[Card]()
   val hand: mutable.Buffer[Card] = mutable.Buffer[Card]()
@@ -47,7 +49,7 @@ class Player(textures: GameTextures, collDetect: CollisionHandler, index: Int) e
   def useCard(card: Card, posX: Float, posY: Float): Boolean = {
 
     //the card can be used
-    if (!collDetect.map.collide(posX, posY)) {
+    if (!collHandler.map.collide(posX, posY)) {
       true
     } else {
       false
@@ -55,7 +57,7 @@ class Player(textures: GameTextures, collDetect: CollisionHandler, index: Int) e
   }
 
   def spawnUnit(x: Float, y: Float): Unit = {
-    units += Soldier.create(ticker, textures, collDetect, x, y, MathUtils.random(0, 1))
+    units += Soldier.create(collHandler, textures, x, y, MathUtils.random(0, 1))
   }
 
   override def draw(shapeRender: ShapeRenderer): Unit = {

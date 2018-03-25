@@ -12,9 +12,9 @@ import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import com.badlogic.gdx.{Gdx, Screen}
 import game.loader.GameTextures
-import game.ui.GameUI
-import game.util.{Vector2e, Vector2mtv}
-import game.{Ticker, World}
+import game.main.ui.GameUI
+import game.util.{Ticker, Vector2e, Vector2mtv, World}
+import game.main.physics.CollisionHandler
 
 
 /**
@@ -59,7 +59,7 @@ class MainGame(textures: GameTextures, screenDim: World) extends Screen {
   MainGame.debugViewPort = viewport
 
   //sets the map
-  private val map: Map = new Map(screenDim, textures)
+  private val map: physics.Map = new physics.Map(screenDim, textures)
 
   private val collDetect: CollisionHandler = new CollisionHandler(map)
 

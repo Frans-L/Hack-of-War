@@ -2,6 +2,7 @@ package game
 
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import game.util.Ticker
 
 /**
   * Created by Frans on 26/02/2018.

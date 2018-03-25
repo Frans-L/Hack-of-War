@@ -1,4 +1,4 @@
-package game
+package game.util
 
 /**
   * Created by Frans on 26/02/2018.

@@ -1,21 +1,26 @@
-package game.main
+package game.main.physics
 
-import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
-import com.badlogic.gdx.math.{Intersector, Polygon, Vector2}
+import com.badlogic.gdx.math.{Intersector, Vector2}
+import game.GameElement
+import game.main.Player
+import game.main.physics.objects.CollisionObject
 
 import scala.collection.mutable
+
 
 /**
   * Created by Frans on 11/03/2♦018.
   *
   * Handles the physics and collision
   */
-class CollisionHandler(val map: Map) {
+class CollisionHandler(val map: Map) extends GameElement {
 
   private val bodys: mutable.Buffer[CollisionBody] = mutable.Buffer[CollisionBody]()
-  bodys ++= map.collPolygons //add map collisions
 
+  bodys ++= map.collPolygons //add map collisions
 
   /** Checks if the obj is colliding with something.
     *
@@ -77,4 +82,9 @@ class CollisionHandler(val map: Map) {
 
   def removeShape(p: CollisionBody): Unit = bodys -= p
 
+  override def update(): Unit = ???
+
+  override def draw(shapeRender: ShapeRenderer): Unit = ???
+
+  override def draw(batch: Batch): Unit = ???
 }

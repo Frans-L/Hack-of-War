@@ -1,10 +1,9 @@
-package game.objects
+package game.main.physics.objects.units
 
-import com.badlogic.gdx.math.Polygon
-import game.Ticker
 import game.loader.GameTextures
-import game.main.{CollisionBody, CollisionHandler}
-import game.util.{Utils, Vector2e}
+import game.main.physics.{CollisionBody, CollisionHandler}
+import game.main.physics.objects.UnitObject
+import game.util.{Ticker, Utils, Vector2e}
 
 /**
   * Created by Frans on 01/03/2018.
@@ -14,7 +13,7 @@ object Soldier {
   val texture: Seq[String] = GameTextures.Units.unit1
 
 
-  def create(ticker: Ticker, textures: GameTextures, collDetect: CollisionHandler,
+  def create(collHandler: CollisionHandler, textures: GameTextures,
              x: Float, y: Float, colorIndex: Int): UnitObject = {
 
 
@@ -25,7 +24,7 @@ object Soldier {
     val body: CollisionBody = Utils.triangleCollBody(0, h, w, h / 2f)
 
     val obj: UnitObject = new UnitObject(
-      textures.atlas.createSprite(texture(colorIndex)), collDetect, body,
+      textures.atlas.createSprite(texture(colorIndex)), collHandler, body,
       Vector2e(x, y), Vector2e(w, h))
 
     obj

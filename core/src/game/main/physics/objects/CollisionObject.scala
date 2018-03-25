@@ -1,18 +1,13 @@
-package game.objects
+package game.main.physics.objects
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.g2d.{Batch, Sprite, TextureRegion}
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.{Interpolation, Polygon, Vector2}
-import game.Ticker
-import game.main.{CollisionBody, CollisionHandler, MainGame}
-import game.util.{Utils, Vector2e, Vector2mtv}
-import game.util.Vector2e._
+import com.badlogic.gdx.math.Vector2
+import game.main.physics.CollisionBody
+import game.util.Vector2e
 
 /**
   * Created by Frans on 26/02/2018.
   */
-trait PhysicsObject extends GeneralObject {
+trait CollisionObject extends SpriteObject {
 
   //all variables that are inherited
   /*
@@ -34,7 +29,6 @@ trait PhysicsObject extends GeneralObject {
   override val origin: Vector2 = Vector2e(size.x / 2f, size.y / 2f)
 
   //physics to gameObject
-  val collHandler: CollisionHandler //the collision handler
   val collBody: CollisionBody
   val velocity: Vector2
   val mass: Float
@@ -50,7 +44,9 @@ trait PhysicsObject extends GeneralObject {
   }
 
   /** ActiveObject should be destroyable */
-  def destroy(): Unit = Unit
+  def destroy(): Unit = {
+    deleted = true
+  }
 
 
 }

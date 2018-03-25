@@ -2,9 +2,8 @@ package game.main
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, InputListener}
-import game.Ticker
 import game.loader.GameTextures
-import game.ui.{GameUI, UICard}
+import game.main.ui.UICard
 
 object Card {
 

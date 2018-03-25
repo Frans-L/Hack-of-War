@@ -1,4 +1,4 @@
-package game.objects
+package game.main.physics.objects
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
@@ -9,7 +9,7 @@ import game.util.Vector2e._
 /**
   * Created by Frans on 26/02/2018.
   */
-trait GeneralObject extends GameElement {
+trait SpriteObject extends GameElement {
 
   var visible: Boolean = true
   var enabled: Boolean = true

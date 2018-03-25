@@ -1,10 +1,11 @@
-package game.objects
+package game.main.physics.objects
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Interpolation, Vector2}
-import game.main.{CollisionBody, CollisionHandler, MainGame}
+import game.main.MainGame
+import game.main.physics.{CollisionBody, CollisionHandler}
 import game.util.Vector2e._
 import game.util.{Utils, Vector2e, Vector2mtv}
 
@@ -12,7 +13,7 @@ import game.util.{Utils, Vector2e, Vector2mtv}
   * Created by Frans on 26/02/2018.
   */
 class UnitObject(var sprite: Sprite, val collHandler: CollisionHandler, val collBody: CollisionBody,
-                 val pos: Vector2, val size: Vector2) extends PhysicsObject {
+                 val pos: Vector2, val size: Vector2) extends CollisionObject {
 
 
   val velocity: Vector2 = Vector2e(0f, 0f)
@@ -56,7 +57,7 @@ class UnitObject(var sprite: Sprite, val collHandler: CollisionHandler, val coll
         val obstacleFound = avoidObstacles(0, avoid)
 
         //if enough speed, try to look further away
-        if (!obstacleFound && velocity.len2() > 0.001f ) {
+        if (!obstacleFound && velocity.len2() > 0.001f) {
           avoidObstacles(maxSeeAhead, avoid)
         }
 
@@ -121,8 +122,8 @@ class UnitObject(var sprite: Sprite, val collHandler: CollisionHandler, val coll
     * Destroys collisions map and marks that this can be cleaned
     */
   override def destroy(): Unit = {
+    super.destroy()
     collHandler.removeShape(collBody)
-    deleted = true
   }
 
 

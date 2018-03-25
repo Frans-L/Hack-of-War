@@ -1,6 +1,4 @@
-package game.ui
-
-import game.GameElement
+package game
 
 /**
   * Created by Frans on 27/02/2018.
