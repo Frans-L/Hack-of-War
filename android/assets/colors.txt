@@ -1,0 +1,10 @@
+
+BLUE
+#6bfffd //kirkas
+#146e85
+
+
+RED
+#ff6b69 //kirkas
+#851412
+

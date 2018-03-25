@@ -11,11 +11,11 @@ import game.util.{Utils, Vector2e}
   */
 object Soldier {
 
-  val texture: String = GameTextures.Units.unit1
+  val texture: Seq[String] = GameTextures.Units.unit1
 
 
   def create(ticker: Ticker, textures: GameTextures, collDetect: CollisionHandler,
-             x: Float, y: Float): UnitObject = {
+             x: Float, y: Float, colorIndex: Int): UnitObject = {
 
 
     val scale = 1.5f
@@ -25,7 +25,7 @@ object Soldier {
     val body: CollisionBody = Utils.triangleCollBody(0, h, w, h / 2f)
 
     val obj: UnitObject = new UnitObject(
-      textures.atlas.createSprite(texture), collDetect, body,
+      textures.atlas.createSprite(texture(colorIndex)), collDetect, body,
       Vector2e(x, y), Vector2e(w, h))
 
     obj

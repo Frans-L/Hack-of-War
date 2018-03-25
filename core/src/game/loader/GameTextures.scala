@@ -26,8 +26,8 @@ object GameTextures {
   val atlasName = "graphics.atlas"
 
   object Units {
-    val unit1 = "unit1"
-    val bullet1 = "bullet"
+    val unit1 = Seq("unit1Blue", "unit1Red")
+    val bullet1 = Seq("bullet1Blue", "bullet1Red")
     val card1 = "card1"
     val mapBorderShort = "mapBorderShort"
     val mapBorderWide = "mapBorderWide"

@@ -4,16 +4,17 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.MathUtils
 import game.loader.GameTextures
 import game.{GameElement, Ticker}
-import game.objects.{UnitObject, GeneralObject, Soldier}
+import game.objects.{GeneralObject, Soldier, UnitObject}
 
 import scala.collection.mutable
 
 /**
   * Created by Frans on 06/03/2018.
   */
-class Player(textures: GameTextures, collDetect: CollisionHandler) extends GameElement {
+class Player(textures: GameTextures, collDetect: CollisionHandler, index: Int) extends GameElement {
 
   private val deck: mutable.Buffer[Card] = mutable.Buffer[Card]()
   val hand: mutable.Buffer[Card] = mutable.Buffer[Card]()
@@ -54,7 +55,7 @@ class Player(textures: GameTextures, collDetect: CollisionHandler) extends GameE
   }
 
   def spawnUnit(x: Float, y: Float): Unit = {
-    units += Soldier.create(ticker, textures, collDetect, x, y)
+    units += Soldier.create(ticker, textures, collDetect, x, y, MathUtils.random(0, 1))
   }
 
   override def draw(shapeRender: ShapeRenderer): Unit = {
