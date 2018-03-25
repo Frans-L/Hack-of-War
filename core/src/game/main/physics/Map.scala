@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.GameElement
 import game.loader.GameTextures
 import game.main.physics.objects.BorderSprite
-import game.util.{Utils, Vector2e, World}
+import game.util.{Utils, Vector2e, Dimensions}
 
 import scala.collection.mutable
 
@@ -20,7 +20,7 @@ object Map {
 /**
   * Created by Frans on 06/03/2018.
   */
-class Map(world: World, textures: GameTextures) extends GameElement {
+class Map(world: Dimensions, textures: GameTextures) extends GameElement {
 
   private val elements: mutable.Buffer[BorderSprite] = mutable.Buffer[BorderSprite]()
 

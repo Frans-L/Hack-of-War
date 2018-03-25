@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import com.badlogic.gdx.{Gdx, Screen}
 import game.loader.GameTextures
 import game.main.ui.GameUI
-import game.util.{Ticker, Vector2e, Vector2mtv, World}
+import game.util.{Ticker, Vector2e, Vector2mtv, Dimensions}
 import game.main.physics.CollisionHandler
 
 
@@ -34,7 +34,7 @@ object MainGame {
 /**
   * Created by Frans on 26/02/2018.
   */
-class MainGame(textures: GameTextures, screenDim: World) extends Screen {
+class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
 
   //sets the ticker => everything should be time dependent

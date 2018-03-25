@@ -3,7 +3,7 @@ package game.util
 /**
   * Created by Frans on 26/02/2018.
   */
-class World(val width: Int, val height: Int, val maxWidth: Int, val maxHeight: Int) {
+class Dimensions(val width: Int, val height: Int, val maxWidth: Int, val maxHeight: Int) {
 
   val left: Int = -width / 2 + 1
   val right: Int = width / 2

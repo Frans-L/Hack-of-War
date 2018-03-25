@@ -3,7 +3,7 @@ package game
 import com.badlogic.gdx._
 import game.loader.{GameTextures, Loader}
 import game.main.MainGame
-import game.util.World
+import game.util.Dimensions
 
 
 class HackOfWar extends Game {
@@ -11,7 +11,7 @@ class HackOfWar extends Game {
 
   private var inputMultiplexer: InputMultiplexer = _
 
-  private var screenDimensions: World = new World(1920, 1080, 2280, 1440)
+  private var screenDimensions: Dimensions = new Dimensions(1920, 1080, 2280, 1440)
 
 
   override def create() {

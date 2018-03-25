@@ -10,14 +10,14 @@ import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import game.loader.GameTextures
 import game.main.Player
 import game.GameElement
-import game.util.World
+import game.util.Dimensions
 
 
 /**
   * Created by Frans on 28/02/2018.
   */
 class GameUI(gameTextures: GameTextures,
-             world: World, viewport: Viewport,
+             world: Dimensions, viewport: Viewport,
              player: Player,
              shapeRenderer: ShapeRenderer) extends GameElement {
 
