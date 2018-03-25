@@ -13,7 +13,7 @@ bullet1Blue
   index: -1
 bullet1Red
   rotate: false
-  xy: 345, 399
+  xy: 345, 404
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
@@ -27,7 +27,7 @@ card1
   index: -1
 mapBorder
   rotate: false
-  xy: 446, 491
+  xy: 447, 491
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
@@ -48,10 +48,10 @@ mapBorderWide
   index: -1
 unit1Blue
   rotate: false
-  xy: 345, 421
-  size: 99, 75
+  xy: 345, 426
+  size: 100, 70
   orig: 100, 75
-  offset: 0, 0
+  offset: 0, 2
   index: -1
 unit1Red
   rotate: false

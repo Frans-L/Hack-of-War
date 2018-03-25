@@ -29,8 +29,9 @@ object UICard {
 /**
   * Created by Frans on 28/02/2018.
   */
-class UICard(ticker: Ticker, sprite: Sprite) extends Actor {
+class UICard(sprite: Sprite) extends Actor {
 
+  var ticker = Ticker.defaultTicker
   private var startPos: Vector2 = new Vector2(0, 0) //tells the spot to stay when not moved
   var state = UICard.State.IDLE
   private var moved = false

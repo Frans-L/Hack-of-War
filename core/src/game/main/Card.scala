@@ -27,9 +27,9 @@ class Card(owner: Player) {
   }
 
   //creates ui element for the card
-  def uiCreate(ticker: Ticker, gameTextures: GameTextures): UICard = {
+  def uiCreate(gameTextures: GameTextures): UICard = {
     uiElement = Some(
-      new UICard(ticker, gameTextures.atlas.createSprite(Card.background)))
+      new UICard(gameTextures.atlas.createSprite(Card.background)))
     this.addListeners()
     uiElement.get
   }

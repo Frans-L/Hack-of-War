@@ -30,7 +30,7 @@ class GameUI(gameTextures: GameTextures,
     var organizeCard = false
     player.hand.foreach(c => {
       if (!c.uiExists) {
-        val card = c.uiCreate(ticker, gameTextures)
+        val card = c.uiCreate(gameTextures)
         card.setBounds(0, world.down, 170, 270)
         card.setScale(0f)
         card.setTouchable(Touchable.enabled)
