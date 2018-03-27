@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.GameElement
 import game.loader.GameTextures
-import game.main.physics.objects.BorderSprite
-import game.util.{Utils, Vector2e, Dimensions}
+import game.main.physics.objects.{BorderSprite, CollisionObject}
+import game.util.{Dimensions, Utils, Vector2e}
 
 import scala.collection.mutable
 
@@ -29,7 +29,7 @@ class Map(world: Dimensions, textures: GameTextures) extends GameElement {
     world.maxWidth / collAccuracy + 1,
     world.maxHeight / collAccuracy + 1)
 
-  val collPolygons: mutable.Buffer[CollisionBody] = mutable.Buffer[CollisionBody]()
+  val collObjects: mutable.Buffer[CollisionObject] = mutable.Buffer[CollisionObject]()
 
   initializeMap()
   createCollisionMap()
@@ -61,8 +61,8 @@ class Map(world: Dimensions, textures: GameTextures) extends GameElement {
   private def createCollisionMap(): Unit = {
     for (x <- collMap.indices) {
       for (y <- collMap.head.indices) {
-        collMap(x)(y) = collPolygons.exists(
-          _.contains(world.maxLeft + x * collAccuracy, world.maxDown + y * collAccuracy))
+        collMap(x)(y) = collObjects.exists(
+          _.collBody.contains(world.maxLeft + x * collAccuracy, world.maxDown + y * collAccuracy))
       }
     }
   }
@@ -76,7 +76,7 @@ class Map(world: Dimensions, textures: GameTextures) extends GameElement {
     var height: Float = 200 + 180
     var y: Float = world.maxDown
     var x: Float = world.maxLeft
-    collPolygons += Utils.rectangleCollBody(x, y, world.maxWidth, height)
+    collObjects += new CollisionObject(Utils.rectangleCollBody(x, y, world.maxWidth, height))
 
     for (i <- 0 to 8) { //to create collisionMap
       elements += new BorderSprite(
@@ -92,7 +92,7 @@ class Map(world: Dimensions, textures: GameTextures) extends GameElement {
     height = 50 + 180
     y = world.maxUp - height
     x = world.maxLeft
-    collPolygons += Utils.rectangleCollBody(x, y, world.maxWidth, height)
+    collObjects += new CollisionObject(Utils.rectangleCollBody(x, y, world.maxWidth, height))
 
     for (i <- 0 to 8) { //to create collisionMap
       elements += new BorderSprite(
@@ -110,7 +110,7 @@ class Map(world: Dimensions, textures: GameTextures) extends GameElement {
     x = world.left + 345 + 180
     var width = 435
     height = 75
-    collPolygons += Utils.rectangleCollBody(x, y, width * 2, height)
+    collObjects += new CollisionObject(Utils.rectangleCollBody(x, y, width * 2, height))
 
     for (i <- 0 until 2) { //to create collisionMap
       elements += new BorderSprite(

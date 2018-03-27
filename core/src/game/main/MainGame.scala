@@ -14,7 +14,7 @@ import com.badlogic.gdx.{Gdx, Screen}
 import game.loader.GameTextures
 import game.main.ui.GameUI
 import game.util.{Ticker, Vector2e, Vector2mtv, Dimensions}
-import game.main.physics.CollisionHandler
+import game.main.physics.PhysicsWorld
 
 
 /**
@@ -26,8 +26,11 @@ object MainGame {
   var debugRender: ShapeRenderer = _
 
   def setColorBlack(): Unit = MainGame.debugRender.setColor(0, 0, 0, 1)
+
   def setColorWhite(): Unit = MainGame.debugRender.setColor(1, 1, 1, 1)
+
   def setColorMagenta(): Unit = MainGame.debugRender.setColor(1, 0, 1, 1)
+
   def setColorRed(): Unit = MainGame.debugRender.setColor(1, 0, 0, 1)
 }
 
@@ -61,11 +64,11 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
   //sets the map
   private val map: physics.Map = new physics.Map(screenDim, textures)
 
-  private val collDetect: CollisionHandler = new CollisionHandler(map)
+  private val physWorld: PhysicsWorld = new PhysicsWorld(map)
 
   //sets the players
   private val players: Vector[Player] = Vector(
-    new Player(textures, collDetect, 0)
+    new Player(textures, physWorld, 0)
   )
 
   //sets the ui
@@ -77,9 +80,10 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
   /**
     * Called every frame
+    *
     * @param delta Libgdx's mandatory parameter
     */
-    override def render(delta: Float): Unit = {
+  override def render(delta: Float): Unit = {
 
     //clears the screen
     Gdx.gl.glClearColor(74 / 255f, 96 / 255f, 112 / 255f, 1)
@@ -95,7 +99,6 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
     MainGame.debugRender.begin(ShapeType.Line)
     this.update()
     MainGame.debugRender.end()
-
 
 
     if (ticker.interval10) {
@@ -126,6 +129,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
     batch.begin()
     players.foreach(_.draw(batch))
+    physWorld.draw(batch)
     map.draw(batch)
     batch.end()
 
@@ -153,6 +157,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
     cam.update()
     players.foreach(_.update())
+    physWorld.update()
     gameUI.update()
 
   }

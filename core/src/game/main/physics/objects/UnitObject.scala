@@ -6,18 +6,20 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Interpolation, Vector2}
 import game.GameElement
 import game.main.MainGame
-import game.main.physics.{CollisionBody, CollisionHandler}
+import game.main.physics.{CollisionBody, PhysicsWorld}
 import game.util.Vector2e._
 import game.util.{Utils, Vector2e, Vector2mtv}
 
 /**
   * Created by Frans on 26/02/2018.
   */
-class UnitObject(var owner: GameElement, var sprite: Sprite, val collHandler: CollisionHandler, val collBody: CollisionBody,
-                 val pos: Vector2, val size: Vector2) extends CollisionObject {
+class UnitObject(var owner: GameElement, var sprite: Sprite,
+                 val collHandler: PhysicsWorld, val collBody: CollisionBody,
+                 val pos: Vector2, override val size: Vector2) extends ObjectType {
 
 
   val velocity: Vector2 = Vector2e(0f, 0f)
+  override val origin: Vector2 = Vector2e(size.x / 2f, size.y / 2f)
 
   val maxVelocity: Float = 0.2f
   val maxForce: Float = 0.05f
@@ -27,7 +29,6 @@ class UnitObject(var owner: GameElement, var sprite: Sprite, val collHandler: Co
   val maxRotateTime: Float = 150f
 
   updateCollPolygon()
-  collHandler.addShape(owner, collBody)
 
   updateSprite()
 
@@ -42,7 +43,7 @@ class UnitObject(var owner: GameElement, var sprite: Sprite, val collHandler: Co
     if (enabled) {
 
       val collForce = Vector2mtv.pool()
-      if (collHandler.isCollided(collBody, collForce)) {
+      if (collHandler.isCollided(this, collForce)) {
 
         pos.mulAdd((collForce.normal ** collForce.depth).limit(maxVelocity), ticker.delta)
 
@@ -105,28 +106,18 @@ class UnitObject(var owner: GameElement, var sprite: Sprite, val collHandler: Co
     //checks collision in the wanted pos
     val visionPos = Vector2e.pool(ahead.x - origin.x, ahead.y - origin.y)
     val (obstacle, angle) =
-      collHandler.collideAsCircle(collBody, ahead, collBody.getRadiusScaled)
+      collHandler.collideAsCircle(this, ahead, collBody.getRadiusScaled)
     Vector2e.free(visionPos) //free the memory
 
     //draws debug circle
     //MainGame.debugRender.circle(ahead.x, ahead.y, collBody.getRadiusScaled)
 
     //calculate the force opposite to obstacle center
-    obstacle.foreach(o => ((avoid ++ pos) -- o.center).nor ** maxForceAvoid / mass)
+    obstacle.foreach(o => ((avoid ++ pos) -- o.collBody.center).nor ** maxForceAvoid / mass)
     Vector2e.free(ahead) //free the memory
 
     obstacle.isDefined //returns true if collided
   }
-
-
-  /**
-    * Destroys collisions map and marks that this can be cleaned
-    */
-  override def destroy(): Unit = {
-    super.destroy()
-    collHandler.removeShape(owner, collBody)
-  }
-
 
   override def draw(shapeRender: ShapeRenderer): Unit = {
     if (visible) {

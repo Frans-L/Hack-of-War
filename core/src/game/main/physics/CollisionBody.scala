@@ -27,7 +27,6 @@ class CollisionBody(vertices: Array[Float], private var radius: Float)
 
   def asVertices: Array[Float] = getTransformedVertices
 
-
   /** Moves the body */
   def moveBy(v: Vector2): Unit = setPosition(getX + v.x, getY + v.y)
 

@@ -9,7 +9,7 @@ import game.util.Vector2e._
 /**
   * Created by Frans on 26/02/2018.
   */
-trait SpriteObject extends GameElement {
+trait SpriteType extends GameElement {
 
   var visible: Boolean = true
   var enabled: Boolean = true

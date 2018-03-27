@@ -2,7 +2,7 @@ package game.main.physics.objects.units
 
 import game.GameElement
 import game.loader.GameTextures
-import game.main.physics.{CollisionBody, CollisionHandler}
+import game.main.physics.{CollisionBody, PhysicsWorld}
 import game.main.physics.objects.UnitObject
 import game.util.{Ticker, Utils, Vector2e}
 
@@ -15,7 +15,7 @@ object Soldier {
 
 
   def create(owner: GameElement,
-             collHandler: CollisionHandler, textures: GameTextures,
+             collHandler: PhysicsWorld, textures: GameTextures,
              x: Float, y: Float, colorIndex: Int): UnitObject = {
 
 

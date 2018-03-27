@@ -3,14 +3,15 @@ package game.main.physics.objects
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import game.main.physics.CollisionHandler
+import game.GameElement
+import game.main.physics.PhysicsWorld
 import game.util.Vector2e._
 
 /**
   * Created by Frans on 06/03/2018.
   */
 class BorderSprite(val pos: Vector2, val size: Vector2,
-                   val padding: Vector2, var sprite: Sprite) extends SpriteObject {
+                   val padding: Vector2, var sprite: Sprite) extends GameElement with SpriteType {
 
   updateSprite()
 
