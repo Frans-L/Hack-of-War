@@ -1,5 +1,6 @@
 package game.main.physics.objects.units
 
+import game.GameElement
 import game.loader.GameTextures
 import game.main.physics.{CollisionBody, CollisionHandler}
 import game.main.physics.objects.UnitObject
@@ -13,7 +14,8 @@ object Soldier {
   val texture: Seq[String] = GameTextures.Units.unit1
 
 
-  def create(collHandler: CollisionHandler, textures: GameTextures,
+  def create(owner: GameElement,
+             collHandler: CollisionHandler, textures: GameTextures,
              x: Float, y: Float, colorIndex: Int): UnitObject = {
 
 
@@ -23,7 +25,7 @@ object Soldier {
 
     val body: CollisionBody = Utils.triangleCollBody(0, h, w, h / 2f)
 
-    val obj: UnitObject = new UnitObject(
+    val obj: UnitObject = new UnitObject(owner,
       textures.atlas.createSprite(texture(colorIndex)), collHandler, body,
       Vector2e(x, y), Vector2e(w, h))
 

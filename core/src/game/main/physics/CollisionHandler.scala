@@ -18,44 +18,56 @@ import scala.collection.mutable
   */
 class CollisionHandler(val map: Map) extends GameElement {
 
-  private val bodys: mutable.Buffer[CollisionBody] = mutable.Buffer[CollisionBody]()
 
-  bodys ++= map.collPolygons //add map collisions
+  // For instance --> bodys(player1)(0), bodys(map)(0)
+  private val bodys: mutable.Map[GameElement, mutable.Buffer[CollisionBody]] =
+    mutable.Map[GameElement, mutable.Buffer[CollisionBody]]()
+
+  private val body: mutable.Buffer[CollisionBody] = mutable.Buffer[CollisionBody]()
+
+  bodys.put(map, map.collPolygons) //add map collisions
+
 
   /** Checks if the obj is colliding with something.
     *
     * @param obj the collisionBody of the object
     * @param mtv sets the minimumTranslationVector that is required to separate objects
-    * @return true if collided
+    * @return the body of the collided object
     */
-  def isCollided(obj: CollisionBody, mtv: MinimumTranslationVector = null): Boolean = {
-    var coll = false
-    for (s <- bodys if !coll) {
-      if (s != obj) {
-        coll = Intersector.overlapConvexPolygons(obj, s, mtv)
-      }
-    }
-    coll
-  }
-
-  //Returns true if collided
-  def collide(obj: CollisionBody): Option[CollisionBody] = {
-    var coll = false
+  def collide(obj: CollisionBody, mtv: MinimumTranslationVector = null): Option[CollisionBody] = {
     var body: Option[CollisionBody] = None
-    for (b <- bodys if !coll && b != obj) {
-      coll = Intersector.overlapConvexPolygons(obj, b)
-      if (coll) body = Some(b)
+    for (category <- bodys if body.isEmpty) {
+      for (s <- category._2 if body.isEmpty && s != obj) {
+        if (Intersector.overlapConvexPolygons(obj, s, mtv))
+          body = Some(s)
+      }
     }
     body
   }
+
+  /** Return true if collided */
+  def isCollided(obj: CollisionBody, mtv: MinimumTranslationVector = null): Boolean = {
+    //collide(obj, mtv).isDefined
+    var body: Option[CollisionBody] = None
+    for((c, o) <- bodysIterator(bodys)){
+      if(o != obj){
+        if (Intersector.overlapConvexPolygons(obj, o, mtv))
+          body = Some(o)
+      }
+    }
+    body.isDefined
+  }
+
 
   //Returns the object that is collided with the point
   def collidePoint(obj: CollisionBody, point: Vector2): Option[CollisionBody] = {
     var coll = false
     var body: Option[CollisionBody] = None
-    for (b <- bodys if !coll && b != obj) {
-      coll = b.contains(point.x, point.y)
-      if (coll) body = Some(b)
+    for (category <- bodys if body.isEmpty) {
+      for (b <- category._2 if body.isEmpty && b != obj) {
+        coll = b.contains(point.x, point.y)
+        if (coll) body = Some(b)
+      }
     }
 
     body
@@ -67,10 +79,13 @@ class CollisionHandler(val map: Map) extends GameElement {
 
     var result: (Boolean, Float) = (false, 0f) //(is collided, angle)
     var body: Option[CollisionBody] = None
-    for (b <- bodys if !result._1 && b != obj) {
-      result = b.overlapsCircle(center, radius)
-      if (result._1) body = Some(b)
+    for (category <- bodys if body.isEmpty) {
+      for (b <- category._2 if !result._1 && b != obj) {
+        result = b.overlapsCircle(center, radius)
+        if (result._1) body = Some(b)
+      }
     }
+
     (body, result._2)
   }
 
@@ -78,13 +93,40 @@ class CollisionHandler(val map: Map) extends GameElement {
     collideAsCircle(obj, obj.center, obj.getRadius)
   }
 
-  def addShape(p: CollisionBody): Unit = bodys += p
+  def addShape(category: GameElement, p: CollisionBody): Unit = {
+    if (bodys.contains(category))
+      bodys(category) += p
+    else
+      bodys.put(category, mutable.Buffer[CollisionBody](p))
+  }
 
-  def removeShape(p: CollisionBody): Unit = bodys -= p
+  def removeShape(category: GameElement, p: CollisionBody): Unit = bodys(category) -= p
 
   override def update(): Unit = ???
 
   override def draw(shapeRender: ShapeRenderer): Unit = ???
 
   override def draw(batch: Batch): Unit = ???
+
+
+  def bodysIterator
+  (b: mutable.Map[GameElement, mutable.Buffer[CollisionBody]]): Iterator[(GameElement, CollisionBody)] =
+    new Iterator[(GameElement, CollisionBody)] {
+
+      private val categoryI = b.iterator
+      private var category: GameElement = _
+      private var bodyI: Iterator[CollisionBody] = Iterator[CollisionBody]()
+
+      override def hasNext: Boolean = bodyI.hasNext || categoryI.hasNext
+
+      override def next(): (GameElement, CollisionBody) = {
+        if (!bodyI.hasNext) {
+          val nxt = categoryI.next
+          category = nxt._1
+          bodyI = nxt._2.iterator
+        }
+
+        (category, bodyI.next())
+      }
+    }
 }

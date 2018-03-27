@@ -57,7 +57,7 @@ class Player(textures: GameTextures, collHandler: CollisionHandler, index: Int) 
   }
 
   def spawnUnit(x: Float, y: Float): Unit = {
-    units += Soldier.create(collHandler, textures, x, y, MathUtils.random(0, 1))
+    units += Soldier.create(this, collHandler, textures, x, y, MathUtils.random(0, 1))
   }
 
   override def draw(shapeRender: ShapeRenderer): Unit = {

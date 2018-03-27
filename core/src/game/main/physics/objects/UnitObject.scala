@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Interpolation, Vector2}
+import game.GameElement
 import game.main.MainGame
 import game.main.physics.{CollisionBody, CollisionHandler}
 import game.util.Vector2e._
@@ -12,7 +13,7 @@ import game.util.{Utils, Vector2e, Vector2mtv}
 /**
   * Created by Frans on 26/02/2018.
   */
-class UnitObject(var sprite: Sprite, val collHandler: CollisionHandler, val collBody: CollisionBody,
+class UnitObject(var owner: GameElement, var sprite: Sprite, val collHandler: CollisionHandler, val collBody: CollisionBody,
                  val pos: Vector2, val size: Vector2) extends CollisionObject {
 
 
@@ -26,7 +27,7 @@ class UnitObject(var sprite: Sprite, val collHandler: CollisionHandler, val coll
   val maxRotateTime: Float = 150f
 
   updateCollPolygon()
-  collHandler.addShape(collBody)
+  collHandler.addShape(owner, collBody)
 
   updateSprite()
 
@@ -123,7 +124,7 @@ class UnitObject(var sprite: Sprite, val collHandler: CollisionHandler, val coll
     */
   override def destroy(): Unit = {
     super.destroy()
-    collHandler.removeShape(collBody)
+    collHandler.removeShape(owner, collBody)
   }
 
 
