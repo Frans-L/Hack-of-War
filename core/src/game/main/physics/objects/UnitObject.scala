@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Interpolation, Vector2}
 import game.GameElement
-import game.main.MainGame
+import game.main.{MainGame, Player}
 import game.main.physics.{CollisionBody, PhysicsWorld}
 import game.util.Vector2e._
 import game.util.{Utils, Vector2e, Vector2mtv}
@@ -13,8 +13,8 @@ import game.util.{Utils, Vector2e, Vector2mtv}
 /**
   * Created by Frans on 26/02/2018.
   */
-class UnitObject(var owner: GameElement, var sprite: Sprite,
-                 val collHandler: PhysicsWorld, val collBody: CollisionBody,
+class UnitObject(var owner: Player, var sprite: Sprite,
+                 val physWorld: PhysicsWorld, val collBody: CollisionBody,
                  val pos: Vector2, override val size: Vector2) extends ObjectType {
 
 
@@ -28,10 +28,10 @@ class UnitObject(var owner: GameElement, var sprite: Sprite,
   val maxForceAvoid: Float = 0.25f
   val maxRotateTime: Float = 150f
 
-  updateCollPolygon()
+  updateCollPolygon() //updates collisionbox
+  updateSprite() //updates sprite
 
-  updateSprite()
-
+  physWorld.addUnit(owner.asInstanceOf[GameElement], this) //add updates
 
   private def target: Vector2 = MainGame.debugViewPort.unproject(Vector2e.pool(Gdx.input.getX, Gdx.input.getY))
 
@@ -43,7 +43,7 @@ class UnitObject(var owner: GameElement, var sprite: Sprite,
     if (enabled) {
 
       val collForce = Vector2mtv.pool()
-      if (collHandler.isCollided(this, collForce)) {
+      if (physWorld.isCollided(this, collForce)) {
 
         pos.mulAdd((collForce.normal ** collForce.depth).limit(maxVelocity), ticker.delta)
 
@@ -106,7 +106,7 @@ class UnitObject(var owner: GameElement, var sprite: Sprite,
     //checks collision in the wanted pos
     val visionPos = Vector2e.pool(ahead.x - origin.x, ahead.y - origin.y)
     val (obstacle, angle) =
-      collHandler.collideAsCircle(this, ahead, collBody.getRadiusScaled)
+      physWorld.collideAsCircle(this, ahead, collBody.getRadiusScaled)
     Vector2e.free(visionPos) //free the memory
 
     //draws debug circle

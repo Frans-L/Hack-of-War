@@ -48,8 +48,7 @@ class Player(textures: GameTextures, physWorld: PhysicsWorld, index: Int) extend
 
   /** Spawns a new unit */
   def spawnUnit(x: Float, y: Float): Unit = {
-    physWorld.addUnit(this,
-      Soldier.create(this, physWorld, textures, x, y, MathUtils.random(0, 1)))
+    Soldier.create(this, physWorld, textures, x, y, MathUtils.random(0, 1))
   }
 
   override def draw(shapeRender: ShapeRenderer): Unit = {

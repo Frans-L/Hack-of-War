@@ -15,7 +15,18 @@ import scala.collection.mutable
 /**
   * Created by Frans on 11/03/2♦018.
   *
-  * Handles the physics and collision
+  * Updates all ObjectTypes that are linked to the LinkedHashMap units.
+  * units(owner) = mutable.Buffer[ObjectType]
+  * Owner can be any GameElement. So each object will be always linked to its owner GameElement.
+  *
+  * This makes possible to update only the objects of the certain category.
+  * For instance, if it's needed to find collision with an enemy,
+  * only tge objects of the enemy can be selected.
+  *
+  * Linkedhashmap saves also the order of the owners. So the objects that are added to newer
+  * owner will be drawn later. => New objects, with a new owner, will be
+  * drawn on top of everything.
+  *
   */
 class PhysicsWorld(val map: Map) extends GameElement {
 
@@ -123,7 +134,8 @@ class PhysicsWorld(val map: Map) extends GameElement {
     if (units(owner).isEmpty) units.remove(owner)
   }
 
-  /** Iterates map's every buffer. */
+  /** Iterates every T of the
+    *  mutable.LinkedHashMap[GameElement, mutable.Buffer[T]] */
   private def mapBufferIterator[T]
   (b: mutable.Map[GameElement, mutable.Buffer[T]]): Iterator[(GameElement, T)] =
     new Iterator[(GameElement, T)] {
