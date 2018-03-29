@@ -21,10 +21,15 @@ class Player(textures: GameTextures, physWorld: PhysicsWorld, index: Int) extend
   private val deck: mutable.Buffer[Card] = mutable.Buffer[Card]()
   val hand: mutable.Buffer[Card] = mutable.Buffer[Card]()
 
-  hand.append(new Card(this))
-  hand.append(new Card(this))
-  hand.append(new Card(this))
-  hand.append(new Card(this))
+
+  initialize()
+
+  protected def initialize(): Unit = {
+    hand.append(new Card(this))
+    hand.append(new Card(this))
+    hand.append(new Card(this))
+    hand.append(new Card(this))
+  }
 
 
   override def update(): Unit = {
@@ -48,7 +53,7 @@ class Player(textures: GameTextures, physWorld: PhysicsWorld, index: Int) extend
 
   /** Spawns a new unit */
   def spawnUnit(x: Float, y: Float): Unit = {
-    Soldier.create(this, physWorld, textures, x, y, MathUtils.random(0, 1))
+    Soldier.create(textures, this, physWorld, x, y, index)
   }
 
   override def draw(shapeRender: ShapeRenderer): Unit = {

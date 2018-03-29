@@ -20,14 +20,14 @@ object Map {
 /**
   * Created by Frans on 06/03/2018.
   */
-class Map(world: Dimensions, textures: GameTextures) extends GameElement {
+class Map(val dimensions: Dimensions, textures: GameTextures) extends GameElement {
 
   private val elements: mutable.Buffer[BorderSprite] = mutable.Buffer[BorderSprite]()
 
   private val collAccuracy = 20 //collisionAccuracy
   private val collMap = Array.ofDim[Boolean](
-    world.maxWidth / collAccuracy + 1,
-    world.maxHeight / collAccuracy + 1)
+    dimensions.maxWidth / collAccuracy + 1,
+    dimensions.maxHeight / collAccuracy + 1)
 
   val collObjects: mutable.Buffer[CollisionObject] = mutable.Buffer[CollisionObject]()
 
@@ -47,10 +47,10 @@ class Map(world: Dimensions, textures: GameTextures) extends GameElement {
     * Returns true if collided with static collision map
     */
   def collide(x: Float, y: Float): Boolean = {
-    if (world.isInside(x + 0.5f, y + 0.5f))
+    if (dimensions.isInside(x + 0.5f, y + 0.5f))
       collMap(
-        ((-world.maxLeft + x) / collAccuracy + 0.5f).toInt)(
-        ((-world.maxDown + y) / collAccuracy + 0.5f).toInt)
+        ((-dimensions.maxLeft + x) / collAccuracy + 0.5f).toInt)(
+        ((-dimensions.maxDown + y) / collAccuracy + 0.5f).toInt)
     else
       false
   }
@@ -62,7 +62,7 @@ class Map(world: Dimensions, textures: GameTextures) extends GameElement {
     for (x <- collMap.indices) {
       for (y <- collMap.head.indices) {
         collMap(x)(y) = collObjects.exists(
-          _.collBody.contains(world.maxLeft + x * collAccuracy, world.maxDown + y * collAccuracy))
+          _.collBody.contains(dimensions.maxLeft + x * collAccuracy, dimensions.maxDown + y * collAccuracy))
       }
     }
   }
@@ -74,9 +74,9 @@ class Map(world: Dimensions, textures: GameTextures) extends GameElement {
 
     //Down border
     var height: Float = 200 + 180
-    var y: Float = world.maxDown
-    var x: Float = world.maxLeft
-    collObjects += new CollisionObject(Utils.rectangleCollBody(x, y, world.maxWidth, height))
+    var y: Float = dimensions.maxDown
+    var x: Float = dimensions.maxLeft
+    collObjects += new CollisionObject(Utils.rectangleCollBody(x, y, dimensions.maxWidth, height))
 
     for (i <- 0 to 8) { //to create collisionMap
       elements += new BorderSprite(
@@ -90,9 +90,9 @@ class Map(world: Dimensions, textures: GameTextures) extends GameElement {
 
     //Up border
     height = 50 + 180
-    y = world.maxUp - height
-    x = world.maxLeft
-    collObjects += new CollisionObject(Utils.rectangleCollBody(x, y, world.maxWidth, height))
+    y = dimensions.maxUp - height
+    x = dimensions.maxLeft
+    collObjects += new CollisionObject(Utils.rectangleCollBody(x, y, dimensions.maxWidth, height))
 
     for (i <- 0 to 8) { //to create collisionMap
       elements += new BorderSprite(
@@ -107,7 +107,7 @@ class Map(world: Dimensions, textures: GameTextures) extends GameElement {
 
     //middle
     y = 0
-    x = world.left + 345 + 180
+    x = dimensions.left + 345 + 180
     var width = 435
     height = 75
     collObjects += new CollisionObject(Utils.rectangleCollBody(x, y, width * 2, height))

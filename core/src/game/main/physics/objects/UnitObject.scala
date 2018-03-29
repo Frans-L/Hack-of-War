@@ -13,7 +13,7 @@ import game.util.{Utils, Vector2e, Vector2mtv}
 /**
   * Created by Frans on 26/02/2018.
   */
-class UnitObject(var owner: Player, var sprite: Sprite,
+class UnitObject(var sprite: Sprite, var owner: Player,
                  val physWorld: PhysicsWorld, val collBody: CollisionBody,
                  val pos: Vector2, override val size: Vector2) extends ObjectType {
 

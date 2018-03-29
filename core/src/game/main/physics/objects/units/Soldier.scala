@@ -15,8 +15,8 @@ object Soldier {
   val texture: Seq[String] = GameTextures.Units.unit1
 
 
-  def create(owner: Player,
-             collHandler: PhysicsWorld, textures: GameTextures,
+  def create(textures: GameTextures,
+             owner: Player, collHandler: PhysicsWorld,
              x: Float, y: Float, colorIndex: Int): UnitObject = {
 
 
@@ -26,8 +26,9 @@ object Soldier {
 
     val body: CollisionBody = Utils.triangleCollBody(0, h, w, h / 2f)
 
-    val obj: UnitObject = new UnitObject(owner,
-      textures.atlas.createSprite(texture(colorIndex)), collHandler, body,
+    val obj: UnitObject = new UnitObject(
+      textures.atlas.createSprite(texture(colorIndex)),
+      owner, collHandler, body,
       Vector2e(x, y), Vector2e(w, h))
 
     obj

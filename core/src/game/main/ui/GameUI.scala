@@ -17,7 +17,7 @@ import game.util.Dimensions
   * Created by Frans on 28/02/2018.
   */
 class GameUI(gameTextures: GameTextures,
-             world: Dimensions, viewport: Viewport,
+             dimensions: Dimensions, viewport: Viewport,
              player: Player,
              shapeRenderer: ShapeRenderer) extends GameElement {
 
@@ -32,7 +32,7 @@ class GameUI(gameTextures: GameTextures,
     player.hand.foreach(c => {
       if (!c.uiExists) {
         val card = c.uiCreate(gameTextures)
-        card.setBounds(0, world.down, 170, 270)
+        card.setBounds(0, dimensions.down, 170, 270)
         card.setScale(0f)
         card.setTouchable(Touchable.enabled)
         card.updateSprite()
@@ -54,7 +54,7 @@ class GameUI(gameTextures: GameTextures,
 
   private def organizeCards(): Unit = {
 
-    val y = world.down
+    val y = dimensions.down
     val width = 170 + 10
 
     val cardAmount = player.hand.filter(_.uiExists).count(_.uiElement.get.hasIdlePlace)

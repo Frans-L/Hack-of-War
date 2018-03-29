@@ -2,7 +2,7 @@ package game.main
 
 import java.util.concurrent.TimeUnit
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.{SpriteBatch, TextureAtlas}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.graphics.profiling.GLProfiler
@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import com.badlogic.gdx.{Gdx, Screen}
 import game.loader.GameTextures
 import game.main.ui.GameUI
-import game.util.{Ticker, Vector2e, Vector2mtv, Dimensions}
+import game.util.{Dimensions, Ticker, Vector2e, Vector2mtv}
 import game.main.physics.PhysicsWorld
 
 
@@ -38,7 +38,6 @@ object MainGame {
   * Created by Frans on 26/02/2018.
   */
 class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
-
 
   //sets the ticker => everything should be time dependent
   private val ticker = new Ticker(TimeUtils.millis())
@@ -67,8 +66,9 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
   private val physWorld: PhysicsWorld = new PhysicsWorld(map)
 
   //sets the players
-  private val players: Vector[Player] = Vector(
-    new Player(textures, physWorld, 0)
+  private val players: Seq[Player] = Seq(
+    new Player(textures, physWorld, 0),
+    new Bot(textures, physWorld, 1)
   )
 
   //sets the ui

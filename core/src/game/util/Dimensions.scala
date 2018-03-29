@@ -5,15 +5,21 @@ package game.util
   */
 class Dimensions(val width: Int, val height: Int, val maxWidth: Int, val maxHeight: Int) {
 
-  val left: Int = -width / 2 + 1
-  val right: Int = width / 2
-  val up: Int = height / 2
-  val down: Int = -height / 2 + 1
+  lazy val left: Int = -width / 2 + 1
+  lazy val right: Int = width / 2
+  lazy val up: Int = height / 2
+  lazy val down: Int = -height / 2 + 1
 
-  val maxLeft: Int = -maxWidth / 2 + 1
-  val maxRight: Int = maxWidth / 2
-  val maxUp: Int = maxHeight / 2
-  val maxDown: Int = -maxHeight / 2 + 1
+  lazy val maxLeft: Int = -maxWidth / 2 + 1
+  lazy val maxRight: Int = maxWidth / 2
+  lazy val maxUp: Int = maxHeight / 2
+  lazy val maxDown: Int = -maxHeight / 2 + 1
+
+  def leftMiddle: Int = left/2
+  def rightMiddle: Int = right/2
+  def downMiddle: Int = down/2
+  def upMiddle: Int = up/2
+
 
   def isInside(x: Float, y: Float): Boolean =
     !(x < maxLeft || x > maxRight || y < maxDown || y > maxUp)
