@@ -67,7 +67,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
   //sets the players
   private val players: Seq[Player] = Seq(
-    new Player(textures, physWorld, 0),
+    new User(textures, physWorld, 0),
     new Bot(textures, physWorld, 1)
   )
 

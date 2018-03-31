@@ -3,10 +3,10 @@ package game.main.physics.objects
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import game.main.physics.CollisionBody
+import game.main.physics.collision.PolygonBody
 import game.util.Vector2e
 
-class CollisionObject(val collBody: CollisionBody) extends ObjectType {
+class CollisionObject(val collBody: PolygonBody) extends ObjectType {
 
   override val velocity: Vector2 = Vector2e(0, 0)
   override val mass: Float = 100f

@@ -1,7 +1,7 @@
 package game.main.physics.objects
 
 import com.badlogic.gdx.math.Vector2
-import game.main.physics.CollisionBody
+import game.main.physics.collision.{CollisionBody, PolygonBody}
 import game.util.Vector2e
 
 /**

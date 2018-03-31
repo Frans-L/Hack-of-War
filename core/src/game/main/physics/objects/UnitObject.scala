@@ -6,7 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Interpolation, Vector2}
 import game.GameElement
 import game.main.{MainGame, Player}
-import game.main.physics.{CollisionBody, PhysicsWorld}
+import game.main.physics.PhysicsWorld
+import game.main.physics.collision.PolygonBody
 import game.util.Vector2e._
 import game.util.{Utils, Vector2e, Vector2mtv}
 
@@ -14,7 +15,7 @@ import game.util.{Utils, Vector2e, Vector2mtv}
   * Created by Frans on 26/02/2018.
   */
 class UnitObject(var sprite: Sprite, var owner: Player,
-                 val physWorld: PhysicsWorld, val collBody: CollisionBody,
+                 val physWorld: PhysicsWorld, val collBody: PolygonBody,
                  val pos: Vector2, override val size: Vector2) extends ObjectType {
 
 
@@ -105,7 +106,7 @@ class UnitObject(var sprite: Sprite, var owner: Player,
 
     //checks collision in the wanted pos
     val visionPos = Vector2e.pool(ahead.x - origin.x, ahead.y - origin.y)
-    val (obstacle, angle) =
+    val obstacle =
       physWorld.collideAsCircle(this, ahead, collBody.getRadiusScaled)
     Vector2e.free(visionPos) //free the memory
 

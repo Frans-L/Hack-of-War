@@ -3,7 +3,8 @@ package game.main.physics.objects.units
 import game.GameElement
 import game.loader.GameTextures
 import game.main.Player
-import game.main.physics.{CollisionBody, PhysicsWorld}
+import game.main.physics.PhysicsWorld
+import game.main.physics.collision.PolygonBody
 import game.main.physics.objects.UnitObject
 import game.util.{Ticker, Utils, Vector2e}
 
@@ -24,7 +25,7 @@ object Soldier {
     val w = 99f / scale
     val h = 75f / scale
 
-    val body: CollisionBody = Utils.triangleCollBody(0, h, w, h / 2f)
+    val body: PolygonBody = Utils.triangleCollBody(0, h, w, h / 2f)
 
     val obj: UnitObject = new UnitObject(
       textures.atlas.createSprite(texture(colorIndex)),

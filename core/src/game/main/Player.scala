@@ -16,21 +16,10 @@ import scala.collection.mutable
 /**
   * Created by Frans on 06/03/2018.
   */
-class Player(textures: GameTextures, physWorld: PhysicsWorld, index: Int) extends GameElement {
+abstract class Player(textures: GameTextures, physWorld: PhysicsWorld, index: Int) extends GameElement {
 
   private val deck: mutable.Buffer[Card] = mutable.Buffer[Card]()
   val hand: mutable.Buffer[Card] = mutable.Buffer[Card]()
-
-
-  initialize()
-
-  protected def initialize(): Unit = {
-    hand.append(new Card(this))
-    hand.append(new Card(this))
-    hand.append(new Card(this))
-    hand.append(new Card(this))
-  }
-
 
   override def update(): Unit = {
 

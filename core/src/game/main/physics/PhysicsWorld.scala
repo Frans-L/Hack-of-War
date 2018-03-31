@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.{Intersector, Vector2}
 import game.GameElement
 import game.main.Player
 import game.main.physics.objects.ObjectType
+import game.util.Vector2mtv
 
 import scala.collection.mutable
 
@@ -77,7 +78,7 @@ class PhysicsWorld(val map: Map) extends GameElement {
   def collide(obj: ObjectType, mtv: MinimumTranslationVector = null): Option[ObjectType] = {
     var crashObj: Option[ObjectType] = None
     for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != obj) {
-      if (Intersector.overlapConvexPolygons(obj.collBody, o.collBody, mtv))
+      if (obj.collBody.overlaps(o.collBody, mtv))
         crashObj = Some(o)
     }
 
@@ -102,23 +103,26 @@ class PhysicsWorld(val map: Map) extends GameElement {
     crashObj
   }
 
-  /** Returns the collided object, and the angle of the polyline */
+  /** Returns the collided object */
   def collideAsCircle(obj: ObjectType, center: Vector2, radius: Float):
-  (Option[ObjectType], Float) = {
+  Option[ObjectType] = {
 
-    var result: (Boolean, Float) = (false, 0f) //(is collided, angle)
+    val mtvTMP = Vector2mtv.pool()
+    var result: Boolean = false //(is collided, angle)
     var crashObj: Option[ObjectType] = None
     for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != obj) {
-      result = o.collBody.overlapsCircle(center, radius)
-      if (result._1) crashObj = Some(o)
+      result = o.collBody.overlapsCircle(center, radius, mtvTMP)
+      if (result) crashObj = Some(o)
     }
 
-    (crashObj, result._2)
+    Vector2mtv.free(mtvTMP) //frees the memory
+
+    crashObj
   }
 
   /** Returns the collided object, and the angle of the polyline */
-  def collideAsCircle(obj: ObjectType): (Option[ObjectType], Float) = {
-    collideAsCircle(obj, obj.collBody.center, obj.collBody.getRadius)
+  def collideAsCircle(obj: ObjectType): Option[ObjectType] = {
+    collideAsCircle(obj, obj.collBody.center, obj.collBody.getRadiusScaled)
   }
 
 
