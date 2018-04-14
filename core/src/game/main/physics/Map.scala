@@ -20,7 +20,9 @@ object Map {
 /**
   * Created by Frans on 06/03/2018.
   */
-class Map(val dimensions: Dimensions, textures: GameTextures) extends GameElement {
+class Map(val dimensions: Dimensions,
+          textures: GameTextures,
+          physWorld: PhysicsWorld) extends GameElement {
 
   private val elements: mutable.Buffer[BorderSprite] = mutable.Buffer[BorderSprite]()
 
@@ -76,7 +78,7 @@ class Map(val dimensions: Dimensions, textures: GameTextures) extends GameElemen
     var height: Float = 200 + 180
     var y: Float = dimensions.maxDown
     var x: Float = dimensions.maxLeft
-    collObjects += new CollisionObject(Utils.rectangleCollBody(x, y, dimensions.maxWidth, height))
+    collObjects += new CollisionObject(this, physWorld, Utils.rectangleCollBody(x, y, dimensions.maxWidth, height))
 
     for (i <- 0 to 8) { //to create collisionMap
       elements += new BorderSprite(
@@ -92,7 +94,7 @@ class Map(val dimensions: Dimensions, textures: GameTextures) extends GameElemen
     height = 50 + 180
     y = dimensions.maxUp - height
     x = dimensions.maxLeft
-    collObjects += new CollisionObject(Utils.rectangleCollBody(x, y, dimensions.maxWidth, height))
+    collObjects += new CollisionObject(this, physWorld, Utils.rectangleCollBody(x, y, dimensions.maxWidth, height))
 
     for (i <- 0 to 8) { //to create collisionMap
       elements += new BorderSprite(
@@ -110,7 +112,7 @@ class Map(val dimensions: Dimensions, textures: GameTextures) extends GameElemen
     x = dimensions.left + 345 + 180
     var width = 435
     height = 75
-    collObjects += new CollisionObject(Utils.rectangleCollBody(x, y, width * 2, height))
+    collObjects += new CollisionObject(this, physWorld, Utils.rectangleCollBody(x, y, width * 2, height))
 
     for (i <- 0 until 2) { //to create collisionMap
       elements += new BorderSprite(

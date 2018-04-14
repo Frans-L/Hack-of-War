@@ -10,23 +10,17 @@ import game.main.physics.PhysicsWorld
 import game.main.physics.collision.{CircleBody, CollisionBody, PolygonBody}
 import game.util.{Vector2e, Vector2mtv}
 
-class BulletObject(var sprite: Sprite, var owner: GameElement,
-                   val physWorld: PhysicsWorld, val collBody: CollisionBody,
-                   val pos: Vector2, val velocity: Vector2,
-                   val size: Vector2) extends ObjectType {
+class BulletObject(override var sprite: Sprite, var owner: GameElement,
+                   override val physWorld: PhysicsWorld, override val collBody: CollisionBody,
+                   override val pos: Vector2, override val velocity: Vector2,
+                   override val size: Vector2) extends ObjectType {
 
-  /*
-  override val collBody: CollisionBody = _
-  override val velocity: Vector2 = _
-  override val mass: Float = _
-  override val pos: Vector2 = _
-  override val size: Vector2 = _
-  override var sprite: Sprite = _
-  */
+  override var mass: Float = 0.25f
+  override var friction: Float = 0
 
-
+  //bullet stats
+  var damage: Float = 50f //will be overridden
   var lifeTime: Int = 1000
-  val mass: Float = 10f
 
   override val origin: Vector2 = Vector2e(size.x / 2f, size.y / 2f)
 
@@ -47,7 +41,8 @@ class BulletObject(var sprite: Sprite, var owner: GameElement,
       crashObj.get match {
 
         case obj: UnitObject =>
-          obj.destroy()
+          obj.reduceHealth(damage)
+          obj.addForce(velocity.scl(mass * 100))
           this.destroy()
 
         case wall: CollisionObject =>

@@ -29,7 +29,7 @@ object BasicBullet {
       pos, velocity.scl(1f), Vector2e(radius * 2f, radius * 2f)
     )
 
-    bullet.collOn = false //make sure that bullet
+    bullet.collToMe = false //make sure that others object doesn't collide with bullet
 
     bullet
   }

@@ -12,8 +12,8 @@ class Bot(physWorld: PhysicsWorld, override val colorIndex: Int) extends
 
   def initialize(): Unit = {
     spawnUnit(
-      physWorld.map.dimensions.leftMiddle,
-      physWorld.map.dimensions.upMiddle)
+      physWorld.dimensions.leftMiddle,
+      physWorld.dimensions.upMiddle)
   }
 
   override def update(): Unit = {
@@ -21,8 +21,8 @@ class Bot(physWorld: PhysicsWorld, override val colorIndex: Int) extends
 
     if(false && Ticker.defaultTicker.interval10){
       spawnUnit(
-        physWorld.map.dimensions.leftMiddle,
-        physWorld.map.dimensions.upMiddle)
+        physWorld.dimensions.leftMiddle,
+        physWorld.dimensions.upMiddle)
     }
 
   }

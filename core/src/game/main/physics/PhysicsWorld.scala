@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.{Intersector, Vector2}
 import game.GameElement
 import game.main.Player
 import game.main.physics.objects.ObjectType
-import game.util.Vector2mtv
+import game.util.{Dimensions, Vector2mtv}
 
 import scala.collection.mutable
 
@@ -29,12 +29,16 @@ import scala.collection.mutable
   * drawn on top of everything.
   *
   */
-class PhysicsWorld(val map: Map) extends GameElement {
+class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
+
+  //global physics stats
+  var globalFriction: Float = 1f
+
+  var map: Map = _ //TODO temporary solution, to add map
 
   private val units: mutable.LinkedHashMap[GameElement, mutable.Buffer[ObjectType]] =
     mutable.LinkedHashMap[GameElement, mutable.Buffer[ObjectType]]()
 
-  units.put(map, map.collObjects.asInstanceOf[mutable.Buffer[ObjectType]]) //add map collisions
 
   /** Updates all units that are added to this collisionWorld */
   override def update(): Unit = {
@@ -64,7 +68,7 @@ class PhysicsWorld(val map: Map) extends GameElement {
       }
 
       //removes empty owners
-      //TODO not sure if safe way to delete?
+      //TODO not sure if safe way to delete? it seems like it safe...
       if (owner._2.isEmpty) units.remove(owner._1)
     }
   }
@@ -77,7 +81,7 @@ class PhysicsWorld(val map: Map) extends GameElement {
     */
   def collide(obj: ObjectType, mtv: MinimumTranslationVector = null): Option[ObjectType] = {
     var crashObj: Option[ObjectType] = None
-    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != obj && o.collOn) {
+    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != obj && o.collToMe) {
       if (obj.collBody.overlaps(o.collBody, mtv))
         crashObj = Some(o)
     }
@@ -95,7 +99,7 @@ class PhysicsWorld(val map: Map) extends GameElement {
   def collidePoint(excludeObj: ObjectType, point: Vector2): Option[ObjectType] = {
     var coll = false
     var crashObj: Option[ObjectType] = None
-    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != excludeObj && o.collOn) {
+    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != excludeObj && o.collToMe) {
       coll = o.collBody.contains(point.x, point.y)
       if (coll) crashObj = Some(o)
     }
@@ -110,7 +114,7 @@ class PhysicsWorld(val map: Map) extends GameElement {
     val mtvTMP = Vector2mtv.pool()
     var result: Boolean = false //(is collided, angle)
     var crashObj: Option[ObjectType] = None
-    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != obj && o.collOn) {
+    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != obj && o.collToMe) {
       result = o.collBody.overlapsCircle(center, radius, mtvTMP)
       if (result) crashObj = Some(o)
     }

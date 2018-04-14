@@ -1,6 +1,9 @@
 package game.main.physics.objects
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.Vector2
+import game.main.physics.PhysicsWorld
 import game.main.physics.collision.{CollisionBody, PolygonBody}
 import game.util.Vector2e
 
@@ -28,15 +31,28 @@ trait ObjectType extends SpriteType {
 
   //physics to gameObject
 
-  var collOn = true //if the collision is checked by others object
-  val collBody: CollisionBody //the collision body
-  val velocity: Vector2
-  val mass: Float
+  val physWorld: PhysicsWorld
+  var mass: Float
+  var friction: Float
 
-  /**
-    * Updates collPolygons location, rotation and scale
-    */
-  def updateCollPolygon(): Unit = {
+  var collToMe: Boolean = true //if others objects checks collision with this object
+  var collToOthers: Boolean = true //if this object checks collision with other objects
+  val collBody: CollisionBody //the collision body
+
+  val velocity: Vector2 = Vector2e(0f, 0f)
+
+
+  /** Updates physics */
+  def updatePhysics(): Unit = {
+
+    pos.mulAdd(velocity, ticker.delta)
+    velocity.scl(1f / (friction + physWorld.globalFriction))
+
+    updateCollPolygon()
+  }
+
+  /** Updates collPolygons location, rotation and scale */
+  protected def updateCollPolygon(): Unit = {
     collBody.setPosition(pos.x - origin.x, pos.y - origin.y)
     collBody.setScale(scale.x, scale.y)
     collBody.setRotation(angle)
@@ -48,6 +64,12 @@ trait ObjectType extends SpriteType {
     deleted = true
   }
 
+
+  /** Adds a force to the object  */
+  def addForce(force: Vector2): Unit = {
+    velocity.mulAdd(force, 1f / mass) // F = MA => A = F/M
+    Gdx.app.log("objecttype", "" + velocity)
+  }
 
 }
 

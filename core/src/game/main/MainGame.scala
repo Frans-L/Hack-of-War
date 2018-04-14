@@ -65,10 +65,12 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
   MainGame.debugViewPort = viewport
 
-  //sets the map
-  private val map: physics.Map = new physics.Map(screenDim, textures)
+  //creates the physics world
+  private val physWorld: PhysicsWorld = new PhysicsWorld(screenDim)
 
-  private val physWorld: PhysicsWorld = new PhysicsWorld(map)
+  //adds the map
+  private val map: physics.Map = new physics.Map(screenDim, textures, physWorld)
+  physWorld.map = map //TODO temporary solution to add map to physWorld
 
   //sets the players
   private val players: Seq[Player] = Seq(
