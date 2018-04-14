@@ -3,8 +3,8 @@ package game.main
 import game.loader.GameTextures
 import game.main.physics.PhysicsWorld
 
-class User(textures: GameTextures, physWorld: PhysicsWorld, index: Int) extends
-  Player(textures, physWorld, index) {
+class User(physWorld: PhysicsWorld, override val colorIndex: Int) extends
+  Player(physWorld, colorIndex) {
 
   initialize()
 

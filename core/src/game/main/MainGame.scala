@@ -10,11 +10,12 @@ import com.badlogic.gdx.graphics.{FPSLogger, GL20, OrthographicCamera}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
-import com.badlogic.gdx.{Gdx, Screen}
+import com.badlogic.gdx.{Gdx, Input, Screen}
 import game.loader.GameTextures
 import game.main.ui.GameUI
 import game.util.{Dimensions, Ticker, Vector2e, Vector2mtv}
 import game.main.physics.PhysicsWorld
+import game.main.physics.objects.units.BasicBullet
 
 
 /**
@@ -39,10 +40,14 @@ object MainGame {
   */
 class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
-  //sets the ticker => everything should be time dependent
+  //sets the default ticker => everything should be time dependent
   private val ticker = new Ticker(TimeUtils.millis())
   Ticker.defaultTicker = ticker //to future gameElements
   ticker.speed = 1f
+
+  //sets the default textures
+  GameTextures.defaultTextures = textures
+  GameTextures.defaultUITextures = textures
 
   //sets the drawing batches
   private val batch: SpriteBatch = new SpriteBatch
@@ -67,13 +72,13 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
   //sets the players
   private val players: Seq[Player] = Seq(
-    new User(textures, physWorld, 0),
-    new Bot(textures, physWorld, 1)
+    new User(physWorld, 0),
+    new Bot(physWorld, 1)
   )
 
   //sets the ui
   private val gameUI: GameUI =
-    new GameUI(textures, screenDim, viewport, players.head, shapeRender)
+    new GameUI(screenDim, viewport, players.head, shapeRender)
 
   val fPSLogger: FPSLogger = new FPSLogger
 
@@ -104,7 +109,6 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
     if (ticker.interval10) {
       Gdx.app.log("MainGame", "Render calls: " + batch.renderCalls)
     }
-
 
     fPSLogger.log()
 

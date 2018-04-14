@@ -1,5 +1,6 @@
 package game.main.physics.collision
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Circle, Vector2}
 import game.util.Vector2e
@@ -11,8 +12,9 @@ class CircleBody(private var radius: Float) extends CollisionBody {
   private var x: Float = 0f
   private var y: Float = 0f
 
-  override protected val centerVector: Vector2 = Vector2e(radius, radius)
+  private val origin: Vector2 = Vector2e(radius, radius)
 
+  //private val centerVector: Vector2 = Vector2e(radius, radius)
 
   /** Every CollisionBody should have a radius for a fast circle collision check */
   override def setRadius(r: Float): Unit = radius = r
@@ -52,19 +54,22 @@ class CircleBody(private var radius: Float) extends CollisionBody {
 
 
   /** The position of the origin from the left down corner. */
-  override def setOrigin(x: Float, y: Float): Unit = centerVector.set(x, y)
+  override def setOrigin(x: Float, y: Float): Unit = {
+    origin.set(x, y)
+  }
 
-  override def getOriginX: Float = centerVector.x
+  override def getOriginX: Float = origin.x
 
-  override def getOriginY: Float = centerVector.y
+  override def getOriginY: Float = origin.y
 
 
   /** Returns true if overlaps, and sets the mtv vector. */
   override def overlapsPolygon(polygon: PolygonBody, mtv: MinimumTranslationVector): Boolean = {
-    val result = polygon.overlapsCircle(centerVector, getRadiusScaled, mtv)
 
-    //mtv vectors points to wrong direction
-    // => idea is to move circle this time
+    val result = polygon.overlapsCircle(center, getRadiusScaled, mtv)
+
+    //the mtv vectors points to wrong direction
+    // => idea is to move circle instead of polygon
     if (result) mtv.normal.scl(-1)
     result
   }
@@ -76,23 +81,26 @@ class CircleBody(private var radius: Float) extends CollisionBody {
   override def overlapsCircle(center: Vector2, r: Float,
                               mtv: MinimumTranslationVector): Boolean = {
 
+    val pos = Vector2e.pool(x, y)
     val radiusS = getRadiusScaled
-    val isCollided = centerVector.dst2(center) <= (r + radiusS) * (r + radiusS)
+    val isCollided = pos.dst2(center) <= (r + radiusS) * (r + radiusS)
 
     //sets the mtv vector if collided
     if (isCollided) {
       mtv.normal.set(
-        center.x - centerVector.x,
-        center.y - centerVector.y)
+        center.x - pos.x,
+        center.y - pos.y)
         .nor()
-      mtv.depth = r + radiusS - centerVector.dst(center)
+      mtv.depth = r + radiusS - pos.dst(center)
     }
+
+    Vector2e.free(pos) //free the memory
 
     isCollided
   }
 
   /** Returns the Center vector and the radius */
-  override def toCircle: (Vector2, Float) = (centerVector, getRadiusScaled)
+  override def toCircle: (Vector2, Float) = (centerVector.cpy, getRadiusScaled)
 
 
   /** Returns true if the point is inside the body */
@@ -101,4 +109,5 @@ class CircleBody(private var radius: Float) extends CollisionBody {
 
   override def contains(vector: Vector2): Boolean =
     centerVector.dst2(center) <= getRadiusScaled * getRadiusScaled
+
 }

@@ -3,7 +3,8 @@ package game.util
 
 object Ticker {
 
-  //null value => if this is not set to be a Ticker, errors will appear
+  //null value at start =>
+  //errors will appear when game starts, if this not set to be something
   var defaultTicker: Ticker = _
 
 }

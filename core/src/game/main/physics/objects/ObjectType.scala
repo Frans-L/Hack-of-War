@@ -27,7 +27,9 @@ trait ObjectType extends SpriteType {
   */
 
   //physics to gameObject
-  val collBody: CollisionBody
+
+  var collOn = true //if the collision is checked by others object
+  val collBody: CollisionBody //the collision body
   val velocity: Vector2
   val mass: Float
 

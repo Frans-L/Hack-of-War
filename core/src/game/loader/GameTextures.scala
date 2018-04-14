@@ -23,6 +23,12 @@ class GameTextures extends Loadable {
 
 object GameTextures {
 
+
+  //null value at start =>
+  //errors will appear when game starts, if this not set to be something
+  var defaultTextures: GameTextures = _
+  var defaultUITextures: GameTextures = _
+
   val atlasName = "graphics.atlas"
 
   object Units {

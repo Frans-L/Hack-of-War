@@ -77,7 +77,7 @@ class PhysicsWorld(val map: Map) extends GameElement {
     */
   def collide(obj: ObjectType, mtv: MinimumTranslationVector = null): Option[ObjectType] = {
     var crashObj: Option[ObjectType] = None
-    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != obj) {
+    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != obj && o.collOn) {
       if (obj.collBody.overlaps(o.collBody, mtv))
         crashObj = Some(o)
     }
@@ -95,7 +95,7 @@ class PhysicsWorld(val map: Map) extends GameElement {
   def collidePoint(excludeObj: ObjectType, point: Vector2): Option[ObjectType] = {
     var coll = false
     var crashObj: Option[ObjectType] = None
-    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != excludeObj) {
+    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != excludeObj && o.collOn) {
       coll = o.collBody.contains(point.x, point.y)
       if (coll) crashObj = Some(o)
     }
@@ -110,7 +110,7 @@ class PhysicsWorld(val map: Map) extends GameElement {
     val mtvTMP = Vector2mtv.pool()
     var result: Boolean = false //(is collided, angle)
     var crashObj: Option[ObjectType] = None
-    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != obj) {
+    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != obj && o.collOn) {
       result = o.collBody.overlapsCircle(center, radius, mtvTMP)
       if (result) crashObj = Some(o)
     }

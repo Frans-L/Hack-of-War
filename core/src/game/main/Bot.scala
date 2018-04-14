@@ -5,8 +5,8 @@ import game.loader.GameTextures
 import game.main.physics.PhysicsWorld
 import game.util.Ticker
 
-class Bot(textures: GameTextures, physWorld: PhysicsWorld, index: Int) extends
-  Player(textures, physWorld, index) {
+class Bot(physWorld: PhysicsWorld, override val colorIndex: Int) extends
+  Player(physWorld, colorIndex) {
 
   initialize()
 
@@ -19,7 +19,7 @@ class Bot(textures: GameTextures, physWorld: PhysicsWorld, index: Int) extends
   override def update(): Unit = {
     super.update()
 
-    if(Ticker.defaultTicker.interval10){
+    if(false && Ticker.defaultTicker.interval10){
       spawnUnit(
         physWorld.map.dimensions.leftMiddle,
         physWorld.map.dimensions.upMiddle)

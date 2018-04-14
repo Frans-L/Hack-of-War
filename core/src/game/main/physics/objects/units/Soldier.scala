@@ -16,20 +16,20 @@ object Soldier {
   val texture: Seq[String] = GameTextures.Units.unit1
 
 
-  def create(textures: GameTextures,
-             owner: Player, collHandler: PhysicsWorld,
-             x: Float, y: Float, colorIndex: Int): UnitObject = {
+  def create(owner: Player, physWorld: PhysicsWorld,
+             x: Float, y: Float): UnitObject = {
 
 
-    val scale = 1.5f
-    val w = 99f / scale
+    //size info
+    val scale = 1.5f //tmp scale
+    val w = 100f / scale
     val h = 75f / scale
 
     val body: PolygonBody = Utils.triangleCollBody(0, h, w, h / 2f)
 
     val obj: UnitObject = new UnitObject(
-      textures.atlas.createSprite(texture(colorIndex)),
-      owner, collHandler, body,
+      GameTextures.defaultTextures.atlas.createSprite(texture(owner.colorIndex)),
+      owner, physWorld, body,
       Vector2e(x, y), Vector2e(w, h))
 
     obj

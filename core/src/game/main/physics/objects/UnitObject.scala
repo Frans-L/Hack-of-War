@@ -7,7 +7,8 @@ import com.badlogic.gdx.math.{Interpolation, Vector2}
 import game.GameElement
 import game.main.{MainGame, Player}
 import game.main.physics.PhysicsWorld
-import game.main.physics.collision.PolygonBody
+import game.main.physics.collision.{CollisionBody, PolygonBody}
+import game.main.physics.objects.units.BasicBullet
 import game.util.Vector2e._
 import game.util.{Utils, Vector2e, Vector2mtv}
 
@@ -15,8 +16,8 @@ import game.util.{Utils, Vector2e, Vector2mtv}
   * Created by Frans on 26/02/2018.
   */
 class UnitObject(var sprite: Sprite, var owner: Player,
-                 val physWorld: PhysicsWorld, val collBody: PolygonBody,
-                 val pos: Vector2, override val size: Vector2) extends ObjectType {
+                 val physWorld: PhysicsWorld, val collBody: CollisionBody,
+                 val pos: Vector2, val size: Vector2) extends ObjectType {
 
 
   val velocity: Vector2 = Vector2e(0f, 0f)
@@ -26,13 +27,14 @@ class UnitObject(var sprite: Sprite, var owner: Player,
   val maxForce: Float = 0.05f
   val mass: Float = 100f
   val maxSeeAhead: Float = sWidth * 2f
+
   val maxForceAvoid: Float = 0.25f
   val maxRotateTime: Float = 150f
 
   updateCollPolygon() //updates collisionbox
   updateSprite() //updates sprite
 
-  physWorld.addUnit(owner.asInstanceOf[GameElement], this) //add updates
+  physWorld.addUnit(owner.asInstanceOf[GameElement], this) //adds update calls
 
   private def target: Vector2 = MainGame.debugViewPort.unproject(Vector2e.pool(Gdx.input.getX, Gdx.input.getY))
 
@@ -79,6 +81,19 @@ class UnitObject(var sprite: Sprite, var owner: Player,
         //free the memory
         Vector2e.free(steering)
         Vector2e.free(avoid)
+
+        //TODO TEST
+
+
+        if (ticker.interval2) {
+
+          val bulletPos = Vector2e.pool(velocity).nor ** (sWidth + BasicBullet.radius) ++ pos
+
+          BasicBullet.create(this, physWorld,
+            bulletPos, Vector2e.pool(velocity).nor ** (maxVelocity * 5),
+            owner.colorIndex)
+        }
+
 
       }
       else

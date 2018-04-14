@@ -2,6 +2,7 @@ package game.main.physics.collision
 
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Intersector, Vector2}
+import game.util.Vector2e
 
 
 /** *
@@ -10,8 +11,8 @@ import com.badlogic.gdx.math.{Intersector, Vector2}
   */
 trait CollisionBody {
 
-  //caches the center point vector
-  protected val centerVector: Vector2
+  //caches the center point vector aka tmp vector
+  protected val centerVector: Vector2 = Vector2e(0, 0)
 
   /** Every CollisionBody should have a radius for a fast circle collision check */
   def setRadius(r: Float)
@@ -62,7 +63,8 @@ trait CollisionBody {
 
   /** Returns true if overlaps, and sets the mtv vector.
     * mtv tells in which direction and how much the object
-    * have to move to avoid the collision. */
+    * have to move to avoid the collision. This method takes
+    * into account whether the collisionBody is invisible or not.*/
   def overlaps(body: CollisionBody, mtv: Intersector.MinimumTranslationVector): Boolean = {
     body match {
       case b: PolygonBody =>

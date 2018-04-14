@@ -16,8 +16,7 @@ import game.util.Dimensions
 /**
   * Created by Frans on 28/02/2018.
   */
-class GameUI(gameTextures: GameTextures,
-             dimensions: Dimensions, viewport: Viewport,
+class GameUI(dimensions: Dimensions, viewport: Viewport,
              player: Player,
              shapeRenderer: ShapeRenderer) extends GameElement {
 
@@ -31,7 +30,7 @@ class GameUI(gameTextures: GameTextures,
     var organizeCard = false
     player.hand.foreach(c => {
       if (!c.uiExists) {
-        val card = c.uiCreate(gameTextures)
+        val card = c.uiCreate()
         card.setBounds(0, dimensions.down, 170, 270)
         card.setScale(0f)
         card.setTouchable(Touchable.enabled)

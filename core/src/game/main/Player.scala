@@ -16,8 +16,9 @@ import scala.collection.mutable
 /**
   * Created by Frans on 06/03/2018.
   */
-abstract class Player(textures: GameTextures, physWorld: PhysicsWorld, index: Int) extends GameElement {
+abstract class Player(physWorld: PhysicsWorld, index: Int) extends GameElement {
 
+  val colorIndex: Int //color of the textures
   private val deck: mutable.Buffer[Card] = mutable.Buffer[Card]()
   val hand: mutable.Buffer[Card] = mutable.Buffer[Card]()
 
@@ -42,7 +43,7 @@ abstract class Player(textures: GameTextures, physWorld: PhysicsWorld, index: In
 
   /** Spawns a new unit */
   def spawnUnit(x: Float, y: Float): Unit = {
-    Soldier.create(textures, this, physWorld, x, y, index)
+    Soldier.create(this, physWorld, x, y)
   }
 
   override def draw(shapeRender: ShapeRenderer): Unit = {
