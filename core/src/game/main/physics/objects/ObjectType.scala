@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2
 import game.main.physics.PhysicsWorld
 import game.main.physics.collision.{CollisionBody, PolygonBody}
 import game.util.Vector2e
+import game.util.Vector2e._
 
 /**
   * Created by Frans on 26/02/2018.
@@ -70,6 +71,15 @@ trait ObjectType extends SpriteType {
     velocity.mulAdd(force, 1f / mass) // F = MA => A = F/M
     Gdx.app.log("objecttype", "" + velocity)
   }
+
+  /** Adds an impact to the object that will add a force */
+  def addImpact(vel: Vector2, mass2: Float): Unit = {
+    val speed =
+      Vector2e.pool(velocity).scl(-math.abs(math.cos(velocity.angleRad(vel))).toFloat) ++ vel
+    velocity.mulAdd(speed, mass2 / mass)
+    Vector2e.free(speed)
+  }
+
 
 }
 

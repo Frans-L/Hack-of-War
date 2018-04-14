@@ -2,12 +2,13 @@ package game.main
 
 import java.util.concurrent.TimeUnit
 
+import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.{SpriteBatch, TextureAtlas}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.graphics.profiling.GLProfiler
 import com.badlogic.gdx.graphics.{FPSLogger, GL20, OrthographicCamera}
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.{MathUtils, Vector2}
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import com.badlogic.gdx.{Gdx, Input, Screen}
@@ -159,7 +160,29 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
   }
 
+  var tmpPressed = false
+
   def update(): Unit = {
+
+    def target = MainGame.debugViewPort.unproject(Vector2e.pool(Gdx.input.getX, Gdx.input.getY))
+
+    if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+      if (!tmpPressed) {
+        BasicBullet.create(players.head, physWorld,
+          target, Vector2e(-1, 0),
+          players.last.colorIndex)
+        BasicBullet.create(players.head, physWorld,
+          target, Vector2e(1, 0),
+          players.last.colorIndex)
+        BasicBullet.create(players.head, physWorld,
+          target, Vector2e(0, 1),
+          players.last.colorIndex)
+        BasicBullet.create(players.head, physWorld,
+          target, Vector2e(0, -1),
+          players.last.colorIndex)
+      }
+      tmpPressed = true
+    } else tmpPressed = false
 
     cam.update()
     players.foreach(_.update())

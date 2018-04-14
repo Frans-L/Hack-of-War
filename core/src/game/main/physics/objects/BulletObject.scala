@@ -15,11 +15,11 @@ class BulletObject(override var sprite: Sprite, var owner: GameElement,
                    override val pos: Vector2, override val velocity: Vector2,
                    override val size: Vector2) extends ObjectType {
 
-  override var mass: Float = 0.25f
+  override var mass: Float = 25f
   override var friction: Float = 0
 
   //bullet stats
-  var damage: Float = 50f //will be overridden
+  var damage: Float = 0f //will be overridden
   var lifeTime: Int = 1000
 
   override val origin: Vector2 = Vector2e(size.x / 2f, size.y / 2f)
@@ -42,7 +42,8 @@ class BulletObject(override var sprite: Sprite, var owner: GameElement,
 
         case obj: UnitObject =>
           obj.reduceHealth(damage)
-          obj.addForce(velocity.scl(mass * 100))
+          obj.addImpact(velocity.scl(1f), mass)
+          //obj.addForce(velocity.scl(mass * 100))
           this.destroy()
 
         case wall: CollisionObject =>
