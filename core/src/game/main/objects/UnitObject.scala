@@ -153,7 +153,7 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
   def shoot(): Unit = {
 
     //calculates the pos of the bullet and create it
-    val bulletPos = Vector2e.pool(movingForce).nor ** (sWidth + BasicBullet.radius) ++ pos
+    val bulletPos = Vector2e.pool(movingForce).nor ** (sWidth / 2f + BasicBullet.radius) ++ pos
     val bullet = BasicBullet.create(this, physWorld,
       bulletPos, Vector2e.pool(movingForce).nor ** (maxSpeed * 5),
       owner.colorIndex)
