@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.{InputEvent, InputListener, Stage, Toucha
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import game.loader.GameTextures
-import game.main.Player
 import game.GameElement
+import game.main.players.Player
 import game.util.Dimensions
 
 

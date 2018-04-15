@@ -3,6 +3,7 @@ package game.main
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, InputListener}
 import game.loader.GameTextures
+import game.main.players.Player
 import game.main.ui.UICard
 
 object Card {

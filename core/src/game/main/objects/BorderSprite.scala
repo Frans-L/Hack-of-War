@@ -1,10 +1,9 @@
-package game.main.physics.objects
+package game.main.objects
 
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
-import game.main.physics.PhysicsWorld
 import game.util.Vector2e._
 
 /**

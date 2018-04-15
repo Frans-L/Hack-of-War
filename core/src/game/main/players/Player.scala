@@ -1,15 +1,11 @@
-package game.main
+package game.main.players
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.MathUtils
-import game.loader.GameTextures
-import game.main.physics.PhysicsWorld
 import game.GameElement
-import game.main.physics.objects.UnitObject
-import game.main.physics.objects.units.Soldier
+import game.main.Card
+import game.main.physics.PhysicsWorld
+import game.main.units.Soldier
 
 import scala.collection.mutable
 

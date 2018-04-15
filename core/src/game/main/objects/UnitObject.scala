@@ -1,14 +1,15 @@
-package game.main.physics.objects
+package game.main.objects
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Interpolation, Vector2}
 import game.GameElement
-import game.main.{MainGame, Player}
-import game.main.physics.PhysicsWorld
+import game.main.MainGame
+import game.main.physics.{ObjectType, PhysicsWorld}
 import game.main.physics.collision.{CollisionBody, PolygonBody}
-import game.main.physics.objects.units.BasicBullet
+import game.main.units.BasicBullet
+import game.main.players.Player
 import game.util.Vector2e._
 import game.util.{Utils, Vector2e, Vector2mtv}
 import sun.font.PhysicalFont

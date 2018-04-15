@@ -1,10 +1,11 @@
-package game.main.physics
+package game.main
 
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.GameElement
 import game.loader.GameTextures
-import game.main.physics.objects.{BorderSprite, CollisionObject}
+import game.main.physics.PhysicsWorld
+import game.main.objects.{BorderSprite, CollisionObject}
 import game.util.{Dimensions, Utils, Vector2e}
 
 import scala.collection.mutable

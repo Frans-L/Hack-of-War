@@ -1,4 +1,4 @@
-package game.main.physics.objects
+package game.main.objects
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2

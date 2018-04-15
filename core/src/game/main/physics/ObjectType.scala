@@ -1,12 +1,12 @@
-package game.main.physics.objects
+package game.main.physics
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.Vector2
-import game.main.physics.PhysicsWorld
-import game.main.physics.collision.{CollisionBody, PolygonBody}
-import game.util.{Vector2e, Vector2mtv}
+import game.main.objects.SpriteType
+import game.main.physics.collision.CollisionBody
 import game.util.Vector2e._
+import game.util.{Vector2e, Vector2mtv}
 
 /**
   * Created by Frans on 26/02/2018.

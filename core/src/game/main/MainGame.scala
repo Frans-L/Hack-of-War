@@ -16,7 +16,8 @@ import game.loader.GameTextures
 import game.main.ui.GameUI
 import game.util.{Dimensions, Ticker, Vector2e, Vector2mtv}
 import game.main.physics.PhysicsWorld
-import game.main.physics.objects.units.BasicBullet
+import game.main.units.BasicBullet
+import game.main.players.{Bot, Player, User}
 
 
 /**
@@ -70,7 +71,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
   private val physWorld: PhysicsWorld = new PhysicsWorld(screenDim)
 
   //adds the map
-  private val map: physics.Map = new physics.Map(screenDim, textures, physWorld)
+  private val map: Map = new Map(screenDim, textures, physWorld)
   physWorld.map = map //TODO temporary solution to add map to physWorld
 
   //sets the players

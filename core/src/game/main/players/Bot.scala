@@ -1,7 +1,5 @@
-package game.main
+package game.main.players
 
-import game.GameElement
-import game.loader.GameTextures
 import game.main.physics.PhysicsWorld
 import game.util.Ticker
 

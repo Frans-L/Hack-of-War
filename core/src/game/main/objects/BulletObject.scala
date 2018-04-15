@@ -1,12 +1,12 @@
-package game.main.physics.objects
+package game.main.objects
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Intersector, Vector2}
 import game.GameElement
-import game.main.{MainGame, Player}
-import game.main.physics.PhysicsWorld
+import game.main.MainGame
+import game.main.physics.{ObjectType, PhysicsWorld}
 import game.main.physics.collision.{CircleBody, CollisionBody, PolygonBody}
 import game.util.{Vector2e, Vector2mtv}
 

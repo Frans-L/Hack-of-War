@@ -1,11 +1,11 @@
-package game.main.physics.objects.units
+package game.main.units
 
 import game.GameElement
 import game.loader.GameTextures
-import game.main.Player
 import game.main.physics.PhysicsWorld
 import game.main.physics.collision.PolygonBody
-import game.main.physics.objects.UnitObject
+import game.main.objects.UnitObject
+import game.main.players.Player
 import game.util.{Ticker, Utils, Vector2e}
 
 /**

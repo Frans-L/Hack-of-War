@@ -1,11 +1,11 @@
-package game.main.physics.objects.units
+package game.main.units
 
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
 import game.loader.GameTextures
 import game.main.physics.PhysicsWorld
 import game.main.physics.collision.{CircleBody, CollisionBody}
-import game.main.physics.objects.BulletObject
+import game.main.objects.BulletObject
 import game.util.{Utils, Vector2e}
 
 object BasicBullet {
