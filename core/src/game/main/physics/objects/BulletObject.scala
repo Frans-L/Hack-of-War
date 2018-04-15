@@ -3,7 +3,7 @@ package game.main.physics.objects
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.{Intersector, Vector2}
 import game.GameElement
 import game.main.{MainGame, Player}
 import game.main.physics.PhysicsWorld
@@ -18,6 +18,7 @@ class BulletObject(override var sprite: Sprite, var owner: GameElement,
   override var mass: Float = 25f
   override var friction: Float = 0
 
+
   //bullet stats
   var damage: Float = 0f //will be overridden
   var lifeTime: Int = 1000
@@ -26,39 +27,38 @@ class BulletObject(override var sprite: Sprite, var owner: GameElement,
 
   updateCollPolygon()
   updateSprite()
-  physWorld.addUnit(owner, this) //adds update calls
+  physWorld.addUnit(owner, this) //adds to update calls
 
 
   override def update(): Unit = {
 
-    val collForce = Vector2mtv.pool()
-    val crashObj = physWorld.collide(this, collForce)
-
-    if (crashObj.isEmpty) {
-      moveForward()
-    } else {
-
-      crashObj.get match {
-
-        case obj: UnitObject =>
-          obj.reduceHealth(damage)
-          obj.addImpact(velocity.scl(1f), mass)
-          //obj.addForce(velocity.scl(mass * 100))
-          this.destroy()
-
-        case wall: CollisionObject =>
-          this.destroy()
-
-        case _ => moveForward()
-      }
-    }
-
     lifeTime -= ticker.delta
-
     if (lifeTime <= 0) this.destroy()
 
+    updatePhysics()
     updateSprite()
-    updateCollPolygon()
+  }
+
+
+  /** Replaces basic collision action with bullet's own. */
+  override protected def collision(crashObj: ObjectType,
+                                   collForce: Intersector.MinimumTranslationVector): Boolean = {
+
+    crashObj match {
+        
+      case obj: UnitObject =>
+        obj.reduceHealth(damage)
+        obj.addImpact(velocity.scl(1f), mass)
+        this.destroy()
+        true
+
+      case wall: CollisionObject =>
+        this.destroy()
+        true
+
+      case _ => false //no collision detected
+    }
+
   }
 
   private def moveForward(): Unit = {

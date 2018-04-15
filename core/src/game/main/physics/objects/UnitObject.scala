@@ -51,12 +51,7 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
   override def update(): Unit = {
     if (enabled) {
 
-      val collForce = Vector2mtv.pool()
-      if (physWorld.isCollided(this, collForce)) {
-
-        pos.mulAdd((collForce.normal ** collForce.depth).limit(maxForwardForce), ticker.delta)
-
-      } else if (pos.x < 1920 / 2f - 150) { //TODO: 'if' because of the debugging
+      if (pos.x < 1920 / 2f - 150) { //TODO: 'if' because of the debugging
 
         //move towards target
         val steering =
@@ -99,9 +94,6 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
       }
       else
         destroy()
-
-      //frees the memory
-      Vector2mtv.free(collForce)
 
       updatePhysics()
       updateSprite()

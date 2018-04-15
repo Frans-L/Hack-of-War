@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.Vector2
 import game.main.physics.PhysicsWorld
 import game.main.physics.collision.{CollisionBody, PolygonBody}
-import game.util.Vector2e
+import game.util.{Vector2e, Vector2mtv}
 import game.util.Vector2e._
 
 /**
@@ -43,16 +43,45 @@ trait ObjectType extends SpriteType {
   val velocity: Vector2 = Vector2e(0f, 0f)
 
 
+
   /** Updates physics */
   def updatePhysics(): Unit = {
 
-    pos.mulAdd(velocity, ticker.delta)
-    velocity.scl(1f / (friction + physWorld.globalFriction))
+    var crash = false
 
-    updateCollPolygon()
+    //checks collision
+    if (collToOthers) {
+      val collForce = Vector2mtv.pool()
+      val crashObj = physWorld.collide(this, collForce)
+      crashObj.foreach(obj => crash = collision(obj, collForce))
+      Vector2mtv.free(collForce) //free the memory
+    }
+
+    //if free to move
+    if (!crash) {
+      pos.mulAdd(velocity, ticker.delta)
+    }
+
+    //reduces the velocity if the total friction isn't zero
+    val fric = friction + physWorld.globalFriction
+    if(fric != 0) velocity.scl(1f / fric)
+
+    updateCollPolygon() //update collisionBox coords
   }
 
-  /** Updates collPolygons location, rotation and scale */
+
+  /** Will be called when collision happened by updatePhysics.
+    * Thse default action is to move out of the object and "bounce" back.
+    *
+    * @return True if the collision was accepted (default) */
+  protected def collision(crashObj: ObjectType, collForce: MinimumTranslationVector): Boolean = {
+    pos.mulAdd(collForce.normal, collForce.depth + 0.1f) //move out of the collision
+    velocity.setAngle(collForce.normal.angle()) //bounce back
+    true
+  }
+
+  /** Updates collPolygons location, rotation and scale.
+    * updatePhysics calls this automatically. */
   protected def updateCollPolygon(): Unit = {
     collBody.setPosition(pos.x - origin.x, pos.y - origin.y)
     collBody.setScale(scale.x, scale.y)
