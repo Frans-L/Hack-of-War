@@ -25,7 +25,7 @@ import game.main.players.{Bot, Player, User}
   */
 object MainGame {
 
-  val drawCollBox: Boolean = true
+  var drawCollBox: Boolean = false
 
   var debugViewPort: Viewport = _
   var debugRender: ShapeRenderer = _
@@ -160,9 +160,11 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
      */
 
     shapeRender.setColor(0, 1f, 0f, 1)
+    map.draw(shapeRender)
     gameUI.draw(shapeRender)
     physWorld.draw(shapeRender)
     players.foreach(_.draw(shapeRender))
+
 
     shapeRender.end()
 
@@ -191,6 +193,11 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
       }
       tmpPressed = true
     } else tmpPressed = false
+
+
+    if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) MainGame.drawCollBox = !MainGame.drawCollBox
+
+
 
     cam.update()
     players.foreach(_.update())

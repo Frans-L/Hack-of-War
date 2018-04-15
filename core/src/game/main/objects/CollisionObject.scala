@@ -4,13 +4,14 @@ import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
+import game.main.MainGame
 import game.main.physics.{ObjectType, PhysicsWorld}
-import game.main.physics.collision.PolygonBody
+import game.main.physics.collision.{CollisionBody, PolygonBody}
 import game.util.Vector2e
 
 class CollisionObject(var owner: GameElement,
                       override val physWorld: PhysicsWorld,
-                      override val collBody: PolygonBody) extends ObjectType {
+                      override val collBody: CollisionBody) extends ObjectType {
 
   override val velocity: Vector2 = Vector2e(0, 0)
   override var mass: Float = 100f
@@ -25,14 +26,17 @@ class CollisionObject(var owner: GameElement,
   physWorld.addUnit(owner, this) //add to physics world
 
 
-
   override def updatePhysics(): Unit = {
-    velocity.set(0,0) //doesn't move anything
+    velocity.set(0, 0) //doesn't move anything
   }
 
   override def update(): Unit = Unit //doesn't move anywhere
 
-  override def draw(shapeRender: ShapeRenderer): Unit = Unit //doesn't draw anything
+  override def draw(shapeRender: ShapeRenderer): Unit = {
+    if (MainGame.drawCollBox) {
+      collBody.draw(shapeRender) //draw debug lines
+    }
+  }
 
   override def draw(batch: Batch): Unit = Unit //doesn't draw anything
 

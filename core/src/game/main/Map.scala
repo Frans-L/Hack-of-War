@@ -1,6 +1,7 @@
 package game.main
 
-import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.GameElement
 import game.loader.GameTextures
@@ -14,9 +15,12 @@ import scala.collection.mutable
 
 object Map {
 
-  val mapBorder: String = GameTextures.Units.mapBorder
-  val mapBorderShort: String = GameTextures.Units.mapBorderShort
-  val mapBorderWide: String = GameTextures.Units.mapBorderWide
+  val border: String = GameTextures.Units.mapBorder
+
+  val corner: String = GameTextures.Units.mapCorner
+  val trenchCorner: String = GameTextures.Units.mapTrenchCorner
+  val middleCorner: String = GameTextures.Units.mapMiddleCorner
+
 }
 
 /**
@@ -41,7 +45,7 @@ class Map(val dimensions: Dimensions,
 
   override def update(): Unit = ???
 
-  override def draw(shapeRender: ShapeRenderer): Unit = ???
+  override def draw(shapeRender: ShapeRenderer): Unit = Unit
 
   override def draw(batch: Batch): Unit = {
     elements.foreach(_.draw(batch))
@@ -72,58 +76,241 @@ class Map(val dimensions: Dimensions,
   }
 
   /**
-    * Creates a map
+    * Creates a map, hardcoded
     */
   private def initializeMap(): Unit = {
 
-    //Down border
-    var height: Float = 200 + 180
-    var y: Float = dimensions.maxDown
-    var x: Float = dimensions.maxLeft
-    collObjects += new CollisionObject(this, physWorld, PolygonBody.rectangleCollBody(x, y, dimensions.maxWidth, height))
 
-    for (i <- 0 to 8) { //to create collisionMap
-      elements += new BorderSprite(
-        Vector2e(x, y),
-        Vector2e(345 - ((i % 2) * 165), height),
-        Vector2e(1, 0),
-        textures.atlas.createSprite(Map.mapBorder))
-      x = elements.last.nextToX
+    //block info
+    val borderWidth: Float = 180
+    val cornerWidth: Float = 90
+    val baseWidth: Float = 310
+    val trenchCornerWidth: Float = 230
+    val trenchWidth: Float = 660
+
+    val blockWidth = Seq(borderWidth + cornerWidth, baseWidth, trenchCornerWidth,
+      trenchWidth, trenchCornerWidth, baseWidth, borderWidth + cornerWidth)
+
+    require(blockWidth.sum.toInt == dimensions.maxWidth) //has to match with screen coords
+
+    val borderHeight: Float = 180
+    val upHeight: Float = 50
+    val cornerHeight: Float = 90
+    val straightHeight: Float = 210 //part between trench max and middle max
+    val middleHeight: Float = 70
+    val middleMaxHeight: Float = middleHeight + cornerHeight * 2
+    val downHeight: Float = 180
+
+    val blockHeight = Seq(borderHeight + downHeight, cornerHeight, straightHeight,
+      middleMaxHeight, straightHeight, cornerHeight, upHeight + borderHeight)
+
+    require(blockHeight.sum.toInt == dimensions.maxHeight) //has to match with screen coords
+
+    addBasicElements()
+    addCorners()
+    addTrenches()
+    addMiddle()
+
+
+    //adds basic stuff like borders
+    def addBasicElements(): Unit = {
+
+      //basic elements
+      val sprite = textures.atlas.createSprite(Map.border)
+
+      var y: Float = dimensions.maxDown
+      addHorizontalBlocks(y, borderHeight + downHeight) //down border
+
+      y = dimensions.maxUp - (borderHeight + upHeight)
+      addHorizontalBlocks(y, borderHeight + upHeight) //up border
+
+      addVerticalBlocks(dimensions.maxLeft, borderWidth) //left border
+      addVerticalBlocks(dimensions.maxRight - borderWidth, borderWidth) //right border
+
+
+      //a bit prettier way to add all verticals blocks
+      def addVerticalBlocks(x: Float, width: Float): Unit = {
+        var y: Float = dimensions.maxDown
+        addBlock(PolygonBody.rectangleCollBody(x, y, width, dimensions.maxHeight))
+        for (i <- blockHeight.indices) {
+          addGraphic(x, y, width, blockHeight(i), sprite, 1, 1)
+          y = elements.last.nextToY
+        }
+      }
+
+      //a bit prettier way to add all horizontal blocks
+      def addHorizontalBlocks(y: Float, height: Float): Unit = {
+        var x: Float = dimensions.maxLeft
+        addBlock(PolygonBody.rectangleCollBody(x, y, dimensions.maxWidth, height))
+        for (i <- blockWidth.indices) {
+          addGraphic(x, y, blockWidth(i), height, sprite, 1, 1)
+          x = elements.last.nextToX
+        }
+      }
+
+    }
+
+    //adds corners
+    def addCorners(): Unit = {
+
+      val width: Float = cornerHeight
+      val height: Float = cornerWidth
+      val sprite = textures.atlas.createSprite(Map.corner)
+
+      //left up corner
+      var x: Float = dimensions.maxLeft + blockWidth.head - width - 2
+      var y: Float = dimensions.maxUp - (borderHeight + upHeight) - height
+      addTriangleElement(x, y, width, height, sprite, flipX = false, flipY = true)
+
+      //right up corner
+      x = dimensions.maxRight - blockWidth.head + 2
+      addTriangleElement(x, y, width, height, sprite, flipX = true, flipY = true)
+
+      //left down corner
+      x = dimensions.maxLeft + blockWidth.head - width - 2
+      y = dimensions.maxDown + (borderHeight + downHeight)
+      addTriangleElement(x, y, width, height, sprite, flipX = false, flipY = false)
+
+      //right down corner
+      x = dimensions.maxRight - blockWidth.head + 2
+      addTriangleElement(x, y, width, height, sprite, flipX = true, flipY = false)
+    }
+
+    //adds trenches
+    def addTrenches(): Unit = {
+
+      var sprite = textures.atlas.createSprite(Map.trenchCorner)
+      var height: Float = cornerHeight
+      var width: Float = trenchCornerWidth
+
+      //left up
+      var x: Float = dimensions.maxLeft + blockWidth.take(2).sum
+      var y: Float = dimensions.maxUp - (borderHeight + upHeight) - height
+      addTriangleElement(x, y, width, height, sprite, flipX = true, flipY = true)
+
+      //right up
+      x = dimensions.maxRight - blockWidth.takeRight(3).sum
+      addTriangleElement(x, y, width, height, sprite, flipX = false, flipY = true)
+
+      //left down
+      x = dimensions.maxLeft + blockWidth.take(2).sum
+      y = dimensions.maxDown + (borderHeight + downHeight)
+      addTriangleElement(x, y, width, height, sprite, flipX = true, flipY = false)
+
+      //right down
+      x = dimensions.maxRight - blockWidth.takeRight(3).sum
+      addTriangleElement(x, y, width, height, sprite, flipX = false, flipY = false)
+
+      //middle part
+      sprite = textures.atlas.createSprite(Map.border)
+
+      height = cornerHeight
+      width = trenchWidth
+      x = dimensions.maxLeft + blockWidth.take(3).sum
+
+      //up
+      y = dimensions.maxUp - (borderHeight + upHeight) - height
+      addBlock(PolygonBody.rectangleCollBody(x, y, width, height))
+      addGraphic(x, y, width, height, sprite, 1, 1)
+
+      //up
+      y = dimensions.maxDown + (borderHeight + downHeight)
+      addBlock(PolygonBody.rectangleCollBody(x, y, width, height))
+      addGraphic(x, y, width, height, sprite, 1, 1)
+    }
+
+    def addMiddle(): Unit = {
+
+      //middle
+      var sprite = textures.atlas.createSprite(Map.border)
+
+      var height: Float = middleHeight
+      var width: Float = trenchWidth / 2
+      var y: Float = (downHeight - upHeight) / 2 - height / 2
+      var x: Float = dimensions.maxLeft + blockWidth.take(2).sum
+
+      val widthSeq = Seq(trenchCornerWidth, width, width, trenchCornerWidth)
+
+      addBlock(PolygonBody.rectangleCollBody(x + trenchCornerWidth, y, width * 2, height))
+      for (i <- 0 until 4) { //to create collisionMap
+        addGraphic(x, y, widthSeq(i), height, sprite, 1, 1)
+        x = elements.last.nextToX
+      }
+
+      //middle corners
+      sprite = textures.atlas.createSprite(Map.trenchCorner)
+      height = cornerHeight
+      width = trenchCornerWidth
+
+      //lef and righ
+      val xSeq = Seq(
+        dimensions.maxLeft + blockWidth.take(2).sum + 1,
+        dimensions.maxRight - blockWidth.take(3).sum - 1)
+
+      var body: PolygonBody = null //tmp variable
+
+      for (i <- 0 until 2) {
+        x = xSeq(i)
+
+        //up
+        y = (downHeight - upHeight) / 2 + 1 + middleHeight / 2
+        sprite.setFlip(i == 1, false)
+        addGraphic(x, y, width, height, sprite)
+
+        //down
+        y = (downHeight - upHeight) / 2 - height - 1 - middleHeight / 2
+        sprite.setFlip(i == 1, true)
+        addGraphic(x, y, width, height, sprite)
+
+        if (i == 0) {
+          body = new PolygonBody(
+            Array(0, 0, trenchCornerWidth, cornerHeight,
+              trenchCornerWidth, cornerHeight + middleHeight,
+              0, cornerHeight * 2 + middleHeight), trenchCornerWidth / 2)
+          body.setOrigin(trenchCornerWidth / 3 * 4, (cornerHeight * 2 + middleHeight) / 2)
+          body.setPosition(x, y)
+        } else {
+          body = new PolygonBody(
+            Array(0, 0,
+              trenchCornerWidth, -cornerHeight,
+              trenchCornerWidth, cornerHeight + middleHeight,
+              0, middleHeight),
+            trenchCornerWidth / 2)
+          body.setOrigin(-trenchCornerWidth / 3, middleHeight / 2)
+          body.setPosition(x, y + cornerHeight)
+        }
+
+        addBlock(body)
+
+      }
+
+
     }
 
 
-    //Up border
-    height = 50 + 180
-    y = dimensions.maxUp - height
-    x = dimensions.maxLeft
-    collObjects += new CollisionObject(this, physWorld, PolygonBody.rectangleCollBody(x, y, dimensions.maxWidth, height))
+    //a bit prettier way to add triangle graphic element with block
+    def addTriangleElement(x: Float, y: Float, width: Float, height: Float,
+                           sprite: Sprite, flipX: Boolean, flipY: Boolean): Unit = {
+      sprite.setFlip(flipX, flipY)
+      addGraphic(x, y, width, height, sprite)
 
-    for (i <- 0 to 8) { //to create collisionMap
-      elements += new BorderSprite(
-        Vector2e(x, y),
-        Vector2e(345 - ((i % 2) * 165), height),
-        Vector2e(1, 0),
-        textures.atlas.createSprite(Map.mapBorder))
-
-      x = elements.last.nextToX
+      if (!flipX && !flipY) addBlock(PolygonBody.triangleCollBody(x, y, width, 0, 0, height))
+      else if (flipX && !flipY) addBlock(PolygonBody.triangleCollBody(x, y, width, 0, width, height))
+      else if (!flipX && flipY) addBlock(PolygonBody.triangleCollBody(x, y, width, height, 0, height))
+      else if (flipX && flipY) addBlock(PolygonBody.triangleCollBody(x, y + height, width, -height, width, 0))
     }
 
 
-    //middle
-    y = 0
-    x = dimensions.left + 345 + 180
-    var width = 435
-    height = 75
-    collObjects += new CollisionObject(this, physWorld, PolygonBody.rectangleCollBody(x, y, width * 2, height))
+    //a bit prettier way to add elements + clones the sprite
+    def addGraphic(x: Float, y: Float, width: Float, height: Float,
+                   sprite: Sprite, borderX: Float = 0, borderY: Float = 0): Unit = {
+      elements += new BorderSprite(Vector2e(x, y), Vector2e(width, height),
+        Vector2e(borderX, borderY), new Sprite(sprite))
+    }
 
-    for (i <- 0 until 2) { //to create collisionMap
-      elements += new BorderSprite(
-        Vector2e(x, y),
-        Vector2e(width, height),
-        Vector2e(1, 0),
-        textures.atlas.createSprite(Map.mapBorder))
-
-      x = elements.last.nextToX
+    //a bit prettier way to add a collision block
+    def addBlock(collisionBody: CollisionBody): Unit = {
+      collObjects += new CollisionObject(this, physWorld, collisionBody)
     }
 
   }

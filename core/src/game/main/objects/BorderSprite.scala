@@ -30,7 +30,7 @@ class BorderSprite(val pos: Vector2, val size: Vector2,
 
     //set bo
     sprite.setBounds(
-      pos.x - padding.x, pos.y - padding.y,
+      pos.x + padding.x, pos.y + padding.y,
       size.width - padding.x * 2f, size.y - padding.y * 2f)
     sprite.setOriginCenter()
   }

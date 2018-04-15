@@ -6,57 +6,78 @@ filter: Nearest,Nearest
 repeat: none
 bullet1Blue
   rotate: false
-  xy: 164, 112
+  xy: 184, 155
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 bullet1Red
   rotate: false
-  xy: 345, 404
+  xy: 206, 155
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 card1
   rotate: false
-  xy: 2, 74
+  xy: 349, 269
   size: 160, 240
   orig: 160, 240
   offset: 0, 0
   index: -1
 mapBorder
   rotate: false
-  xy: 447, 491
+  xy: 2, 13
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
 mapBorderShort
   rotate: false
-  xy: 164, 134
-  size: 176, 180
+  xy: 2, 147
+  size: 180, 180
   orig: 180, 180
-  offset: 2, 0
+  offset: 0, 0
   index: -1
 mapBorderWide
   rotate: false
-  xy: 2, 316
-  size: 341, 180
+  xy: 2, 329
+  size: 345, 180
   orig: 345, 180
-  offset: 2, 0
+  offset: 0, 0
+  index: -1
+mapCorner
+  rotate: false
+  xy: 239, 85
+  size: 90, 90
+  orig: 90, 90
+  offset: 0, 0
+  index: -1
+mapMiddleCorner
+  rotate: false
+  xy: 2, 20
+  size: 235, 125
+  orig: 235, 125
+  offset: 0, 0
+  index: -1
+mapTrenchCorner
+  rotate: false
+  xy: 184, 177
+  size: 235, 90
+  orig: 235, 90
+  offset: 0, 0
   index: -1
 unit1Blue
   rotate: false
-  xy: 345, 426
-  size: 100, 70
+  xy: 239, 8
+  size: 100, 75
   orig: 100, 75
-  offset: 0, 2
+  offset: 0, 0
   index: -1
 unit1Red
   rotate: false
-  xy: 2, 2
-  size: 100, 70
+  xy: 331, 100
+  size: 100, 75
   orig: 100, 75
-  offset: 0, 2
+  offset: 0, 0
   index: -1

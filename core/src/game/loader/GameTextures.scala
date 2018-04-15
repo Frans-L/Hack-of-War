@@ -37,7 +37,11 @@ object GameTextures {
     val card1 = "card1"
     val mapBorderShort = "mapBorderShort"
     val mapBorderWide = "mapBorderWide"
+
     val mapBorder = "mapBorder"
+    val mapCorner = "mapCorner"
+    val mapTrenchCorner = "mapTrenchCorner"
+    val mapMiddleCorner = "mapMiddleCorner"
   }
 
 }

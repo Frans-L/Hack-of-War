@@ -139,7 +139,7 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
       physWorld.collideCircle(this, ahead, collBody.getRadiusScaled, collFilter)
 
     //draws debug circle
-    //MainGame.debugRender.circle(ahead.x, ahead.y, collBody.getRadiusScaled)
+    //if(MainGame.drawCollBox) MainGame.debugRender.circle(ahead.x, ahead.y, collBody.getRadiusScaled)
 
     //calculate the force opposite to obstacle center
     obstacle.foreach(o => ((avoid ++ pos) -- o.collBody.center).nor ** maxForceAvoid / mass)

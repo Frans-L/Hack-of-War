@@ -39,13 +39,18 @@ object PolygonBody {
   }
 
   /** Creates CollisionBody that is shaped rectangle, the first point is the origin */
-  def triangleCollBody(x2: Float, y2: Float, x3: Float, y3: Float): PolygonBody = {
+  def triangleCollBody(x2: Float, y2: Float, x3: Float, y3: Float): PolygonBody =
+    triangleCollBody(0, 0, x2, y2, x3, y3)
+
+  /** Creates CollisionBody that is shaped rectangle, the first point is the origin */
+  def triangleCollBody(x1: Float, y1: Float, x2: Float, y2: Float, x3: Float, y3: Float): PolygonBody = {
     val radius = (math.sqrt(math.max(x2 * x2 + y2 * y2, x3 * x3 + y3 * y3)) / 1.5f).toFloat
     val p: PolygonBody = new PolygonBody(Array(
       0, 0,
       x2, y2,
       x3, y3), radius)
 
+    p.setPosition(x1, y1)
     p
   }
 
@@ -108,7 +113,7 @@ class PolygonBody(vertices: Array[Float], private var radius: Float) extends
     result
   }
 
-  /** Returns true if overlaps a line.*/
+  /** Returns true if overlaps a line. */
   override def overlapsLine(startPos: Vector2, endPos: Vector2): Boolean = {
     Intersector.intersectSegmentPolygon(startPos, endPos, this)
   }
@@ -124,6 +129,7 @@ class PolygonBody(vertices: Array[Float], private var radius: Float) extends
 
   override def draw(shapeRender: ShapeRenderer): Unit = {
     shapeRender.polygon(getTransformedVertices)
+    shapeRender.circle(center.x, center.y, 4)
   }
 
 }
