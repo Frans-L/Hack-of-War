@@ -51,53 +51,56 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
   override def update(): Unit = {
     if (enabled) {
 
-      if (pos.x < 1920 / 2f - 150) { //TODO: 'if' because of the debugging
+      updateSteering()
+      updateShooting()
 
-        //move towards target
-        val steering =
-          (((target -- pos).nor ** maxForwardForce) -- movingForce)
-            .limit(maxAccelerateForce) / mass
-
-        //if no obstacle at close distance found, try look further away
-        val avoid = Vector2e.pool()
-        val obstacleFound = avoidObstacles(0, avoid)
-
-        //if enough speed, try to look further away
-        if (!obstacleFound && movingForce.len2() > maxAccelerateForce / 100f) {
-          avoidObstacles(maxSeeAhead, avoid)
-        }
-
-        //updates steering to avoid obstacles
-        steering ++ avoid
-
-        //adds limited movingVelocity to real velocity
-        movingForce.mulAdd(steering, ticker.delta).limit(maxForwardForce)
-        velocity.add(movingForce)
-
-        //rotates smoothly towards moving direction
-        angle = Utils.closestAngle360(angle, movingForce.angle)
-        angle = Interpolation.linear.apply(angle, movingForce.angle, ticker.delta / maxRotateTime)
-        angle = Utils.absAngle(angle)
-
-        //free the memory
-        Vector2e.free(steering)
-        Vector2e.free(avoid)
-
-        //TODO TEST
-
-
-        if (ticker.interval2) {
-          shoot()
-        }
-
-
-      }
-      else
-        destroy()
+      if (pos.x > 1920 / 2f - 150) destroy() //TODO because of debug
 
       updatePhysics()
       updateSprite()
     }
+  }
+
+  /** Updates the shooting AI of the unit. */
+  private def updateShooting(): Unit = {
+    if (ticker.interval2) {
+      shoot()
+    }
+  }
+
+  /** Updates the movement of the object. */
+  private def updateSteering(): Unit = {
+
+    //move towards target
+    val steering =
+      (((target -- pos).nor ** maxForwardForce) -- movingForce)
+        .limit(maxAccelerateForce) / mass
+
+    //if no obstacle at close distance found, try look further away
+    val avoid = Vector2e.pool()
+    val obstacleFound = avoidObstacles(0, avoid)
+
+    //if enough speed, try to look further away
+    if (!obstacleFound && movingForce.len2() > maxAccelerateForce / 100f) {
+      avoidObstacles(maxSeeAhead, avoid)
+    }
+
+    //updates steering to avoid obstacles
+    steering ++ avoid
+
+    //adds limited movingVelocity to real velocity
+    movingForce.mulAdd(steering, ticker.delta).limit(maxForwardForce)
+    velocity.add(movingForce)
+
+    //rotates smoothly towards moving direction
+    angle = Utils.closestAngle360(angle, movingForce.angle)
+    angle = Interpolation.linear.apply(angle, movingForce.angle, ticker.delta / maxRotateTime)
+    angle = Utils.absAngle(angle)
+
+    //free the memory
+    Vector2e.free(steering)
+    Vector2e.free(avoid)
+
   }
 
 

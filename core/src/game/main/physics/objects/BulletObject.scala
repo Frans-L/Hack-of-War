@@ -45,7 +45,7 @@ class BulletObject(override var sprite: Sprite, var owner: GameElement,
                                    collForce: Intersector.MinimumTranslationVector): Boolean = {
 
     crashObj match {
-        
+
       case obj: UnitObject =>
         obj.reduceHealth(damage)
         obj.addImpact(velocity.scl(1f), mass)
