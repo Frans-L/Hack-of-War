@@ -1,10 +1,55 @@
 package game.main.physics.collision
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Intersector, Polygon, Vector2}
-import com.badlogic.gdx.utils.GdxRuntimeException
+import com.badlogic.gdx.utils.{GdxRuntimeException, Pool, Pools}
 import game.util.{Utils, Vector2e}
+
+
+object PolygonBody {
+
+  /** Creates CollisionBody that is shaped trapezoid. */
+  def trapezoidCollBody(leftHeight: Float, rightHeight: Float, length: Float): PolygonBody = {
+    val radius = math.max(math.max(leftHeight, rightHeight), length) / 2f
+    val middle = leftHeight / 2f
+    val p: PolygonBody = new PolygonBody(Array(
+      0, 0,
+      length, middle - rightHeight / 2f,
+      length, middle + rightHeight / 2f,
+      0, leftHeight), radius)
+
+    p
+  }
+
+  /** Creates CollisionBody that is shaped rectangle */
+  def rectangleCollBody(x: Float, y: Float, w: Float, h: Float): PolygonBody = {
+    val radius = math.max(w, h) / 2
+    val p: PolygonBody = new PolygonBody(Array(
+      0, 0,
+      w, 0,
+      w, h,
+      0, h), radius)
+
+    p.setPosition(x, y)
+    p.setOrigin(w / 2f, h / 2f)
+
+    p
+  }
+
+  /** Creates CollisionBody that is shaped rectangle, the first point is the origin */
+  def triangleCollBody(x2: Float, y2: Float, x3: Float, y3: Float): PolygonBody = {
+    val radius = (math.sqrt(math.max(x2 * x2 + y2 * y2, x3 * x3 + y3 * y3)) / 1.5f).toFloat
+    val p: PolygonBody = new PolygonBody(Array(
+      0, 0,
+      x2, y2,
+      x3, y3), radius)
+
+    p
+  }
+
+}
 
 /**
   * Created by Frans on 14/03/2018.
@@ -63,12 +108,22 @@ class PolygonBody(vertices: Array[Float], private var radius: Float) extends
     result
   }
 
+  /** Returns true if overlaps a line.*/
+  override def overlapsLine(startPos: Vector2, endPos: Vector2): Boolean = {
+    Intersector.intersectSegmentPolygon(startPos, endPos, this)
+  }
+
   /** Returns the Center vector and the radius */
   override def toCircle: (Vector2, Float) = ???
 
   /** Returns true if overlaps, and sets the mtv vector. */
   override def overlapsPolygon(polygon: PolygonBody, mtv: Intersector.MinimumTranslationVector): Boolean = {
     Intersector.overlapConvexPolygons(this.asPolygon, polygon.asPolygon, mtv)
+  }
+
+
+  override def draw(shapeRender: ShapeRenderer): Unit = {
+    shapeRender.polygon(getTransformedVertices)
   }
 
 }

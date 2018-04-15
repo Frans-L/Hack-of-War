@@ -50,4 +50,7 @@ abstract class Player(physWorld: PhysicsWorld, index: Int) extends GameElement {
   override def draw(batch: Batch): Unit = {
   }
 
+  /** Returns enemies buffer[Player] as buffer[GameElement] */
+  def enemiesAsGameElement: mutable.Buffer[GameElement] = enemies.asInstanceOf[mutable.Buffer[GameElement]]
+
 }

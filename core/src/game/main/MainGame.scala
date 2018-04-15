@@ -25,6 +25,8 @@ import game.main.players.{Bot, Player, User}
   */
 object MainGame {
 
+  val drawCollBox: Boolean = true
+
   var debugViewPort: Viewport = _
   var debugRender: ShapeRenderer = _
 
@@ -157,8 +159,9 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
     a.draw(shapeRender)
      */
 
-    shapeRender.setColor(0, 0.75f, 0.75f, 1)
+    shapeRender.setColor(0, 1f, 0f, 1)
     gameUI.draw(shapeRender)
+    physWorld.draw(shapeRender)
     players.foreach(_.draw(shapeRender))
 
     shapeRender.end()

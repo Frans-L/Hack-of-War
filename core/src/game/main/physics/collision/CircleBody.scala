@@ -1,8 +1,9 @@
 package game.main.physics.collision
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
-import com.badlogic.gdx.math.{Circle, Vector2}
+import com.badlogic.gdx.math.{Circle, Intersector, Vector2}
 import game.util.Vector2e
 
 class CircleBody(private var radius: Float) extends CollisionBody {
@@ -102,6 +103,10 @@ class CircleBody(private var radius: Float) extends CollisionBody {
   /** Returns the Center vector and the radius */
   override def toCircle: (Vector2, Float) = (centerVector.cpy, getRadiusScaled)
 
+  /** Returns true if overlaps a line. */
+  override def overlapsLine(startPos: Vector2, endPos: Vector2): Boolean = {
+    Intersector.intersectSegmentCircle(startPos, endPos, center, getRadiusScaled * getRadiusScaled)
+  }
 
   /** Returns true if the point is inside the body */
   override def contains(x: Float, y: Float): Boolean =
@@ -109,5 +114,9 @@ class CircleBody(private var radius: Float) extends CollisionBody {
 
   override def contains(vector: Vector2): Boolean =
     centerVector.dst2(center) <= getRadiusScaled * getRadiusScaled
+
+  override def draw(shapeRender: ShapeRenderer): Unit = {
+    shapeRender.circle(center.x, center.y, getRadiusScaled)
+  }
 
 }

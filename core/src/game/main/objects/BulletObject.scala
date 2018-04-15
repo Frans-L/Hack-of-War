@@ -25,7 +25,7 @@ class BulletObject(override var sprite: Sprite, var owner: GameElement,
 
   override val origin: Vector2 = Vector2e(size.x / 2f, size.y / 2f)
 
-  updateCollPolygon()
+  updateCollPolygon(collBody)
   updateSprite()
   physWorld.addUnit(owner, this) //adds to update calls
 
@@ -67,7 +67,9 @@ class BulletObject(override var sprite: Sprite, var owner: GameElement,
   }
 
   override def draw(shapeRender: ShapeRenderer): Unit = {
-
+    if (MainGame.drawCollBox) {
+      collBody.draw(shapeRender)
+    }
   }
 
   override def draw(batch: Batch): Unit = {

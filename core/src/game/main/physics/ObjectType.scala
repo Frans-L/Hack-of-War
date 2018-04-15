@@ -72,7 +72,7 @@ trait ObjectType extends SpriteType {
     val fric = friction + physWorld.globalFriction
     if(fric != 0) velocity.scl(1f / fric)
 
-    updateCollPolygon() //update collisionBox coords
+    updateCollPolygon(collBody) //update collisionBox coords
   }
 
 
@@ -88,11 +88,11 @@ trait ObjectType extends SpriteType {
 
   /** Updates collPolygons location, rotation and scale.
     * updatePhysics calls this automatically. */
-  protected def updateCollPolygon(): Unit = {
-    collBody.setPosition(pos.x - origin.x, pos.y - origin.y)
-    collBody.setScale(scale.x, scale.y)
-    collBody.setRotation(angle)
-    collBody.setOrigin(origin.x, origin.y)
+  protected def updateCollPolygon(body: CollisionBody = collBody): Unit = {
+    body.setPosition(pos.x - origin.x, pos.y - origin.y)
+    body.setScale(scale.x, scale.y)
+    body.setRotation(angle)
+    body.setOrigin(origin.x, origin.y)
   }
 
   /** ActiveObject should be destroyable */

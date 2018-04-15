@@ -12,32 +12,6 @@ object Utils {
   lazy val tmp1 = Vector2e(0, 0) //TODO: Does Java 7 support lazy val?
   lazy val tmp2 = Vector2e(0, 0)
 
-  /** Creates CollisionBody that is shaped rectangle */
-  def rectangleCollBody(x: Float, y: Float, w: Float, h: Float): PolygonBody = {
-    val radius = math.max(w, h) / 2
-    val p: PolygonBody = new PolygonBody(Array(
-      0, 0,
-      w, 0,
-      w, h,
-      0, h), radius)
-
-    p.setPosition(x, y)
-    p.setOrigin(w / 2f, h / 2f)
-
-    p
-  }
-
-  /** Creates CollisionBody that is shaped rectangle, the first point is the origin */
-  def triangleCollBody(x2: Float, y2: Float, x3: Float, y3: Float): PolygonBody = {
-    val radius = (math.sqrt(math.max(x2 * x2 + y2 * y2, x3 * x3 + y3 * y3)) / 1.5f).toFloat
-    val p: PolygonBody = new PolygonBody(Array(
-      0, 0,
-      x2, y2,
-      x3, y3), radius)
-
-    p
-  }
-
   /** Normalizes a vector */
   def normalize(x: Float, y: Float): (Float, Float) = {
     val l = math.sqrt(x * x + y * y).toFloat

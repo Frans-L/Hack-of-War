@@ -25,7 +25,7 @@ object Soldier {
     val w = 100f / scale
     val h = 75f / scale
 
-    val body: PolygonBody = Utils.triangleCollBody(0, h, w, h / 2f)
+    val body: PolygonBody = PolygonBody.triangleCollBody(0, h, w, h / 2f)
 
     val obj: UnitObject = new UnitObject(
       GameTextures.defaultTextures.atlas.createSprite(texture(owner.colorIndex)),

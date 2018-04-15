@@ -1,5 +1,6 @@
 package game.main.physics.collision
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Intersector, Vector2}
 import game.util.Vector2e
@@ -64,7 +65,7 @@ trait CollisionBody {
   /** Returns true if overlaps, and sets the mtv vector.
     * mtv tells in which direction and how much the object
     * have to move to avoid the collision. This method takes
-    * into account whether the collisionBody is invisible or not.*/
+    * into account whether the collisionBody is invisible or not. */
   def overlaps(body: CollisionBody, mtv: Intersector.MinimumTranslationVector): Boolean = {
     body match {
       case b: PolygonBody =>
@@ -76,15 +77,19 @@ trait CollisionBody {
   }
 
 
-  /** Returns true if overlaps, and sets the mtv vector.
-    * isCollided: Boolean => True if collided
-    * angle: Float => Collision angle in degrees */
+  /** Returns true if overlaps, and sets the mtv vector. */
   def overlapsCircle(center: Vector2, radius: Float, mtv: MinimumTranslationVector): Boolean
 
   /** Returns true if overlaps, and sets the mtv vector. */
   def overlapsPolygon(polygon: PolygonBody, mtv: MinimumTranslationVector): Boolean
 
+  /** Returns true if overlaps a line.*/
+  def overlapsLine(startPos: Vector2, endPos: Vector2): Boolean
+
   /** Returns the Center vector and the radius */
   def toCircle: (Vector2, Float)
+
+  /** Draws the collisionBody */
+  def draw(shapeRender: ShapeRenderer): Unit
 
 }

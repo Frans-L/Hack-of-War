@@ -40,7 +40,15 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
   var health: Float = 100f
   var damage: Float = 10f
 
-  updateCollPolygon() //updates collisionbox
+  //attack vision
+  val visionMaxHeight: Float = size.height * 2f
+  val visionMaxDist: Float = size.width * 4f
+  val attackVision: CollisionBody = PolygonBody.trapezoidCollBody(size.height,
+    visionMaxHeight, visionMaxDist)
+
+
+  updateCollPolygon(collBody) //updates collisionbox
+  updateCollPolygon(attackVision)
   updateSprite() //updates sprite
 
   physWorld.addUnit(owner.asInstanceOf[GameElement], this) //adds update calls
@@ -60,15 +68,22 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
       if (pos.x > 1920 / 2f - 150) destroy() //TODO because of debug
 
       updatePhysics()
+      updateCollPolygon(attackVision) //update the vision collBox
       updateSprite()
     }
   }
 
   /** Updates the shooting AI of the unit. */
   private def updateShooting(): Unit = {
-    if (ticker.interval2) {
-      shoot()
-    }
+
+    val enemy = physWorld.collideCollisionBody(this, attackVision, null, owner.enemiesAsGameElement)
+
+    enemy.foreach(enemy => {
+      val blockingWall = physWorld.collideLine(this, this.pos, enemy.pos, physWorld.mapFilter)
+
+      if(blockingWall.isEmpty) shoot()
+    })
+
   }
 
   /** Updates the movement of the object. */
@@ -120,10 +135,8 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
       (visionLength * (movingForce.len() / maxForwardForce)) ++ pos
 
     //checks collision in the wanted pos
-    val visionPos = Vector2e.pool(ahead.x - origin.x, ahead.y - origin.y)
     val obstacle =
-      physWorld.collideAsCircle(this, ahead, collBody.getRadiusScaled, collFilter)
-    Vector2e.free(visionPos) //free the memory
+      physWorld.collideCircle(this, ahead, collBody.getRadiusScaled, collFilter)
 
     //draws debug circle
     //MainGame.debugRender.circle(ahead.x, ahead.y, collBody.getRadiusScaled)
@@ -136,9 +149,9 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
   }
 
   override def draw(shapeRender: ShapeRenderer): Unit = {
-    if (visible) {
-      //shapeRender.polygon(collPolygon.getTransformedVertices)
-      //shapeRender.circle(pos.x, pos.y, 5)
+    if (MainGame.drawCollBox) {
+      collBody.draw(shapeRender)
+      attackVision.draw(shapeRender)
     }
   }
 
