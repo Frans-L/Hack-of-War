@@ -14,6 +14,8 @@ import game.util.Vector2e._
 import game.util.{Utils, Vector2e, Vector2mtv}
 import sun.font.PhysicalFont
 
+import scala.collection.mutable
+
 /**
   * Created by Frans on 26/02/2018.
   */
@@ -120,7 +122,7 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
     //checks collision in the wanted pos
     val visionPos = Vector2e.pool(ahead.x - origin.x, ahead.y - origin.y)
     val obstacle =
-      physWorld.collideAsCircle(this, ahead, collBody.getRadiusScaled)
+      physWorld.collideAsCircle(this, ahead, collBody.getRadiusScaled, collFilter)
     Vector2e.free(visionPos) //free the memory
 
     //draws debug circle
@@ -158,6 +160,10 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
 
     //sets the bullet statistics
     bullet.damage = damage
+    bullet.collFilter ++= owner.enemies.asInstanceOf[mutable.Buffer[GameElement]]
+    bullet.collFilter += physWorld.map
+
+    //owner.enemies.asInstanceOf[mutable.Buffer[GameElement]]
   }
 
   /** Reduces the health of the object and checks if object has diead */

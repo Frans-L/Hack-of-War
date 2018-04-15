@@ -15,6 +15,8 @@ import scala.collection.mutable
 abstract class Player(physWorld: PhysicsWorld, index: Int) extends GameElement {
 
   val colorIndex: Int //color of the textures
+  val enemies: mutable.Buffer[Player] = mutable.Buffer.empty[Player] //the enemy of this player
+
   private val deck: mutable.Buffer[Card] = mutable.Buffer[Card]()
   val hand: mutable.Buffer[Card] = mutable.Buffer[Card]()
 

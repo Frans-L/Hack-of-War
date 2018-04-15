@@ -80,6 +80,10 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
     new Bot(physWorld, 1)
   )
 
+  players.head.enemies += players.last
+  players.last.enemies += players.head
+
+
   //sets the ui
   private val gameUI: GameUI =
     new GameUI(screenDim, viewport, players.head, shapeRender)

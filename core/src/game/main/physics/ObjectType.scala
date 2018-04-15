@@ -3,10 +3,12 @@ package game.main.physics
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.Vector2
-import game.main.objects.SpriteType
+import game.GameElement
 import game.main.physics.collision.CollisionBody
 import game.util.Vector2e._
 import game.util.{Vector2e, Vector2mtv}
+
+import scala.collection.mutable
 
 /**
   * Created by Frans on 26/02/2018.
@@ -38,6 +40,10 @@ trait ObjectType extends SpriteType {
 
   var collToMe: Boolean = true //if others objects checks collision with this object
   var collToOthers: Boolean = true //if this object checks collision with other objects
+
+  //this object checks collision only with these filtered objects, if Option is defined
+  var collFilter: mutable.Buffer[GameElement] = mutable.Buffer.empty
+
   val collBody: CollisionBody //the collision body
 
   val velocity: Vector2 = Vector2e(0f, 0f)
@@ -52,7 +58,7 @@ trait ObjectType extends SpriteType {
     //checks collision
     if (collToOthers) {
       val collForce = Vector2mtv.pool()
-      val crashObj = physWorld.collide(this, collForce)
+      val crashObj = physWorld.collide(this, collForce, collFilter)
       crashObj.foreach(obj => crash = collision(obj, collForce))
       Vector2mtv.free(collForce) //free the memory
     }

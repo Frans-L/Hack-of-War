@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
+import game.main.physics.SpriteType
 import game.util.Vector2e._
 
 /**

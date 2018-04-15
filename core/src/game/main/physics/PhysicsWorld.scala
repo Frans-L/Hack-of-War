@@ -21,10 +21,10 @@ import scala.collection.mutable
   *
   * This makes possible to update only the objects of the certain category.
   * For instance, if it's needed to find collision with an enemy,
-  * only tge objects of the enemy can be selected.
+  * only the objects of the enemy can be selected.
   *
-  * Linkedhashmap saves also the order of the owners. So the objects that are added to newer
-  * owner will be drawn later. => New objects, with a new owner, will be
+  * Linkedhashmap saves also the order of the owners. The objects that are added to newer
+  * owner will be drawn later. So new objects, with a new owner, will be
   * drawn on top of everything.
   *
   */
@@ -38,10 +38,12 @@ class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
   private val units: mutable.LinkedHashMap[GameElement, mutable.Buffer[ObjectType]] =
     mutable.LinkedHashMap[GameElement, mutable.Buffer[ObjectType]]()
 
+  private lazy val tmpEmptyBuffer = mutable.Buffer.empty[GameElement] //caches an empty buffer
+
 
   /** Updates all units that are added to this collisionWorld */
   override def update(): Unit = {
-    for ((owner, obj) <- mapBufferIterator(units)) {
+    for ((owner, obj) <- mapBufferIterator(units, tmpEmptyBuffer)) {
       obj.update()
     }
 
@@ -50,7 +52,7 @@ class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
 
   /** Draws all units that are added to this collisionWorld */
   override def draw(batch: Batch): Unit = {
-    for ((owner, obj) <- mapBufferIterator(units)) {
+    for ((owner, obj) <- mapBufferIterator(units, tmpEmptyBuffer)) {
       obj.draw(batch)
     }
   }
@@ -78,9 +80,10 @@ class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
     * @param mtv sets the minimumTranslationVector that is required to separate objects
     * @return the body of the collided object
     */
-  def collide(obj: ObjectType, mtv: MinimumTranslationVector = null): Option[ObjectType] = {
+  def collide(obj: ObjectType, mtv: MinimumTranslationVector = null,
+              category: mutable.Buffer[GameElement]): Option[ObjectType] = {
     var crashObj: Option[ObjectType] = None
-    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != obj && o.collToMe) {
+    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != obj && o.collToMe) {
       if (obj.collBody.overlaps(o.collBody, mtv))
         crashObj = Some(o)
     }
@@ -89,16 +92,18 @@ class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
   }
 
   /** Returns true if collided */
-  def isCollided(obj: ObjectType, mtv: MinimumTranslationVector = null): Boolean = {
-    collide(obj, mtv).isDefined
+  def isCollided(obj: ObjectType, mtv: MinimumTranslationVector = null,
+                 category: mutable.Buffer[GameElement]): Boolean = {
+    collide(obj, mtv, category).isDefined
   }
 
 
   /** Returns the object that is collided with the point */
-  def collidePoint(excludeObj: ObjectType, point: Vector2): Option[ObjectType] = {
+  def collidePoint(excludeObj: ObjectType, point: Vector2,
+                   category: mutable.Buffer[GameElement]): Option[ObjectType] = {
     var coll = false
     var crashObj: Option[ObjectType] = None
-    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != excludeObj && o.collToMe) {
+    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != excludeObj && o.collToMe) {
       coll = o.collBody.contains(point.x, point.y)
       if (coll) crashObj = Some(o)
     }
@@ -107,13 +112,14 @@ class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
   }
 
   /** Returns the collided object */
-  def collideAsCircle(obj: ObjectType, center: Vector2, radius: Float):
+  def collideAsCircle(obj: ObjectType, center: Vector2, radius: Float,
+                      category: mutable.Buffer[GameElement]):
   Option[ObjectType] = {
 
     val mtvTMP = Vector2mtv.pool()
     var result: Boolean = false //(is collided, angle)
     var crashObj: Option[ObjectType] = None
-    for ((owner, o) <- mapBufferIterator(units) if crashObj.isEmpty && o != obj && o.collToMe) {
+    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != obj && o.collToMe) {
       result = o.collBody.overlapsCircle(center, radius, mtvTMP)
       if (result) crashObj = Some(o)
     }
@@ -124,8 +130,9 @@ class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
   }
 
   /** Returns the collided object, and the angle of the polyline */
-  def collideAsCircle(obj: ObjectType): Option[ObjectType] = {
-    collideAsCircle(obj, obj.collBody.center, obj.collBody.getRadiusScaled)
+  def collideAsCircle(obj: ObjectType,
+                      category: mutable.Buffer[GameElement]): Option[ObjectType] = {
+    collideAsCircle(obj, obj.collBody.center, obj.collBody.getRadiusScaled, category)
   }
 
 
@@ -142,26 +149,61 @@ class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
   }
 
   /** Iterates every T of the
-    *  mutable.LinkedHashMap[GameElement, mutable.Buffer[T]] */
+    *  mutable.LinkedHashMap[GameElement, mutable.Buffer[T]]
+    *
+    * @param mapBuffer A map which has a buffer in it.
+    * @param catFilter CategoryFilter => If defined, iterator selects only one buffer from the map.
+    * @return a new iterator.
+    **/
   private def mapBufferIterator[T]
-  (b: mutable.Map[GameElement, mutable.Buffer[T]]): Iterator[(GameElement, T)] =
+  (mapBuffer: mutable.Map[GameElement, mutable.Buffer[T]],
+   catFilter: mutable.Buffer[GameElement]): Iterator[(GameElement, T)] =
     new Iterator[(GameElement, T)] {
 
-      private val categoryI = b.iterator
-      private var owner: GameElement = _ //will be given a value at first call of next()
+      //iterates every category if the filter empty
+      private val categoryI = if (catFilter.isEmpty) mapBuffer.iterator else filterIterator
+
+      private var owner: GameElement = _ //will be given a value at first call of nextOwner
       private var bodyI: Iterator[T] = Iterator[T]()
+
+      nextOwner()
 
       override def hasNext: Boolean = bodyI.hasNext || categoryI.hasNext
 
       override def next(): (GameElement, T) = {
-        if (!bodyI.hasNext) {
+        val nxt = (owner, bodyI.next())
+        nextOwner() //hasNext has to know if a next category, with bodies, exists
+        nxt
+      }
+
+      //selects next owner / category
+      private def nextOwner(): Unit = {
+        //finds the category which has elements
+        while (!bodyI.hasNext && categoryI.hasNext) {
           val nxt = categoryI.next
           owner = nxt._1
           bodyI = nxt._2.iterator
         }
 
-        (owner, bodyI.next())
       }
+
+
+      //iterates every selected category
+      private lazy val tmpBuffer = mutable.Buffer.empty[T] //caches empty buffer
+      private def filterIterator: Iterator[(GameElement, mutable.Buffer[T])] =
+        new Iterator[(GameElement, mutable.Buffer[T])] {
+
+          private val filt = catFilter.iterator
+
+          override def hasNext: Boolean = filt.hasNext
+
+          override def next(): (GameElement, mutable.Buffer[T]) = {
+            val own = filt.next()
+            val buff = mapBuffer.getOrElse(own, tmpBuffer)
+            (own, buff)
+          }
+        }
+
     }
 
 }
