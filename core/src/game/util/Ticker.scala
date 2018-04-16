@@ -22,13 +22,13 @@ class Ticker(startTick: Long) {
   private var interval2s: Long = 0
   private var interval10s: Long = 0
 
-  //Time since last update (ms)
+  //time since last update (ms)
   def delta: Int = ((tick - lastTick) * speed).toInt
 
-  //Time since the ticker started (ms)
+  //time since the ticker started (ms)
   def total: Long = tick
 
-  //Updates the time
+  /** Updates the time */
   def update(currentTick: Long): Unit = {
 
     //one frame delay for the interval
@@ -40,15 +40,16 @@ class Ticker(startTick: Long) {
     tick = currentTick - startTick
   }
 
-  //Resets the total time
+  /** Resets the total time */
   def reset(currentTick: Long): Unit = {
     tick = currentTick
     lastTick = currentTick
   }
 
 
-  //Returns true two every two seconds
+  /** Returns true two every two seconds */
   def interval2: Boolean = interval2s <= tick
+
   def interval10: Boolean = interval10s <= tick
 
 

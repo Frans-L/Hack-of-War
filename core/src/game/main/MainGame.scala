@@ -58,7 +58,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
   private val shapeRender: ShapeRenderer = new ShapeRenderer
 
   MainGame.debugRender = new ShapeRenderer
-  MainGame.debugRender.setColor(1, 0, 1f, 1)
+  MainGame.debugRender.setColor(0, 1f, 0f, 1)
 
   //sets the game camera
   private val cam: OrthographicCamera = new OrthographicCamera()

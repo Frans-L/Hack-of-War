@@ -56,7 +56,7 @@ class UICard(sprite: Sprite) extends Actor {
   }
 
 
-  //animation when the card is used
+  /** Animation when the card is used */
   def startUseAnim(x: Float, y: Float, finish: () => Unit): Unit = {
 
     state = UICard.State.ACTION
@@ -75,7 +75,7 @@ class UICard(sprite: Sprite) extends Actor {
     this.addAction(anim)
   }
 
-  //called when drag starts
+  /** Called when drag starts */
   def startDrag(x: Float, y: Float): Unit = {
 
     if (state == UICard.State.MOVE ||
@@ -98,14 +98,15 @@ class UICard(sprite: Sprite) extends Actor {
     addAction(anim)
   }
 
-  //updates sprite pos
-  def drag(x: Float, y: Float): Unit = {
+  /** Updates sprite pos */
+  def drag(x: Float, y: Float): (Float, Float) = {
     this.setPosition(
       this.getX + (x - dragPos.x) * getScaleX,
       this.getY + (y - dragPos.y) * getScaleY)
+    (this.getX + dragPos.x * getScaleX, this.getY + dragPos.y * getScaleY)
   }
 
-  //stops the drag and returns final pos
+  /** Stops the drag and returns final pos */
   def stopDrag(x: Float, y: Float): (Float, Float) = {
 
     moved = true //card is moved
@@ -118,7 +119,7 @@ class UICard(sprite: Sprite) extends Actor {
   }
 
 
-  //card returns to the original spot with animation
+  /** Card returns to the original spot with animation */
   def backToStart(): Unit = {
 
     state = UICard.State.RETURN
@@ -136,7 +137,7 @@ class UICard(sprite: Sprite) extends Actor {
     this.addAction(anim)
   }
 
-  //card moves to it original spot with fast animation
+  /** Card moves to it original spot with fast animation */
   private def updateStartPos(): Unit = {
     val animTime = 200 / 1000f
 
@@ -148,7 +149,7 @@ class UICard(sprite: Sprite) extends Actor {
   }
 
 
-  //sets the new start pos, and move card to it
+  /** Sets the new start pos, and move card to it */
   def setStartPosition(x: Float, y: Float): Unit = {
     startPos = new Vector2(x, y)
     if (state == UICard.State.IDLE)
@@ -167,7 +168,7 @@ class UICard(sprite: Sprite) extends Actor {
     r
   }
 
-  //is called every frame by stage (calls method update)
+  /** Is called every frame by stage (calls method update) */
   override def act(delta: Float): Unit = {
     super.act(delta)
     this.update()

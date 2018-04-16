@@ -1,4 +1,4 @@
-package game.main
+package game.main.cards
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, InputListener}
@@ -15,18 +15,18 @@ object Card {
 /**
   * Created by Frans on 06/03/2018.
   */
-class Card(owner: Player) {
+abstract class Card(owner: Player) {
 
   var used = false
 
   var uiElement: Option[UICard] = None
 
-  //returns true if ui exists
+  /** Returns true if ui exists */
   def uiExists: Boolean = {
     uiElement.isDefined
   }
 
-  //creates ui element for the card
+  /** Creates ui element for the card */
   def uiCreate(): UICard = {
     uiElement = Some(
       new UICard(GameTextures.defaultUITextures.atlas.createSprite(Card.background)))
@@ -34,18 +34,20 @@ class Card(owner: Player) {
     uiElement.get
   }
 
-  //adds listeners to UI element
+  /** Adds listeners to UI element */
   private def addListeners(): Unit = {
     require(uiElement.isDefined)
     val e = uiElement.get
     e.addListener(new InputListener() {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean = {
         e.startDrag(x, y)
+        selected(x, y)
         true
       }
 
       override def touchDragged(event: InputEvent, x: Float, y: Float, pointer: Int): Unit = {
-        e.drag(x, y)
+        val (x2, y2) = e.drag(x, y)
+        beforeUse(x2, y2)
       }
 
       override def touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Unit = {
@@ -56,27 +58,36 @@ class Card(owner: Player) {
     })
   }
 
-  //tries to use the card
+  /** Tries to use the card */
   private def use(x: Float, y: Float): Unit = {
-    if (owner.useCard(this, x, y)) {
+    if (usable(x, y)) {
       uiElement.foreach(_.startUseAnim(x, y, () => action(x, y)))
-      Gdx.app.log("card", "used")
     } else {
       uiElement.foreach(_.backToStart()) //back to start pos
     }
   }
 
-  //card's action that is called when the card is used
-  private def action(x: Float, y: Float): Unit = {
-    owner.spawnUnit(x, y)
+  /** The actions when the card is selected / drag is started. */
+  protected def selected(x: Float, y: Float): Unit = Unit
+
+  /** The actions when the card is dragged. */
+  protected def beforeUse(x: Float, y: Float): Unit = Unit
+
+  /** Returns true if the card can be used. */
+  protected def usable(x: Float, y: Float): Boolean = {
+    owner.useCard(this, x, y)
+  }
+
+  /** Card's action that is called when the card is used */
+  protected def action(x: Float, y: Float): Unit = {
     destroy()
   }
 
 
+  /** Destroys the card. */
   def destroy(): Unit = {
     uiElement.foreach(_.remove()) //remove UI element
     used = true //mark that card can be destroyed
-    owner.hand += new Card(owner) //new card to the player
   }
 
 }

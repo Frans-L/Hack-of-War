@@ -1,6 +1,6 @@
 package game.main.players
 
-import game.main.Card
+import game.main.cards.{Card, UnitCard}
 import game.main.physics.PhysicsWorld
 
 class User(physWorld: PhysicsWorld, override val colorIndex: Int) extends
@@ -9,10 +9,10 @@ class User(physWorld: PhysicsWorld, override val colorIndex: Int) extends
   initialize()
 
   def initialize(): Unit = {
-    hand.append(new Card(this))
-    hand.append(new Card(this))
-    hand.append(new Card(this))
-    hand.append(new Card(this))
+    hand.append(new UnitCard(this))
+    hand.append(new UnitCard(this))
+    hand.append(new UnitCard(this))
+    hand.append(new UnitCard(this))
   }
 
 }

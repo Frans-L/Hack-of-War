@@ -3,7 +3,7 @@ package game.main.objects
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.{Interpolation, Vector2}
+import com.badlogic.gdx.math.{Interpolation, MathUtils, Vector2}
 import game.GameElement
 import game.main.MainGame
 import game.main.physics.{ObjectType, PhysicsWorld}
@@ -12,7 +12,7 @@ import game.main.units.BasicBullet
 import game.main.players.Player
 import game.main.gameMap.Path
 import game.util.Vector2e._
-import game.util.{Utils, Vector2e, Vector2mtv}
+import game.util.{CountdownTimer, Utils, Vector2e, Vector2mtv}
 import sun.font.PhysicalFont
 
 import scala.collection.mutable
@@ -21,8 +21,13 @@ import scala.collection.mutable
   * Created by Frans on 26/02/2018.
   */
 class UnitObject(override var sprite: Sprite, var owner: Player,
-                 override val physWorld: PhysicsWorld, override val collBody: CollisionBody,
-                 override val pos: Vector2, override val size: Vector2) extends ObjectType {
+                 override val physWorld: PhysicsWorld,
+                 override val collBody: CollisionBody,
+                 var steeringPath: Option[UnitPath]) extends ObjectType {
+
+  override val pos: Vector2 = Vector2e(0, 0)
+  override val size: Vector2 = Vector2e(sprite.getWidth * sprite.getScaleX,
+    sprite.getHeight * sprite.getScaleY)
 
   override val origin: Vector2 = Vector2e(size.x / 2f, size.y / 2f)
   override var mass: Float = 100f
@@ -36,8 +41,6 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
 
   val maxForceAvoid: Float = 0.025f
   val maxRotateTime: Float = 150f
-
-  val steeringPath: UnitPath = new UnitPath(physWorld.map.path.head, Vector2e(0, 0), 10)
 
   //units stats
   var health: Float = 100f
@@ -68,12 +71,19 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
       updateSteering()
       updateShooting()
 
-      if (pos.x > 1920 / 2f - 150) destroy() //TODO because of debug
+      //if (pos.x > 1920 / 2f - 150) destroy() //TODO because of debug
 
       updatePhysics()
       updateCollPolygon(attackVision) //update the vision collBox
       updateSprite()
+
     }
+  }
+
+  /** Updates the shape info. */
+  override def updateShape(): Unit = {
+    super.updateShape()
+    updateCollPolygon(attackVision)
   }
 
   /** Updates the shooting AI of the unit. */
@@ -92,8 +102,8 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
 
   private def selectSteeringTarget(): Vector2 = {
 
-    if (false && owner.colorIndex == 0) mousePos
-    else steeringPath.updateTarget(pos)
+    if (steeringPath.isEmpty) mousePos // owner.colorIndex == 3
+    else steeringPath.get.updateTarget(pos)
   }
 
   /** Updates the movement of the object. */
@@ -154,7 +164,7 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
       physWorld.collideCircle(this, ahead, collBody.getRadiusScaled, collFilter)
 
     //draws debug circle
-    //if(MainGame.drawCollBox) MainGame.debugRender.circle(ahead.x, ahead.y, collBody.getRadiusScaled)
+    if (MainGame.drawCollBox) MainGame.debugRender.circle(ahead.x, ahead.y, collBody.getRadiusScaled)
 
     //calculate the force opposite to obstacle center
     obstacle.foreach(o => ((avoid ++ pos) -- o.collBody.center).nor ** maxForceAvoid / mass)

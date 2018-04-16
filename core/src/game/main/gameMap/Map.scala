@@ -1,9 +1,9 @@
 package game.main.gameMap
 
-import java.nio.file.Path
-
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.MathUtils
 import game.GameElement
 import game.loader.GameTextures
 import game.main.objects.{BorderSprite, CollisionObject}
@@ -21,6 +21,8 @@ object Map {
   val corner: String = GameTextures.Units.mapCorner
   val trenchCorner: String = GameTextures.Units.mapTrenchCorner
   val middleCorner: String = GameTextures.Units.mapMiddleCorner
+
+  val pathPoint: String = GameTextures.Units.pathPoint
 
 }
 
@@ -40,6 +42,10 @@ class Map(val dimensions: Dimensions,
 
   val collObjects: mutable.Buffer[CollisionObject] = mutable.Buffer[CollisionObject]()
   var path: Seq[Path] = _ //will be set at initializeMap
+  var pathReversed: Seq[Path] = _
+
+  var centerX: Float = 0 //the playable areas center
+  var centerY: Float = 0 //initializeMap gives right coords
 
   initializeMap()
   createCollisionMap()
@@ -77,11 +83,24 @@ class Map(val dimensions: Dimensions,
     }
   }
 
+  /** Returns the closest path. */
+  def getPath(x: Float, y: Float): Option[Path] = {
+    if (!collide(x, y)) {
+      if (y < centerY) Some(path.head)
+      else Some(path.last)
+    } else None
+  }
+
+  /** Returns a random path. */
+  def randomPath: Path = path(MathUtils.random(path.length - 1))
+
+  /** Returns a random reversed path. */
+  def randomPathReversed: Path = pathReversed(MathUtils.random(pathReversed.length - 1))
+
   /**
     * Creates a map, hardcoded
     */
   private def initializeMap(): Unit = {
-
 
     //block info
     val borderWidth: Float = 180
@@ -108,6 +127,10 @@ class Map(val dimensions: Dimensions,
 
     require(blockHeight.sum.toInt == dimensions.maxHeight) //has to match with screen coords
 
+    //update the info about the center
+    centerY = blockPosYMiddle(blockHeight.length / 2)
+    centerX = blockPosXMiddle(blockWidth.length / 2)
+
     addBasicElements()
     addCorners()
     addTrenches()
@@ -117,15 +140,38 @@ class Map(val dimensions: Dimensions,
     //adds the path
     def addPath(): Unit = {
 
-      val route = Seq(
-        Vector2e(blockPosXMiddle(1), blockPosYMiddle(3)),
+      val routeDown = Seq(
+        Vector2e(blockPosX(1), blockPosYMiddle(3)),
+        Vector2e(blockPosX(1) + blockWidth(1) / 3, blockPosYMiddle(3)),
+        Vector2e(blockPosXMiddle(1), blockPosYMiddle(1) + blockHeight(2) / 2),
         Vector2e(blockPosX(2), blockPosYMiddle(1) + blockHeight(2) / 2),
         Vector2e(blockPosX(3), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1)),
+
         Vector2e(blockPosX(4), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1)),
-        Vector2e(blockPosX(5), blockPosYMiddle(1) + blockHeight(2) / 2)
+        Vector2e(blockPosX(5), blockPosYMiddle(1) + blockHeight(2) / 2),
+        Vector2e(blockPosXMiddle(5), blockPosYMiddle(1) + blockHeight(2) / 2),
+        Vector2e(blockPosX(6) - blockWidth(1) / 3, blockPosYMiddle(3)),
+        Vector2e(blockPosX(6), blockPosYMiddle(3))
+
       )
 
-      path = Seq(new Path(route, 10, 10))
+      val routeUp = Seq(
+        Vector2e(blockPosX(1), blockPosYMiddle(3)),
+        Vector2e(blockPosX(1) + blockWidth(1) / 3, blockPosYMiddle(3)),
+        Vector2e(blockPosXMiddle(1), blockPosYMiddle(5) - blockHeight(4) / 2),
+        Vector2e(blockPosX(2), blockPosYMiddle(5) - blockHeight(4) / 2),
+        Vector2e(blockPosX(3), blockPosYMiddle(5) - blockHeight(4) / 2 - blockHeight(1)),
+
+        Vector2e(blockPosX(4), blockPosYMiddle(5) - blockHeight(2) / 2 - blockHeight(1)),
+        Vector2e(blockPosX(5), blockPosYMiddle(5) - blockHeight(2) / 2),
+        Vector2e(blockPosXMiddle(5), blockPosYMiddle(5) - blockHeight(4) / 2),
+        Vector2e(blockPosX(6) - blockWidth(1) / 3, blockPosYMiddle(3)),
+        Vector2e(blockPosX(6), blockPosYMiddle(3))
+
+      )
+
+      path = Seq(new Path(routeDown, 80f), new Path(routeUp, 80f))
+      pathReversed = Seq(new Path(routeDown, 80f).reverse(), new Path(routeUp, 80f).reverse())
     }
 
 

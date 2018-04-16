@@ -42,6 +42,8 @@ object GameTextures {
     val mapCorner = "mapCorner"
     val mapTrenchCorner = "mapTrenchCorner"
     val mapMiddleCorner = "mapMiddleCorner"
+
+    val pathPoint = "pointCircle"
   }
 
 }

@@ -33,7 +33,6 @@ trait ObjectType extends SpriteType {
   */
 
   //physics to gameObject
-
   val physWorld: PhysicsWorld
   var mass: Float
   var friction: Float
@@ -48,6 +47,13 @@ trait ObjectType extends SpriteType {
 
   val velocity: Vector2 = Vector2e(0f, 0f)
 
+
+  /** After changing pos / size / origin etc. It's good to update
+    * sprite and the collBody immediately. */
+  def updateShape(): Unit = {
+    updateSprite()
+    updateCollPolygon()
+  }
 
 
   /** Updates physics */
@@ -70,7 +76,7 @@ trait ObjectType extends SpriteType {
 
     //reduces the velocity if the total friction isn't zero
     val fric = friction + physWorld.globalFriction
-    if(fric != 0) velocity.scl(1f / fric)
+    if (fric != 0) velocity.scl(1f / fric)
 
     updateCollPolygon(collBody) //update collisionBox coords
   }
