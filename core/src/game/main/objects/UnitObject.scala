@@ -10,6 +10,7 @@ import game.main.physics.{ObjectType, PhysicsWorld}
 import game.main.physics.collision.{CollisionBody, PolygonBody}
 import game.main.units.BasicBullet
 import game.main.players.Player
+import game.main.gameMap.Path
 import game.util.Vector2e._
 import game.util.{Utils, Vector2e, Vector2mtv}
 import sun.font.PhysicalFont
@@ -36,6 +37,8 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
   val maxForceAvoid: Float = 0.025f
   val maxRotateTime: Float = 150f
 
+  val steeringPath: UnitPath = new UnitPath(physWorld.map.path.head, Vector2e(0, 0), 10)
+
   //units stats
   var health: Float = 100f
   var damage: Float = 10f
@@ -53,7 +56,7 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
 
   physWorld.addUnit(owner.asInstanceOf[GameElement], this) //adds update calls
 
-  private def target: Vector2 = MainGame.debugViewPort.unproject(Vector2e.pool(Gdx.input.getX, Gdx.input.getY))
+  private def mousePos: Vector2 = MainGame.debugViewPort.unproject(Vector2e(Gdx.input.getX, Gdx.input.getY))
 
 
   /**
@@ -81,22 +84,33 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
     enemy.foreach(enemy => {
       val blockingWall = physWorld.collideLine(this, this.pos, enemy.pos, physWorld.mapFilter)
 
-      if(blockingWall.isEmpty) shoot()
+      if (blockingWall.isEmpty) shoot()
     })
 
+  }
+
+
+  private def selectSteeringTarget(): Vector2 = {
+
+    if (false && owner.colorIndex == 0) mousePos
+    else steeringPath.updateTarget(pos)
   }
 
   /** Updates the movement of the object. */
   private def updateSteering(): Unit = {
 
+
+    val target = Vector2e.pool(selectSteeringTarget())
+
     //move towards target
     val steering =
-      (((target -- pos).nor ** maxForwardForce) -- movingForce)
+      (((Vector2e.pool(target) -- pos).nor ** maxForwardForce) -- movingForce)
         .limit(maxAccelerateForce) / mass
 
     //if no obstacle at close distance found, try look further away
     val avoid = Vector2e.pool()
     val obstacleFound = avoidObstacles(0, avoid)
+
 
     //if enough speed, try to look further away
     if (!obstacleFound && movingForce.len2() > maxAccelerateForce / 100f) {
@@ -118,6 +132,7 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
     //free the memory
     Vector2e.free(steering)
     Vector2e.free(avoid)
+    Vector2e.free(target)
 
   }
 
@@ -166,9 +181,9 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
   def shoot(): Unit = {
 
     //calculates the pos of the bullet and create it
-    val bulletPos = Vector2e.pool(movingForce).nor ** (sWidth / 2f + BasicBullet.radius) ++ pos
+    val bulletPos = Vector2e(movingForce).nor ** (sWidth / 2f + BasicBullet.radius) ++ pos
     val bullet = BasicBullet.create(this, physWorld,
-      bulletPos, Vector2e.pool(movingForce).nor ** (maxSpeed * 5),
+      bulletPos, Vector2e(movingForce).nor ** (maxSpeed * 5),
       owner.colorIndex)
 
     //sets the bullet statistics

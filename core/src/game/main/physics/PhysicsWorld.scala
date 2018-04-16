@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Intersector, Vector2}
+import game.GameElement
 import game.main.physics.collision.CollisionBody
-import game.{GameElement, main}
 import game.main.players.Player
 import game.util.{Dimensions, Vector2mtv}
 
@@ -34,7 +34,7 @@ class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
   //global physics stats
   var globalFriction: Float = 1f
 
-  var map: main.Map = _ //TODO temporary solution, to add map
+  var map: game.main.gameMap.Map = _ //TODO temporary solution, to add map
 
   private val units: mutable.LinkedHashMap[GameElement, mutable.Buffer[ObjectType]] =
     mutable.LinkedHashMap[GameElement, mutable.Buffer[ObjectType]]()

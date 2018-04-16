@@ -1,14 +1,15 @@
-package game.main
+package game.main.gameMap
 
-import com.badlogic.gdx.Gdx
+import java.nio.file.Path
+
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.GameElement
 import game.loader.GameTextures
-import game.main.physics.PhysicsWorld
 import game.main.objects.{BorderSprite, CollisionObject}
+import game.main.physics.PhysicsWorld
 import game.main.physics.collision.{CollisionBody, PolygonBody}
-import game.util.{Dimensions, Utils, Vector2e}
+import game.util.{Dimensions, Vector2e}
 
 import scala.collection.mutable
 
@@ -38,6 +39,7 @@ class Map(val dimensions: Dimensions,
     dimensions.maxHeight / collAccuracy + 1)
 
   val collObjects: mutable.Buffer[CollisionObject] = mutable.Buffer[CollisionObject]()
+  var path: Seq[Path] = _ //will be set at initializeMap
 
   initializeMap()
   createCollisionMap()
@@ -110,6 +112,21 @@ class Map(val dimensions: Dimensions,
     addCorners()
     addTrenches()
     addMiddle()
+    addPath()
+
+    //adds the path
+    def addPath(): Unit = {
+
+      val route = Seq(
+        Vector2e(blockPosXMiddle(1), blockPosYMiddle(3)),
+        Vector2e(blockPosX(2), blockPosYMiddle(1) + blockHeight(2) / 2),
+        Vector2e(blockPosX(3), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1)),
+        Vector2e(blockPosX(4), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1)),
+        Vector2e(blockPosX(5), blockPosYMiddle(1) + blockHeight(2) / 2)
+      )
+
+      path = Seq(new Path(route, 10, 10))
+    }
 
 
     //adds basic stuff like borders
@@ -219,6 +236,7 @@ class Map(val dimensions: Dimensions,
       addGraphic(x, y, width, height, sprite, 1, 1)
     }
 
+    //adds middle part
     def addMiddle(): Unit = {
 
       //middle
@@ -312,6 +330,23 @@ class Map(val dimensions: Dimensions,
     def addBlock(collisionBody: CollisionBody): Unit = {
       collObjects += new CollisionObject(this, physWorld, collisionBody)
     }
+
+    //calculates the middle pos of the element n
+    def blockPosYMiddle(n: Int): Float =
+      dimensions.maxDown + blockHeight.take(n).sum + blockHeight(n) / 2f
+
+    //calculates the middle pos of the element n
+    def blockPosXMiddle(n: Int): Float =
+      dimensions.maxLeft + blockWidth.take(n).sum + blockWidth(n) / 2f
+
+    //calculates the pos of the element n
+    def blockPosY(n: Int): Float =
+      dimensions.maxDown + blockHeight.take(n).sum
+
+    //calculates the pos of the element n
+    def blockPosX(n: Int): Float =
+      dimensions.maxLeft + blockWidth.take(n).sum
+
 
   }
 }

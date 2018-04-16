@@ -73,7 +73,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
   private val physWorld: PhysicsWorld = new PhysicsWorld(screenDim)
 
   //adds the map
-  private val map: Map = new Map(screenDim, textures, physWorld)
+  private val map: game.main.gameMap.Map = new game.main.gameMap.Map(screenDim, textures, physWorld)
   physWorld.map = map //TODO temporary solution to add map to physWorld
 
   //sets the players
@@ -174,7 +174,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
   def update(): Unit = {
 
-    def target = MainGame.debugViewPort.unproject(Vector2e.pool(Gdx.input.getX, Gdx.input.getY))
+    def target = MainGame.debugViewPort.unproject(Vector2e(Gdx.input.getX, Gdx.input.getY))
 
     if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
       if (!tmpPressed) {
