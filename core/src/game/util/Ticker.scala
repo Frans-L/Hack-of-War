@@ -19,7 +19,9 @@ class Ticker(startTick: Long) {
   private var tick: Long = 0
   private var lastTick: Long = 0
 
+  //TODO: Hardcoded timers for quick debugging
   private var interval2s: Long = 0
+  private var interval4s: Long = 0
   private var interval10s: Long = 0
 
   //time since last update (ms)
@@ -33,6 +35,7 @@ class Ticker(startTick: Long) {
 
     //one frame delay for the interval
     if (interval2s <= tick) interval2s = tick + 2000
+    if (interval4s <= tick) interval4s = tick + 4000
     if (interval10s <= tick) interval10s = tick + 10000
 
     //update time
@@ -46,6 +49,8 @@ class Ticker(startTick: Long) {
     lastTick = currentTick
   }
 
+  /** Returns true two every two seconds */
+  def interval4: Boolean = interval4s <= tick
 
   /** Returns true two every two seconds */
   def interval2: Boolean = interval2s <= tick

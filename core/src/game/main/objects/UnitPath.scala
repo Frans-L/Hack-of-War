@@ -35,5 +35,7 @@ class UnitPath(pathOrg: Path, icon: Sprite, offsetB: Float, val acceptDist: Floa
     target
   }
 
+  def hasNext: Boolean = targetI < path.length
+
 
 }

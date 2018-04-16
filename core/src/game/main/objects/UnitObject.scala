@@ -35,22 +35,28 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
 
   //movements stats
   val movingForce = Vector2e(0f, 0f)
-  val maxForwardForce: Float = 0.04f //max speed = (force * totalFric) / (totalFric - 1)
-  val maxAccelerateForce: Float = 0.01f
+  val maxForwardForce: Float = 0.033f //max speed = (force * totalFric) / (totalFric - 1)
+  val maxAccelerateForce: Float = 0.007f
   val maxSeeAhead: Float = sWidth * 2f
 
-  val maxForceAvoid: Float = 0.025f
+  val maxForceAvoid: Float = 0.022f
   val maxRotateTime: Float = 150f
 
   //units stats
   var health: Float = 100f
-  var damage: Float = 10f
+  var damage: Float = 30f
+  var reloadTime: Int = 150
+
+  private var reloadTimer: Int = 0
 
   //attack vision
-  val visionMaxHeight: Float = size.height * 2f
+  val visionMaxHeight: Float = size.height * 3.5f
   val visionMaxDist: Float = size.width * 4f
   val attackVision: CollisionBody = PolygonBody.trapezoidCollBody(size.height,
     visionMaxHeight, visionMaxDist)
+
+  var attackTarget: Option[UnitObject] = None
+  val maxForwardForceAttack: Float = maxForwardForce * 0.5f
 
 
   updateCollPolygon(collBody) //updates collisionbox
@@ -89,20 +95,35 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
   /** Updates the shooting AI of the unit. */
   private def updateShooting(): Unit = {
 
-    val enemy = physWorld.collideCollisionBody(this, attackVision, null, owner.enemiesAsGameElement)
+    if (attackTarget.isEmpty) {
+      val enemy = physWorld.collideCollisionBody(this, attackVision, null, owner.enemiesAsGameElement)
+      enemy.foreach {
+        case enemy: UnitObject => attackTarget = Some(enemy)
+        case _ => Unit
+      }
+    }
 
-    enemy.foreach(enemy => {
-      val blockingWall = physWorld.collideLine(this, this.pos, enemy.pos, physWorld.mapFilter)
+    attackTarget.foreach(target => {
+      if (!target.deleted) {
+        val blockingWall = physWorld.collideLine(this, this.pos, target.pos, physWorld.mapFilter)
+        if (blockingWall.isDefined) attackTarget = None
+        else shoot()
+      } else {
+        attackTarget = None
+      }
 
-      if (blockingWall.isEmpty) shoot()
     })
+
+    //update reloading
+    reloadTimer = math.min(reloadTimer + ticker.delta, reloadTime)
 
   }
 
 
   private def selectSteeringTarget(): Vector2 = {
 
-    if (steeringPath.isEmpty) mousePos // owner.colorIndex == 3
+    if (steeringPath.isEmpty || !steeringPath.get.hasNext) mousePos // owner.colorIndex == 3
+    else if (attackTarget.isDefined) attackTarget.get.pos
     else steeringPath.get.updateTarget(pos)
   }
 
@@ -131,7 +152,8 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
     steering ++ avoid
 
     //adds limited movingVelocity to real velocity
-    movingForce.mulAdd(steering, ticker.delta).limit(maxForwardForce)
+    val limit = if (attackTarget.isDefined) maxForwardForceAttack else maxForwardForce
+    movingForce.mulAdd(steering, ticker.delta).limit(limit)
     velocity.add(movingForce)
 
     //rotates smoothly towards moving direction
@@ -189,19 +211,22 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
 
   /** Shoots a bullet */
   def shoot(): Unit = {
+    if (reloadTimer >= reloadTime) {
 
-    //calculates the pos of the bullet and create it
-    val bulletPos = Vector2e(movingForce).nor ** (sWidth / 2f + BasicBullet.radius) ++ pos
-    val bullet = BasicBullet.create(this, physWorld,
-      bulletPos, Vector2e(movingForce).nor ** (maxSpeed * 5),
-      owner.colorIndex)
+      //calculates the pos of the bullet and create it
+      val bulletPos = Vector2e(movingForce).nor ** (sWidth / 2f + BasicBullet.radius) ++ pos
+      val bullet = BasicBullet.create(this, physWorld,
+        bulletPos, Vector2e(movingForce).nor ** (maxSpeed * 5),
+        owner.colorIndex)
 
-    //sets the bullet statistics
-    bullet.damage = damage
-    bullet.collFilter ++= owner.enemies.asInstanceOf[mutable.Buffer[GameElement]]
-    bullet.collFilter += physWorld.map
+      //sets the bullet statistics
+      bullet.damage = damage
+      bullet.collFilter ++= owner.enemies.asInstanceOf[mutable.Buffer[GameElement]]
+      bullet.collFilter += physWorld.map
 
-    //owner.enemies.asInstanceOf[mutable.Buffer[GameElement]]
+      //reset timer
+      reloadTimer = 0
+    }
   }
 
   /** Reduces the health of the object and checks if object has diead */

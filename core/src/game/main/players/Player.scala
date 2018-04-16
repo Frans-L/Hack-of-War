@@ -48,8 +48,8 @@ abstract class Player(physWorld: PhysicsWorld, index: Int) extends GameElement {
   }
 
   /** Spawns a new unit */
-  def spawnUnit(x: Float, y: Float, path: Path): Unit = {
-    Soldier.create(this, physWorld, x, y, path)
+  def spawnUnit(x: Float, y: Float, path: Path, random: Boolean = false): Unit = {
+    Soldier.create(this, physWorld, x, y, path, random)
   }
 
   /** Returns the closes path from the map. */

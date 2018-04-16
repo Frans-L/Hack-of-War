@@ -15,7 +15,7 @@ class BulletObject(override var sprite: Sprite, var owner: GameElement,
                    override val pos: Vector2, override val velocity: Vector2,
                    override val size: Vector2) extends ObjectType {
 
-  override var mass: Float = 25f
+  override var mass: Float = 50f
   override var friction: Float = 0
 
 
