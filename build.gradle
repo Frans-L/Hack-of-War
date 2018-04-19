@@ -83,10 +83,20 @@ project(":core") {
     apply plugin: "java"
     apply plugin: "scala"
 
+    sourceSets.test.java.srcDirs = ["test/"]
+
     dependencies {
         compile "org.scala-lang:scala-library:$scalaVersion"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
+
+        testCompile "junit:junit:4.12"
+        testCompile "org.mockito:mockito-core:2.2.7"
+        testCompile "org.scala-lang:scala-library:$scalaVersion"
+        testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
     }
 }
 

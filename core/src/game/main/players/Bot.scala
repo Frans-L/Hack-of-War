@@ -18,7 +18,7 @@ class Bot(physWorld: PhysicsWorld, override val colorIndex: Int) extends
   override def update(): Unit = {
     super.update()
 
-    if (Ticker.defaultTicker.interval4) {
+    if (Ticker.defaultTicker.interval10) {
 
       for (i <- 0 to MathUtils.random(3)) {
         spawnUnit(
