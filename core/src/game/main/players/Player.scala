@@ -44,6 +44,7 @@ abstract class Player(physWorld: PhysicsWorld, index: Int) extends GameElement {
       true
     } else {
       false
+      true //TODO DEBUG
     }
   }
 

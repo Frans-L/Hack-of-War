@@ -92,20 +92,58 @@ class PolygonBody(vertices: Array[Float], private var radius: Float) extends
     val v1 = Vector2e.pool()
     val v2 = Vector2e.pool()
 
-    var result = false
+    //if the center of the circle is in inside of the polygon
+    var result = this.contains(center)
 
-    result = Utils.intersectSegmentCircle(v1.set(verts(verts.length - 2), verts(verts.length - 1)),
-      v2.set(verts(0), verts(1)),
-      center, r,
-      mtv)
+    if (!result) { //circle is outside of the polygon
 
-    for (i <- 2 until verts.length by 2 if !result) {
-      result = Utils.intersectSegmentCircle(
-        v1.set(verts(i - 2), verts(i - 1)),
-        v2.set(verts(i), verts(i + 1)),
+      //checks if circle's edge collides with polygon' edges
+      result = CollisionBody.intersectSegmentCircle(v1.set(verts(verts.length - 2), verts(verts.length - 1)),
+        v2.set(verts(0), verts(1)),
         center, r,
         mtv)
+
+      for (i <- 2 until verts.length by 2 if !result) {
+        result = CollisionBody.intersectSegmentCircle(
+          v1.set(verts(i - 2), verts(i - 1)),
+          v2.set(verts(i), verts(i + 1)),
+          center, r,
+          mtv)
+      }
+
+    } else if (mtv != null) { //the center is inside of the polygon
+
+      //calculates the mtv by finding the distance from the center to polygon's edge
+      val v3 = Vector2e.pool()
+      var dist2: Float = 0
+
+      Intersector.nearestSegmentPoint(
+        v1.set(verts(verts.length - 2), verts(verts.length - 1)),
+        v2.set(verts(0), verts(1)), center, v3)
+      v3.sub(center)
+
+      dist2 = v3.len2()
+      mtv.normal.set(v3).scl(-1) //use mtv as tmp vector
+
+      for (i <- 2 until verts.length by 2) {
+        Intersector.nearestSegmentPoint(
+          v1.set(verts(i - 2), verts(i - 1)),
+          v2.set(verts(i), verts(i + 1)),
+          center, v3)
+        v3.sub(center)
+
+        val l = v3.len2()
+        if (l < dist2) {
+          dist2 = l
+          mtv.normal.set(v3).scl(-1)
+        }
+      }
+
+      mtv.depth = math.sqrt(dist2).toFloat + r
+      mtv.normal.nor()
+      Vector2e.free(v3)
     }
+
 
     Vector2e.free(v1) //frees the memory
     Vector2e.free(v2)

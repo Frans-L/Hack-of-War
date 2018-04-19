@@ -27,6 +27,8 @@ class UnitCard(owner: Player) extends Card(owner) {
 
   override protected def action(x: Float, y: Float): Unit = {
     unitPath.drawTimer.backward().start()
+    val debugPath = unitPath.getOriginalPath
+    debugPath.head.set(x, y)
     owner.spawnUnit(x, y, unitPath.getOriginalPath)
     super.action(x, y)
   }

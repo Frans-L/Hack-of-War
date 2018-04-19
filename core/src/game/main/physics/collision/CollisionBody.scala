@@ -6,6 +6,35 @@ import com.badlogic.gdx.math.{Intersector, Vector2}
 import game.util.Vector2e
 
 
+object CollisionBody {
+
+  lazy val tmp1 = Vector2e(0, 0) //TODO: Does Java 7 support lazy val?
+  lazy val tmp2 = Vector2e(0, 0)
+  lazy val tmp3 = Vector2e(0, 0)
+
+  /** Returns true if the segment circle collided and sets the MinimumTranslationVector to
+    * tell how much and in which direction the circle have to move to avoid collision.
+    *
+    * @return true if collided
+    */
+  def intersectSegmentCircle(start: Vector2, end: Vector2, center: Vector2, radius: Float,
+                             mtv: MinimumTranslationVector): Boolean = {
+
+    Intersector.nearestSegmentPoint(start, end, center, tmp1)
+    tmp2.set(center)
+
+    if (tmp2.dst2(tmp1) <= radius * radius) {
+      if (mtv != null) {
+        mtv.depth = math.abs(tmp2.dst2(tmp1) - radius)
+        mtv.normal = mtv.normal.set(tmp2.sub(tmp1).nor())
+      }
+      true
+    } else
+      false
+  }
+
+}
+
 /** *
   * Wrapper for different shape like circle and polygon.
   * Note: Setters and getters to make it same style with libgdx java library.
@@ -83,7 +112,7 @@ trait CollisionBody {
   /** Returns true if overlaps, and sets the mtv vector. */
   def overlapsPolygon(polygon: PolygonBody, mtv: MinimumTranslationVector): Boolean
 
-  /** Returns true if overlaps a line.*/
+  /** Returns true if overlaps a line. */
   def overlapsLine(startPos: Vector2, endPos: Vector2): Boolean
 
   /** Returns the Center vector and the radius */

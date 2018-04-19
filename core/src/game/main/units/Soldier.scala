@@ -33,7 +33,7 @@ object Soldier {
 
     val icon = pathIcon(owner)
 
-    val body: PolygonBody = PolygonBody.triangleCollBody(0, height, width, height / 2f)
+    val body: PolygonBody = PolygonBody.triangleCollBody(width, height / 2f, 0, height)
 
     val unitPath = {
       if (!random) new UnitPath(path, icon, path.findOffset(x, y), body.getRadiusScaled * 2)
