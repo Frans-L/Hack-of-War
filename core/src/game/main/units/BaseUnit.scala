@@ -10,6 +10,6 @@ object BaseUnit {
   private val scale = 1.5f
   val width: Float = 100f / scale
   val height: Float = 75f / scale
-  
+
 
 }
