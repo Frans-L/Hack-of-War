@@ -87,7 +87,6 @@ trait ObjectType extends SpriteType {
     *
     * @return True if the collision was accepted (default) */
   protected def collision(crashObj: ObjectType, collForce: MinimumTranslationVector): Boolean = {
-    Gdx.app.log("objecttype", "" + collForce.normal)
     pos.mulAdd(collForce.normal, collForce.depth + 0.1f) //move out of the collision
     velocity.setAngle(collForce.normal.angle()) //bounce back
     true
@@ -111,7 +110,6 @@ trait ObjectType extends SpriteType {
   /** Adds a force to the object  */
   def addForce(force: Vector2): Unit = {
     velocity.mulAdd(force, 1f / mass) // F = MA => A = F/M
-    Gdx.app.log("objecttype", "" + velocity)
   }
 
   /** Adds an impact to the object that will add a force */

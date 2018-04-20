@@ -38,13 +38,11 @@ abstract class Player(physWorld: PhysicsWorld, index: Int) extends GameElement {
 
   /** Returns true is succeeded */
   def useCard(card: Card, posX: Float, posY: Float): Boolean = {
-
     //the card can be used
     if (!physWorld.map.collide(posX, posY)) {
       true
     } else {
       false
-      true //TODO DEBUG
     }
   }
 

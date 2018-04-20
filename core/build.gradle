@@ -8,7 +8,3 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.scala.srcDirs = [ "src/" ]
 sourceSets.test.java.srcDirs = ["test/"]
 sourceSets.test.scala.srcDirs = [ "test/" ]
-
-eclipse.project {
-    name = appName + "-core"
-}

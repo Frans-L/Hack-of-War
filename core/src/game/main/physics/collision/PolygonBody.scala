@@ -161,7 +161,7 @@ class PolygonBody(vertices: Array[Float], private var radius: Float) extends
 
   /** Returns true if overlaps, and sets the mtv vector. */
   override def overlapsPolygon(polygon: PolygonBody, mtv: Intersector.MinimumTranslationVector): Boolean = {
-    Intersector.overlapConvexPolygons(this.asPolygon, polygon.asPolygon, mtv)
+    gdxfixed.math.Intersector.overlapConvexPolygons(this.asPolygon, polygon.asPolygon, mtv)
   }
 
 
