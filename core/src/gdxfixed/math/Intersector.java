@@ -8,6 +8,8 @@ import static com.badlogic.gdx.math.Intersector.pointLineSide;
  * Libgdx has a bug in version 1.9.9
  * The bug fix hasn't been released officially yet.
  * That's why the fix is added here.
+ * https://github.com/libgdx/libgdx/pull/5048/commits/43f9f644977b02d85569773ead60334037193c49
+ * - Ken Schosinky
  */
 public class Intersector {
 
