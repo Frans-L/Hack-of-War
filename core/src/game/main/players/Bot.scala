@@ -2,6 +2,7 @@ package game.main.players
 
 import com.badlogic.gdx.math.MathUtils
 import game.main.physics.PhysicsWorld
+import game.main.units.SoldierCreator
 import game.util.Ticker
 
 class Bot(physWorld: PhysicsWorld, override val colorIndex: Int) extends
@@ -11,6 +12,7 @@ class Bot(physWorld: PhysicsWorld, override val colorIndex: Int) extends
 
   def initialize(): Unit = {
     spawnUnit(
+      SoldierCreator,
       physWorld.dimensions.leftMiddle,
       physWorld.dimensions.upMiddle, physWorld.map.randomPathReversed)
   }
@@ -22,12 +24,14 @@ class Bot(physWorld: PhysicsWorld, override val colorIndex: Int) extends
 
       for (i <- 0 to MathUtils.random(3)) {
         spawnUnit(
+          SoldierCreator,
           physWorld.dimensions.leftMiddle,
           physWorld.dimensions.upMiddle, physWorld.map.randomPathReversed, true)
       }
 
       for (i <- 0 to MathUtils.random(2)) {
-        enemies.head.spawnUnit( //spawn to the player
+        enemies.head.spawnUnit(
+          SoldierCreator, //spawn to the player
           physWorld.dimensions.leftMiddle,
           physWorld.dimensions.upMiddle, physWorld.map.randomPath, true)
       }

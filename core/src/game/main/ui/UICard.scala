@@ -1,7 +1,8 @@
 package game.main.ui
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.{Batch, BitmapFont, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Interpolation, Vector2, Vector3}
 import com.badlogic.gdx.scenes.scene2d.actions.{Actions, MoveToAction, ParallelAction, ScaleByAction}
@@ -29,28 +30,47 @@ object UICard {
 /**
   * Created by Frans on 28/02/2018.
   */
-class UICard(sprite: Sprite) extends Actor {
+class UICard(cardSprite: Sprite, icon: Sprite) extends Actor {
+
+  private val font: BitmapFont = GameTextures.defaultUITextures.Fonts.normal20
 
   private var startPos: Vector2 = new Vector2(0, 0) //tells the spot to stay when not moved
-  var state = UICard.State.IDLE
+  var state: Int = UICard.State.IDLE
   private var moved = false
 
   private var dragPos: Vector2 = new Vector2(0, 0) //the pos which were touched
 
-  def updateSprite(): Unit = {
-    sprite.setBounds(
-      this.getX,
-      this.getY,
-      this.getWidth * this.getScaleX,
-      this.getHeight * this.getScaleY)
+  def updateSprites(): Unit = {
+
+    cardSprite.setOrigin(0, 0)
+    cardSprite.setSize(this.getWidth, this.getHeight)
+    cardSprite.setScale(this.getScaleX, this.getScaleY)
+    cardSprite.setPosition(this.getX, this.getY)
+
+    icon.setOrigin(0, 0)
+    icon.setSize(icon.getWidth, icon.getHeight)
+    icon.setScale(this.getScaleX, this.getScaleY)
+    icon.setPosition(
+      this.centerX - icon.getWidth * icon.getScaleX / 2,
+      this.centerY)
+
   }
 
   def update(): Unit = {
-    updateSprite()
+    updateSprites()
   }
 
   override def draw(batch: Batch, fl: Float): Unit = {
-    sprite.draw(batch)
+
+    cardSprite.draw(batch)
+    icon.draw(batch)
+
+    if (getScaleX > 0 && getScaleY > 0) {
+      font.getData.setScale(getScaleX, getScaleY)
+      font.setColor(Color.valueOf("#6b84ff"))
+      val center = getX + getWidth * getScaleX / 2f - font.getData.spaceWidth / 2
+      font.draw(batch, "5", center, getY + font.getData.lineHeight)
+    }
     //shapeRenderer.rect(getX, getY, getWidth, getHeight)
 
   }
@@ -173,5 +193,11 @@ class UICard(sprite: Sprite) extends Actor {
     super.act(delta)
     this.update()
   }
+
+  /** Returns the center position of the actor */
+  private def centerX: Float = this.getX + this.getWidth * this.getScaleX / 2f
+
+  /** Returns the center position of the actor */
+  private def centerY: Float = this.getY + this.getHeight * this.getScaleY / 2f
 
 }

@@ -34,7 +34,7 @@ class GameUI(dimensions: Dimensions, viewport: Viewport,
         card.setBounds(0, dimensions.down, 170, 270)
         card.setScale(0f)
         card.setTouchable(Touchable.enabled)
-        card.updateSprite()
+        card.updateSprites()
         stage.addActor(card)
         card.toBack()
         organizeCard = true

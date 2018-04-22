@@ -35,12 +35,12 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
 
   //movements stats
   val movingForce = Vector2e(0f, 0f)
-  val maxForwardForce: Float = 0.033f //max speed = (force * totalFric) / (totalFric - 1)
-  val maxAccelerateForce: Float = 0.007f
-  val maxSeeAhead: Float = sWidth * 2f
+  var maxForwardForce: Float = 0.033f //max speed = (force * totalFric) / (totalFric - 1)
+  var maxAccelerateForce: Float = 0.007f
+  var maxSeeAhead: Float = sWidth * 2f
 
-  val maxForceAvoid: Float = 0.022f
-  val maxRotateTime: Float = 150f
+  var maxForceAvoid: Float = 0.022f
+  var maxRotateTime: Float = 150f
 
   //units stats
   var health: Float = 100f
@@ -50,13 +50,13 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
   private var reloadTimer: Int = 0
 
   //attack vision
-  val visionMaxHeight: Float = size.height * 3.5f
-  val visionMaxDist: Float = size.width * 4f
+  var visionMaxHeight: Float = size.height * 3.5f
+  var visionMaxDist: Float = size.width * 4f
   val attackVision: CollisionBody = PolygonBody.trapezoidCollBody(size.height,
     visionMaxHeight, visionMaxDist)
 
   var attackTarget: Option[UnitObject] = None
-  val maxForwardForceAttack: Float = maxForwardForce * 0.5f
+  var maxForwardForceAttack: Float = maxForwardForce * 0.5f
 
 
   updateCollPolygon(collBody) //updates collisionbox

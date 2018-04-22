@@ -1,6 +1,7 @@
 package game.main.cards
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, InputListener}
 import game.loader.GameTextures
 import game.main.players.Player
@@ -17,8 +18,10 @@ object Card {
   */
 abstract class Card(owner: Player) {
 
-  var used = false
+  val icon: Sprite
+  val cost: Int
 
+  var used = false
   var uiElement: Option[UICard] = None
 
   /** Returns true if ui exists */
@@ -29,7 +32,8 @@ abstract class Card(owner: Player) {
   /** Creates ui element for the card */
   def uiCreate(): UICard = {
     uiElement = Some(
-      new UICard(GameTextures.defaultUITextures.atlas.createSprite(Card.background)))
+      new UICard(
+        GameTextures.defaultUITextures.atlas.createSprite(Card.background), icon))
     this.addListeners()
     uiElement.get
   }

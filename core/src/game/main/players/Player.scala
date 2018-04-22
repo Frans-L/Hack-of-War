@@ -7,7 +7,7 @@ import game.GameElement
 import game.main.cards.Card
 import game.main.gameMap.{IconPath, Path}
 import game.main.physics.PhysicsWorld
-import game.main.units.Soldier
+import game.main.units.{Soldier, SoldierCreator, UnitCreator}
 
 import scala.collection.mutable
 
@@ -47,8 +47,9 @@ abstract class Player(physWorld: PhysicsWorld, index: Int) extends GameElement {
   }
 
   /** Spawns a new unit */
-  def spawnUnit(x: Float, y: Float, path: Path, random: Boolean = false): Unit = {
-    Soldier.create(this, physWorld, x, y, path, random)
+  def spawnUnit(unitCreator: UnitCreator, x: Float, y: Float,
+                path: Path, random: Boolean = false): Unit = {
+    unitCreator.create(this, physWorld, x, y, path, random)
   }
 
   /** Returns the closes path from the map. */

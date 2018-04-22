@@ -1,13 +1,17 @@
 package game.main.cards
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
 import game.main.gameMap.{IconPath, Path}
 import game.main.objects.UnitPath
 import game.main.players.Player
-import game.main.units.Soldier
+import game.main.units.{Soldier, SoldierCreator, UnitCreator}
 
-class UnitCard(owner: Player) extends Card(owner) {
+class UnitCard(owner: Player, unitCreator: UnitCreator) extends Card(owner) {
+
+  override val icon: Sprite = unitCreator.cardIcon(owner)
+  override val cost: Int = unitCreator.cost
 
   var unitPath: IconPath = new IconPath(
     new Path(Seq[Vector2](new Vector2(0, 0)), 0),
@@ -27,13 +31,13 @@ class UnitCard(owner: Player) extends Card(owner) {
 
   override protected def action(x: Float, y: Float): Unit = {
     unitPath.drawTimer.backward().start()
-    owner.spawnUnit(x, y, unitPath.getOriginalPath)
+    owner.spawnUnit(SoldierCreator, x, y, unitPath.getOriginalPath)
     super.action(x, y)
   }
 
   override def destroy(): Unit = {
     super.destroy()
-    owner.hand += new UnitCard(owner) //new card to the player
+    owner.hand += new UnitCard(owner, SoldierCreator) //new card to the player
   }
 
 }
