@@ -16,12 +16,8 @@ object UICard {
   val easUse: Interpolation = Interpolation.pow2In
   val easUseDur: Long = 500 //ms
 
-  object State {
-    val IDLE = 0
-    val RETURN = 1
-    val MOVE = 2
-    val DRAG = 3
-    val ACTION = 4
+  object State extends Enumeration {
+    val IDLE, RETURN, MOVE, DRAG, ACTION = Value
   }
 
 
@@ -30,12 +26,12 @@ object UICard {
 /**
   * Created by Frans on 28/02/2018.
   */
-class UICard(cardSprite: Sprite, icon: Sprite) extends Actor {
+class UICard(cardSprite: Sprite, icon: Sprite, txt: String) extends Actor {
 
   private val font: BitmapFont = GameTextures.defaultUITextures.Fonts.normal20
 
   private var startPos: Vector2 = new Vector2(0, 0) //tells the spot to stay when not moved
-  var state: Int = UICard.State.IDLE
+  var state: UICard.State.Value = UICard.State.IDLE
   private var moved = false
 
   private var dragPos: Vector2 = new Vector2(0, 0) //the pos which were touched
@@ -68,8 +64,8 @@ class UICard(cardSprite: Sprite, icon: Sprite) extends Actor {
     if (getScaleX > 0 && getScaleY > 0) {
       font.getData.setScale(getScaleX, getScaleY)
       font.setColor(Color.valueOf("#6b84ff"))
-      val center = getX + getWidth * getScaleX / 2f - font.getData.spaceWidth / 2
-      font.draw(batch, "5", center, getY + font.getData.lineHeight)
+      val center = getX + getWidth * getScaleX / 2f - font.getData.spaceWidth / 2 * txt.length
+      font.draw(batch, txt, center, getY + font.getData.lineHeight)
     }
     //shapeRenderer.rect(getX, getY, getWidth, getHeight)
 
