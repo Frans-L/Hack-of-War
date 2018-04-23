@@ -28,12 +28,8 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
                  var steeringPath: Option[UnitPath]) extends ObjectType {
 
   //textures
-  override var sprite: Sprite =
-    GameTextures.defaultTextures.atlas.createSprite(textures.main(owner.colorIndex))
-  private val shadow: Sprite =
-    GameTextures.defaultTextures.atlas.createSprite(textures.shadow)
-  shadow.setAlpha(0.7f)
-  private val shadowPos = Vector2e(-3f, -5f)
+  override var sprite: Sprite = this.createSprite(textures, owner.colorIndex).get
+  override protected val shadow: Option[Sprite] = this.createShadow(textures)
 
   //mandatory variables to object with physics
   override val pos: Vector2 = Vector2e(0, 0)
@@ -92,14 +88,6 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
       updateSprite()
 
     }
-  }
-
-  /** Updates the sprites */
-  override def updateSprite(): Unit = {
-    updateSprite(sprite)
-    updateSprite(shadow)
-    shadow.translateX(shadowPos.x)
-    shadow.translateY(shadowPos.y)
   }
 
   /** Updates the shape info. */
@@ -212,18 +200,10 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
   }
 
   override def draw(shapeRender: ShapeRenderer): Unit = {
-    if (MainGame.drawCollBox) {
-      collBody.draw(shapeRender)
-      attackVision.draw(shapeRender)
-    }
+    super.draw(shapeRender)
+    if (MainGame.drawCollBox) attackVision.draw(shapeRender)
   }
 
-  override def draw(batch: Batch): Unit = {
-    if (visible) {
-      shadow.draw(batch)
-      sprite.draw(batch)
-    }
-  }
 
 
   /** Shoots a bullet */

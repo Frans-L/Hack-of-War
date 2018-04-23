@@ -46,10 +46,6 @@ object GameTextures {
 
   val atlasName = "graphics.atlas"
 
-  object Jei {
-    val a = 1
-  }
-
   object Font {
 
     object Normal20 {
@@ -77,9 +73,14 @@ object GameTextures {
 
   object Units {
 
-    object baseSoldier extends UnitTextures{
+    object BaseSoldier extends UnitTextures{
       override val main: Seq[String] =  Seq("unit1Blue", "unit1Red")
       override val shadow: String = "unit1Shadow"
+    }
+
+    object BaseBullet extends UnitTextures{
+      override val main: Seq[String] = Seq("bullet1Blue", "bullet1Red")
+      override val shadow: String = "bullet1Shadow"
     }
 
     val bullet1 = Seq("bullet1Blue", "bullet1Red")

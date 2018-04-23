@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.{Intersector, Vector2}
 import game.GameElement
 import game.main.physics.collision.CollisionBody
 import game.main.players.Player
-import game.util.{Dimensions, Vector2mtv}
+import game.util.{Dimensions, Vector2e, Vector2mtv}
 
 import scala.collection.mutable
 
@@ -33,6 +33,7 @@ class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
 
   //global physics stats
   var globalFriction: Float = 1f
+  var globalShadowPos: Vector2 = Vector2e(-3f, -5f)
 
   var map: game.main.gameMap.Map = _ //TODO temporary solution, to add map
 

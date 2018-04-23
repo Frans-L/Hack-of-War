@@ -9,7 +9,7 @@ object SoldierCreator extends UnitCreator {
 
   override val cost: Int = 3
 
-  override val texture: UnitTextures = GameTextures.Units.baseSoldier
+  override val texture: UnitTextures = GameTextures.Units.BaseSoldier
   override val width: Float = 100f / 1.5f
   override val height: Float = 75f / 1.5f
 

@@ -1,9 +1,13 @@
 package game.main.physics
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
+import game.loader.{GameTextures, UnitTextures}
+import game.main.MainGame
 import game.main.physics.collision.CollisionBody
 import game.util.Vector2e._
 import game.util.{Vector2e, Vector2mtv}
@@ -36,17 +40,18 @@ trait ObjectType extends SpriteType {
   val physWorld: PhysicsWorld
   var mass: Float
   var friction: Float
+  val velocity: Vector2 = Vector2e(0f, 0f)
 
   var collToMe: Boolean = true //if others objects checks collision with this object
   var collToOthers: Boolean = true //if this object checks collision with other objects
 
   //this object checks collision only with these filtered objects, if Option is defined
   var collFilter: mutable.Buffer[GameElement] = mutable.Buffer.empty
-
   val collBody: CollisionBody //the collision body
 
-  val velocity: Vector2 = Vector2e(0f, 0f)
-
+  //shadows
+  protected val shadow: Option[Sprite] = None
+  val shadowPos: Vector2 = Vector2e(0, 0) //can be null since it is only used with shadow (option)
 
   /** After changing pos / size / origin etc. It's good to update
     * sprite and the collBody immediately. */
@@ -118,6 +123,49 @@ trait ObjectType extends SpriteType {
       Vector2e.pool(velocity).scl(-math.abs(math.cos(velocity.angleRad(vel))).toFloat) ++ vel
     velocity.mulAdd(speed, mass2 / mass)
     Vector2e.free(speed)
+  }
+
+  /** Updates the sprites */
+  override def updateSprite(): Unit = {
+    updateSprite(sprite)
+
+    shadow.foreach(s => {
+      updateSprite(s)
+      s.translateX(shadowPos.x + physWorld.globalShadowPos.x)
+      s.translateY(shadowPos.y + physWorld.globalShadowPos.y)
+    })
+  }
+
+
+  /** Draws the collision boxes */
+  override def draw(shapeRender: ShapeRenderer): Unit = {
+    if (MainGame.drawCollBox) {
+      collBody.draw(shapeRender)
+    }
+  }
+
+  /** Draws the sprites */
+  override def draw(batch: Batch): Unit = {
+    if (visible) {
+      shadow.foreach(s => s.draw(batch))
+      sprite.draw(batch)
+    }
+  }
+
+  /** Returns the shadow if it exists */
+  protected def createShadow(unitTextures: UnitTextures): Option[Sprite] = {
+    if (unitTextures.shadow.length > 0) {
+      val s = GameTextures.defaultTextures.atlas.createSprite(unitTextures.shadow)
+      s.setAlpha(0.7f)
+      Some(s)
+    } else None
+  }
+
+  /** Returns the main sprite if it exists */
+  protected def createSprite(unitTextures: UnitTextures, colorIndex: Int): Option[Sprite] = {
+    if (unitTextures.main(colorIndex).length > 0)
+      Some(GameTextures.defaultTextures.atlas.createSprite(unitTextures.main(colorIndex)))
+    else None
   }
 
 

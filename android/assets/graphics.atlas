@@ -13,6 +13,13 @@ bullet1Blue
   index: -1
 bullet1Red
   rotate: false
+  xy: 216, 307
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+bullet1Shadow
+  rotate: false
   xy: 206, 275
   size: 20, 20
   orig: 20, 20
