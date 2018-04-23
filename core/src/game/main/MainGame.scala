@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import com.badlogic.gdx.{Gdx, Input, Screen}
 import game.loader.GameTextures
 import game.main.ui.GameUI
-import game.util.{Dimensions, Ticker, Vector2e, Vector2mtv}
+import game.util._
 import game.main.physics.PhysicsWorld
 import game.main.units.BasicBullet
 import game.main.players.{Bot, Player, User}

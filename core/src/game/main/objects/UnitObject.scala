@@ -13,7 +13,7 @@ import game.main.units.{BasicBullet, BulletCreator}
 import game.main.players.Player
 import game.main.gameMap.Path
 import game.util.Vector2e._
-import game.util.{CountdownTimer, Utils, Vector2e, Vector2mtv}
+import game.util.{pools, _}
 import sun.font.PhysicalFont
 
 import scala.collection.mutable
@@ -137,15 +137,15 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
   private def updateSteering(): Unit = {
 
 
-    val target = Vector2e.pool(selectSteeringTarget())
+    val target = pools.VectorPool.obtain(selectSteeringTarget())
 
     //move towards target
     val steering =
-      (((Vector2e.pool(target) -- pos).nor ** maxForwardForce) -- movingForce)
+      (((pools.VectorPool.obtain(target) -- pos).nor ** maxForwardForce) -- movingForce)
         .limit(maxAccelerateForce) / mass
 
     //if no obstacle at close distance found, try look further away
-    val avoid = Vector2e.pool()
+    val avoid = pools.VectorPool.obtain()
     val obstacleFound = avoidObstacles(0, avoid)
 
 
@@ -168,9 +168,9 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
     angle = Utils.absAngle(angle)
 
     //free the memory
-    Vector2e.free(steering)
-    Vector2e.free(avoid)
-    Vector2e.free(target)
+    pools.VectorPool.free(steering)
+    pools.VectorPool.free(avoid)
+    pools.VectorPool.free(target)
 
   }
 
@@ -184,7 +184,7 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
     */
   private def avoidObstacles(visionLength: Float, avoid: Vector2): Boolean = {
 
-    val ahead = Vector2e.pool(movingForce).nor **
+    val ahead = pools.VectorPool.obtain(movingForce).nor **
       (visionLength * (movingForce.len() / maxForwardForce)) ++ pos
 
     //checks collision in the wanted pos
@@ -196,7 +196,7 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
 
     //calculate the force opposite to obstacle center
     obstacle.foreach(o => ((avoid ++ pos) -- o.collBody.center).nor ** maxForceAvoid / mass)
-    Vector2e.free(ahead) //free the memory
+    pools.VectorPool.free(ahead) //free the memory
 
     obstacle.isDefined //returns true if collided
   }

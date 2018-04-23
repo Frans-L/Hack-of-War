@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Circle, Intersector, Vector2}
 import game.util.Vector2e
+import game.util.pools.VectorPool
 
 class CircleBody(private var radius: Float) extends CollisionBody {
 
@@ -82,7 +83,7 @@ class CircleBody(private var radius: Float) extends CollisionBody {
   override def overlapsCircle(center: Vector2, r: Float,
                               mtv: MinimumTranslationVector): Boolean = {
 
-    val pos = Vector2e.pool(x, y)
+    val pos = VectorPool.obtain(x, y)
     val radiusS = getRadiusScaled
     val isCollided = pos.dst2(center) <= (r + radiusS) * (r + radiusS)
 
@@ -95,7 +96,7 @@ class CircleBody(private var radius: Float) extends CollisionBody {
       mtv.depth = r + radiusS - pos.dst(center)
     }
 
-    Vector2e.free(pos) //free the memory
+    VectorPool.free(pos) //free the memory
 
     isCollided
   }

@@ -10,7 +10,8 @@ import game.loader.{GameTextures, UnitTextures}
 import game.main.MainGame
 import game.main.physics.collision.CollisionBody
 import game.util.Vector2e._
-import game.util.{Vector2e, Vector2mtv}
+import game.util.pools.{VectorPool, MinimumTranslationVectorPool}
+import game.util.Vector2e
 
 import scala.collection.mutable
 
@@ -35,7 +36,7 @@ trait ObjectType extends SpriteType {
   override var angle: Float = 0f //degrees
 
   */
-
+  
   //physics to gameObject
   val physWorld: PhysicsWorld
   var mass: Float
@@ -68,10 +69,10 @@ trait ObjectType extends SpriteType {
 
     //checks collision
     if (collToOthers) {
-      val collForce = Vector2mtv.pool()
+      val collForce = MinimumTranslationVectorPool.obtain()
       val crashObj = physWorld.collide(this, collForce, collFilter)
       crashObj.foreach(obj => crash = collision(obj, collForce))
-      Vector2mtv.free(collForce) //free the memory
+      MinimumTranslationVectorPool.free(collForce) //free the memory
     }
 
     //if free to move
@@ -120,9 +121,9 @@ trait ObjectType extends SpriteType {
   /** Adds an impact to the object that will add a force */
   def addImpact(vel: Vector2, mass2: Float): Unit = {
     val speed =
-      Vector2e.pool(velocity).scl(-math.abs(math.cos(velocity.angleRad(vel))).toFloat) ++ vel
+      VectorPool.obtain(velocity).scl(-math.abs(math.cos(velocity.angleRad(vel))).toFloat) ++ vel
     velocity.mulAdd(speed, mass2 / mass)
-    Vector2e.free(speed)
+    VectorPool.free(speed)
   }
 
   /** Updates the sprites */

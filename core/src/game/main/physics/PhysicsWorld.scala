@@ -8,7 +8,8 @@ import com.badlogic.gdx.math.{Intersector, Vector2}
 import game.GameElement
 import game.main.physics.collision.CollisionBody
 import game.main.players.Player
-import game.util.{Dimensions, Vector2e, Vector2mtv}
+import game.util.pools.MinimumTranslationVectorPool
+import game.util.{Dimensions, Vector2e}
 
 import scala.collection.mutable
 
@@ -136,7 +137,7 @@ class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
                     category: mutable.Buffer[GameElement]):
   Option[ObjectType] = {
 
-    val mtvTMP = Vector2mtv.pool()
+    val mtvTMP = MinimumTranslationVectorPool.obtain()
     var result: Boolean = false //(is collided, angle)
     var crashObj: Option[ObjectType] = None
     for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != obj && o.collToMe) {
@@ -144,7 +145,7 @@ class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
       if (result) crashObj = Some(o)
     }
 
-    Vector2mtv.free(mtvTMP) //frees the memory
+    MinimumTranslationVectorPool.free(mtvTMP) //frees the memory
 
     crashObj
   }

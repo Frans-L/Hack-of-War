@@ -10,7 +10,7 @@ import game.main.MainGame
 import game.main.physics.{ObjectType, PhysicsWorld}
 import game.main.physics.collision.{CircleBody, CollisionBody, PolygonBody}
 import game.main.players.Player
-import game.util.{Vector2e, Vector2mtv}
+import game.util.Vector2e
 
 class BulletObject(textures: UnitTextures, colorIndex: Int, override val size: Vector2,
                    var owner: GameElement, override val physWorld: PhysicsWorld,

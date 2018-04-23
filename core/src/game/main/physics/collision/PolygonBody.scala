@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Intersector, Polygon, Vector2}
 import com.badlogic.gdx.utils.{GdxRuntimeException, Pool, Pools}
+import game.util.pools.VectorPool
 import game.util.{Utils, Vector2e}
 
 
@@ -89,8 +90,8 @@ class PolygonBody(vertices: Array[Float], private var radius: Float) extends
                               mtv: MinimumTranslationVector): Boolean = {
 
     val verts: Array[Float] = getTransformedVertices
-    val v1 = Vector2e.pool()
-    val v2 = Vector2e.pool()
+    val v1 = VectorPool.obtain()
+    val v2 = VectorPool.obtain()
 
     //if the center of the circle is in inside of the polygon
     var result = this.contains(center)
@@ -114,7 +115,7 @@ class PolygonBody(vertices: Array[Float], private var radius: Float) extends
     } else if (mtv != null) { //the center is inside of the polygon
 
       //calculates the mtv by finding the distance from the center to polygon's edge
-      val v3 = Vector2e.pool()
+      val v3 = VectorPool.obtain()
       var dist2: Float = 0
 
       Intersector.nearestSegmentPoint(
@@ -141,12 +142,12 @@ class PolygonBody(vertices: Array[Float], private var radius: Float) extends
 
       mtv.depth = math.sqrt(dist2).toFloat + r
       mtv.normal.nor()
-      Vector2e.free(v3)
+      VectorPool.free(v3)
     }
 
 
-    Vector2e.free(v1) //frees the memory
-    Vector2e.free(v2)
+    VectorPool.free(v1) //frees the memory
+    VectorPool.free(v2)
 
     result
   }
