@@ -10,8 +10,10 @@ import game.util.Vector2e._
 /**
   * Created by Frans on 06/03/2018.
   */
-class BorderSprite(val pos: Vector2, val size: Vector2,
-                   val padding: Vector2, var sprite: Sprite) extends GameElement with SpriteType {
+class BorderSprite(override val pos: Vector2,
+                   override val size: Vector2,
+                   val padding: Vector2,
+                   override var sprite: Sprite) extends GameElement with SpriteType {
 
   updateSprite()
 

@@ -13,10 +13,10 @@ trait SpriteType extends GameElement {
 
   var visible: Boolean = true
   var enabled: Boolean = true
-  var deleted: Boolean = false
+  var canBeDeleted: Boolean = false
 
-  val pos: Vector2
-  val size: Vector2
+  val pos: Vector2 = Vector2e(0f, 0f)
+  val size: Vector2 = Vector2e(0f, 0f)
   val origin: Vector2 = Vector2e(0, 0)
   val scale: Vector2 = Vector2e(1f, 1f)
   var angle: Float = 0f //degrees

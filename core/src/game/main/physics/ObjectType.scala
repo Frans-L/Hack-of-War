@@ -5,20 +5,23 @@ import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Pool.Poolable
 import game.GameElement
 import game.loader.{GameTextures, UnitTextures}
 import game.main.MainGame
 import game.main.physics.collision.CollisionBody
 import game.util.Vector2e._
-import game.util.pools.{VectorPool, MinimumTranslationVectorPool}
+import game.util.pools.{MinimumTranslationVectorPool, VectorPool}
 import game.util.Vector2e
 
 import scala.collection.mutable
 
 /**
+  * Object with physics and shadows.
+  * Almost everything have to be var to make object poolable
   * Created by Frans on 26/02/2018.
   */
-trait ObjectType extends SpriteType {
+trait ObjectType extends SpriteType with Poolable {
 
   //all variables that are inherited
   /*
@@ -38,9 +41,9 @@ trait ObjectType extends SpriteType {
   */
   
   //physics to gameObject
-  val physWorld: PhysicsWorld
-  var mass: Float
-  var friction: Float
+  var physWorld: PhysicsWorld
+  var mass: Float = 100f
+  var friction: Float = 25f
   val velocity: Vector2 = Vector2e(0f, 0f)
 
   var collToMe: Boolean = true //if others objects checks collision with this object
@@ -48,11 +51,12 @@ trait ObjectType extends SpriteType {
 
   //this object checks collision only with these filtered objects, if Option is defined
   var collFilter: mutable.Buffer[GameElement] = mutable.Buffer.empty
-  val collBody: CollisionBody //the collision body
+  var collBody: CollisionBody  //the collision body
 
   //shadows
-  protected val shadow: Option[Sprite] = None
+  protected var shadow: Option[Sprite] = None
   val shadowPos: Vector2 = Vector2e(0, 0) //can be null since it is only used with shadow (option)
+
 
   /** After changing pos / size / origin etc. It's good to update
     * sprite and the collBody immediately. */
@@ -60,7 +64,6 @@ trait ObjectType extends SpriteType {
     updateSprite()
     updateCollPolygon()
   }
-
 
   /** Updates physics */
   def updatePhysics(): Unit = {
@@ -107,9 +110,9 @@ trait ObjectType extends SpriteType {
     body.setOrigin(origin.x, origin.y)
   }
 
-  /** ActiveObject should be destroyable */
+  /** ActiveObject should be destroyable. Marks that the object can be deleted. */
   def destroy(): Unit = {
-    deleted = true
+    canBeDeleted = true
   }
 
 
@@ -168,7 +171,6 @@ trait ObjectType extends SpriteType {
       Some(GameTextures.defaultTextures.atlas.createSprite(unitTextures.main(colorIndex)))
     else None
   }
-
 
 }
 

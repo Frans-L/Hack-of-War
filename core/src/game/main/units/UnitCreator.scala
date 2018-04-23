@@ -2,6 +2,7 @@ package game.main.units
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.utils.{Pool, Pools}
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameMap.Path
 import game.main.objects.{UnitObject, UnitPath}
@@ -37,8 +38,9 @@ trait UnitCreator {
 
     //creates the unit
     val size = Vector2e(width, height)
-    val obj: UnitObject = new UnitObject(texture, size, owner, physWorld, body, Some(unitPath))
+    val obj = UnitObject.pool.obtain().init(texture, size, owner, physWorld, body)
     obj.pos.set(unitPath.path.head)
+    obj.steeringPath = Some(unitPath)
     obj.updateShape() //important to remember after force changing pos
 
     setStats(obj)

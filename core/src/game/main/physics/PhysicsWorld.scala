@@ -73,7 +73,10 @@ class PhysicsWorld(val dimensions: Dimensions) extends GameElement {
     for (owner <- units) {
       //removes deleted units
       for (i <- owner._2.indices.reverse) {
-        if (owner._2(i).deleted) owner._2.remove(i)
+        if (owner._2(i).canBeDeleted) {
+          owner._2(i).delete()
+          owner._2.remove(i)
+        }
       }
 
       //removes empty owners

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Interpolation, MathUtils, Vector2}
+import com.badlogic.gdx.utils.{Pool, Pools}
 import game.GameElement
 import game.loader.{GameTextures, UnitTextures}
 import game.main.MainGame
@@ -14,65 +15,118 @@ import game.main.players.Player
 import game.main.gameMap.Path
 import game.util.Vector2e._
 import game.util.{pools, _}
-import sun.font.PhysicalFont
-
 import scala.collection.mutable
+
+object UnitObject {
+  val pool: Pool[UnitObject] = Pools.get(classOf[UnitObject])
+}
 
 /**
   * Created by Frans on 26/02/2018.
   */
-class UnitObject(textures: UnitTextures, override val size: Vector2,
-                 var owner: Player,
-                 override val physWorld: PhysicsWorld,
-                 override val collBody: CollisionBody,
-                 var steeringPath: Option[UnitPath]) extends ObjectType {
+class UnitObject() extends ObjectType {
 
-  //textures
-  override var sprite: Sprite = this.createSprite(textures, owner.colorIndex).get
-  override protected val shadow: Option[Sprite] = this.createShadow(textures)
+  //general
+  var owner: Player = _
+  override var physWorld: PhysicsWorld = _
+  override var collBody: CollisionBody = _
 
-  //mandatory variables to object with physics
-  override val pos: Vector2 = Vector2e(0, 0)
-  override val origin: Vector2 = Vector2e(size.x / 2f, size.y / 2f)
-  override var mass: Float = 100f
-  override var friction: Float = 0.25f
+  override var sprite: Sprite = _
 
-  //movements stats
-  val movingForce = Vector2e(0f, 0f)
-  var maxForwardForce: Float = 0.033f //max speed = (force * totalFric) / (totalFric - 1)
-  var maxAccelerateForce: Float = 0.007f
-  var maxSeeAhead: Float = sWidth * 2f
+  //steering stats
+  var steeringPath: Option[UnitPath] = None
+  private val movingForce = Vector2e(0f, 0f)
+  var maxForwardForce: Float = _
+  var maxAccelerateForce: Float = _
+  var maxSeeAhead: Float = _
+  var maxForceAvoid: Float = _
+  var maxRotateTime: Float = _
 
-  var maxForceAvoid: Float = 0.022f
-  var maxRotateTime: Float = 150f
-
-  //basic stats
-  var health: Float = 100f
-
-  //shooting
-  var damage: Float = 30f
-  var reloadTime: Int = 150
-  private var reloadTimer: Int = 0
-  var bulletCreator: BulletCreator = BasicBullet
+  //basic stats & shooting
+  var health: Float = _
+  var damage: Float = _
+  var reloadTime: Int = _
+  private var reloadTimer: Int = _
+  var bulletCreator: BulletCreator = _
 
   //attack vision
-  var visionMaxHeight: Float = size.height * 3.5f
-  var visionMaxDist: Float = size.width * 4f
-  val attackVision: CollisionBody = PolygonBody.trapezoidCollBody(size.height,
-    visionMaxHeight, visionMaxDist)
-
+  var visionMaxHeight: Float = _
+  var visionMaxDist: Float = _
+  var attackVision: CollisionBody = _
   var attackTarget: Option[UnitObject] = None
-  var maxForwardForceAttack: Float = maxForwardForce * 0.5f //speed when attacking
+  var maxForwardForceAttack: Float = _ //speed when attacking
 
 
-  updateCollPolygon(collBody) //updates collisionbox
-  updateCollPolygon(attackVision)
-  updateSprite() //updates sprite
-
-  physWorld.addUnit(owner.asInstanceOf[GameElement], this) //adds update calls
+  def this(textures: UnitTextures, size: Vector2, owner: Player,
+           physWorld: PhysicsWorld, collBody: CollisionBody) {
+    this()
+    init(textures, size, owner, physWorld, collBody) // sets all variables a value
+  }
 
   private def mousePos: Vector2 = MainGame.debugViewPort.unproject(Vector2e(Gdx.input.getX, Gdx.input.getY))
 
+
+  /** Initializes the object. Have to called if obtained from the pool! */
+  def init(textures: UnitTextures, size: Vector2, owner: Player,
+           physWorld: PhysicsWorld, collBody: CollisionBody): UnitObject.this.type = {
+
+    setToDefault(textures, size, owner, physWorld, collBody)
+
+    updateCollPolygon(collBody) //updates collisionbox
+    updateCollPolygon(attackVision)
+    updateSprite() //updates sprites
+    physWorld.addUnit(owner.asInstanceOf[GameElement], this) //adds update calls
+
+    this
+  }
+
+  /** Initializes the all variables of the object.
+    * Makes pooling possible. */
+  def setToDefault(textures: UnitTextures, size: Vector2, owner: Player,
+                   physWorld: PhysicsWorld, collBody: CollisionBody): Unit = {
+
+    this.enabled = true
+    this.visible = true
+    this.canBeDeleted = false
+
+    this.owner = owner
+    this.physWorld = physWorld
+    this.collBody = collBody
+
+    this.sprite = if (textures != null) this.createSprite(textures, owner.colorIndex).get else null
+    this.shadow = if (textures != null) this.createShadow(textures) else None
+
+    if (size != null) this.size.set(size) else this.size.set(0, 0)
+    this.pos.set(0, 0)
+    this.angle = 0
+    this.origin.set(this.size.x / 2f, this.size.y / 2f)
+
+    //default values
+    this.mass = 100f
+    this.friction = 0.025f
+    this.velocity.set(0, 0)
+    this.steeringPath = None
+    this.movingForce.set(0, 0)
+    this.maxForwardForce = 0.033f //max speed = (force * totalFric) / (totalFric - 1)
+    this.maxAccelerateForce = 0.007f
+
+    this.maxSeeAhead = sWidth * 2f
+    this.maxForceAvoid = 0.022f
+    this.maxRotateTime = 150f
+
+    this.health = 100f
+    this.damage = 30f
+    this.reloadTime = 150
+    this.reloadTimer = 0
+    this.bulletCreator = BasicBullet
+
+    this.visionMaxHeight = this.size.height * 3.5f
+    this.visionMaxDist = this.size.width * 4f
+    this.attackVision = PolygonBody.trapezoidCollBody(this.size.height, visionMaxHeight, visionMaxDist)
+
+    this.attackTarget = None
+    this.maxForwardForceAttack = maxForwardForce * 0.5f //speed when attacking
+  }
 
   /**
     * Updates the object collision, physics, AI etc...
@@ -110,7 +164,7 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
     }
 
     attackTarget.foreach(target => {
-      if (!target.deleted) {
+      if (!target.canBeDeleted) {
         val blockingWall = physWorld.collideLine(this, this.pos, target.pos, physWorld.mapFilter)
         if (blockingWall.isDefined) attackTarget = None
         else shoot()
@@ -207,7 +261,6 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
   }
 
 
-
   /** Shoots a bullet */
   def shoot(): Unit = {
     if (reloadTimer >= reloadTime) {
@@ -239,6 +292,18 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
   def maxSpeed: Float =
     maxForwardForce * (friction + physWorld.globalFriction) /
       (friction + physWorld.globalFriction - 1)
+
+  /** Resets the object */
+  override def reset(): Unit = {
+    Gdx.app.log("unitobject", "reset")
+    setToDefault(null, null, null, null, null)
+    canBeDeleted = true
+  }
+
+  /** Frees the object back to pool. */
+  override def delete(): Unit = {
+    UnitObject.pool.free(this)
+  }
 
 }
 

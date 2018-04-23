@@ -17,4 +17,7 @@ trait GameElement {
 
   def draw(batch: Batch): Unit
 
+  /** Disposes elements if there is any. */
+  def delete(): Unit = Unit
+
 }

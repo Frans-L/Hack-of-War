@@ -10,16 +10,13 @@ import game.main.physics.collision.{CollisionBody, PolygonBody}
 import game.util.Vector2e
 
 class CollisionObject(var owner: GameElement,
-                      override val physWorld: PhysicsWorld,
-                      override val collBody: CollisionBody) extends ObjectType {
+                      override var physWorld: PhysicsWorld,
+                      override var collBody: CollisionBody) extends ObjectType {
 
-  override val velocity: Vector2 = Vector2e(0, 0)
-  override var mass: Float = 100f
-  override var friction: Float = 10f
-  override val pos: Vector2 = Vector2e(collBody.getX, collBody.getY)
-  override val size: Vector2 = Vector2e(collBody.getRadius, collBody.getRadius)
+  pos.set(collBody.getX, collBody.getY)
+  size.set(collBody.getRadius, collBody.getRadius)
+  origin.set(size.x / 2f, size.y / 2f)
   override var sprite: Sprite = _
-  override val origin: Vector2 = Vector2e(size.x / 2f, size.y / 2f)
 
   collToOthers = false //doesn't check collision with others by itself
 
@@ -39,5 +36,7 @@ class CollisionObject(var owner: GameElement,
   }
 
   override def draw(batch: Batch): Unit = Unit //doesn't draw anything
+
+  override def reset(): Unit = ???
 
 }

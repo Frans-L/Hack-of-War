@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import com.badlogic.gdx.{Gdx, Input, Screen}
 import game.loader.GameTextures
+import game.main.objects.UnitObject
 import game.main.ui.GameUI
 import game.util._
 import game.main.physics.PhysicsWorld
@@ -118,6 +119,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
     if (ticker.interval10) {
       Gdx.app.log("MainGame", "Render calls: " + batch.renderCalls)
+      Gdx.app.log("MainGame", "Pooled units: " + UnitObject.pool.getFree())
     }
 
     fPSLogger.log()

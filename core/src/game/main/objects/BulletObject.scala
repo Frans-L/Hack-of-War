@@ -13,17 +13,17 @@ import game.main.players.Player
 import game.util.Vector2e
 
 class BulletObject(textures: UnitTextures, colorIndex: Int, override val size: Vector2,
-                   var owner: GameElement, override val physWorld: PhysicsWorld,
-                   override val collBody: CollisionBody,
+                   var owner: GameElement, override var physWorld: PhysicsWorld,
+                   override var collBody: CollisionBody,
                    override val pos: Vector2, override val velocity: Vector2) extends ObjectType {
 
   //sprites
   override var sprite: Sprite = this.createSprite(textures, colorIndex).get
-  override protected val shadow: Option[Sprite] = this.createShadow(textures)
+  shadow = this.createShadow(textures)
 
   //physic object
-  override var mass: Float = 50f
-  override var friction: Float = 0
+  mass = 50f
+  friction = 0
 
   //bullet stats
   var damage: Float = 0f //will be overridden
@@ -83,5 +83,7 @@ class BulletObject(textures: UnitTextures, colorIndex: Int, override val size: V
       sprite.draw(batch)
     }
   }
+
+  override def reset(): Unit = ???
 
 }
