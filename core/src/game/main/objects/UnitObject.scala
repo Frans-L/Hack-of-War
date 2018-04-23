@@ -9,7 +9,7 @@ import game.loader.{GameTextures, UnitTextures}
 import game.main.MainGame
 import game.main.physics.{ObjectType, PhysicsWorld}
 import game.main.physics.collision.{CollisionBody, PolygonBody}
-import game.main.units.BasicBullet
+import game.main.units.{BasicBullet, BulletCreator}
 import game.main.players.Player
 import game.main.gameMap.Path
 import game.util.Vector2e._
@@ -46,12 +46,14 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
   var maxForceAvoid: Float = 0.022f
   var maxRotateTime: Float = 150f
 
-  //units stats
+  //basic stats
   var health: Float = 100f
+
+  //shooting
   var damage: Float = 30f
   var reloadTime: Int = 150
-
   private var reloadTimer: Int = 0
+  var bulletCreator: BulletCreator = BasicBullet
 
   //attack vision
   var visionMaxHeight: Float = size.height * 3.5f
@@ -60,7 +62,7 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
     visionMaxHeight, visionMaxDist)
 
   var attackTarget: Option[UnitObject] = None
-  var maxForwardForceAttack: Float = maxForwardForce * 0.5f
+  var maxForwardForceAttack: Float = maxForwardForce * 0.5f //speed when attacking
 
 
   updateCollPolygon(collBody) //updates collisionbox
@@ -211,8 +213,8 @@ class UnitObject(textures: UnitTextures, override val size: Vector2,
     if (reloadTimer >= reloadTime) {
 
       //calculates the pos of the bullet and create it
-      val bulletPos = Vector2e(movingForce).nor ** (sWidth / 2f + BasicBullet.radius) ++ pos
-      val bullet = BasicBullet.create(this, physWorld,
+      val bulletPos = Vector2e(movingForce).nor ** (sWidth / 2f + bulletCreator.radius) ++ pos
+      val bullet = bulletCreator.create(this, physWorld,
         bulletPos, Vector2e(movingForce).nor ** (maxSpeed * 5),
         owner.colorIndex)
 

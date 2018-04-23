@@ -29,6 +29,7 @@ object SoldierCreator extends UnitCreator {
     obj.health = 100f
     obj.damage = 30f
     obj.reloadTime = 150
+    obj.bulletCreator = BasicBullet
 
     obj.visionMaxHeight = obj.sHeight * 3.5f
     obj.visionMaxDist = obj.sWidth * 4f
