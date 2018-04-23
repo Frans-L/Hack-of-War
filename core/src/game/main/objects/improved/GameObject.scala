@@ -4,14 +4,11 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
-import game.main.objects.improved.ObjectElement
 import game.util.Vector2e
 
 import scala.collection.mutable
 
 class GameObject extends GameElement with ObjectElement {
-
-  var father: Option[GameObject] = None
 
   val pos: Vector2 = Vector2e(0, 0)
   val size: Vector2 = Vector2e(0, 0)
@@ -22,11 +19,11 @@ class GameObject extends GameElement with ObjectElement {
   var canBeDeleted: Boolean = false
 
   override def update(): Unit = {
-    update(this, ticker.delta)
+    update(ticker.delta)
   }
 
-  override def update(father: GameObject, delta: Int): Unit = {
-    elements.foreach(_.update(this, delta))
+  override def update(delta: Int): Unit = {
+    elements.foreach(_.update(delta))
   }
 
   /** Adds a new child to a object relatively to this object. */
@@ -35,6 +32,13 @@ class GameObject extends GameElement with ObjectElement {
     gameObject.scale.scl(scale)
     gameObject.angle += angle
     elements += gameObject
+    this
+  }
+
+  /** Adds a new child element to this object. */
+  override def addElement(objectElement: ObjectElement): GameObject.this.type = {
+    objectElement.setParent(this)
+    elements += objectElement
     this
   }
 
@@ -61,5 +65,8 @@ class GameObject extends GameElement with ObjectElement {
 
   def nextToY: Float = pos.y + sHeight
 
+  override def setParent(f: GameObject): Unit = {
+    parent = f
+  }
 
 }

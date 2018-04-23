@@ -6,14 +6,15 @@ import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 
 class SpriteElement(var sprite: Sprite) extends ObjectElement {
 
-  override def update(f: GameObject, delta: Int) {
+  override def update(delta: Int) {
     //updates sprite loc
-    sprite.setOrigin(f.origin.x, f.origin.y)
-    sprite.setBounds(f.pos.x - f.origin.x, f.pos.y - f.origin.y, f.size.x, f.size.y)
-    sprite.setScale(f.scale.x, f.scale.y)
-    sprite.setRotation(f.angle)
+    sprite.setOrigin(parent.origin.x, parent.origin.y)
+    sprite.setBounds(parent.pos.x - parent.origin.x,
+      parent.pos.y - parent.origin.y, parent.size.x, parent.size.y)
+    sprite.setScale(parent.scale.x, parent.scale.y)
+    sprite.setRotation(parent.angle)
 
-    super.update(f, delta)
+    super.update(delta)
   }
 
   override def draw(batch: Batch): Unit = {

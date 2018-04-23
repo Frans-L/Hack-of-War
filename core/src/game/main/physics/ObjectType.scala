@@ -68,6 +68,7 @@ trait ObjectType extends SpriteType with Poolable {
   /** Updates physics */
   def updatePhysics(): Unit = {
 
+    /*
     var crash = false
 
     //checks collision
@@ -88,6 +89,7 @@ trait ObjectType extends SpriteType with Poolable {
     if (fric != 0) velocity.scl(1f / fric)
 
     updateCollPolygon(collBody) //update collisionBox coords
+    */
   }
 
 

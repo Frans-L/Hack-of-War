@@ -6,8 +6,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import game.GameElement
 import game.loader.GameTextures
-import game.main.objects.improved.GameObject
-import game.main.objects.improved.objects.BorderSprite
+import game.main.objects.improved.ObjectHandler.Level
+import game.main.objects.improved.{GameObject, ObjectHandler}
+import game.main.objects.improved.objects.{BorderSprite, CollisionObject}
 import game.main.objects.{BorderSprite, CollisionObject}
 import game.main.physics.PhysicsWorld
 import game.main.physics.collision.{CollisionBody, PolygonBody}
@@ -33,6 +34,7 @@ object Map {
   */
 class Map(val dimensions: Dimensions,
           textures: GameTextures,
+          objectHandler: ObjectHandler,
           physWorld: PhysicsWorld) extends GameElement {
 
   private val elements: mutable.Buffer[GameObject] = mutable.Buffer[GameObject]()
@@ -42,7 +44,7 @@ class Map(val dimensions: Dimensions,
     dimensions.maxWidth / collAccuracy + 1,
     dimensions.maxHeight / collAccuracy + 1)
 
-  val collObjects: mutable.Buffer[CollisionObject] = mutable.Buffer[CollisionObject]()
+  val collObjects: mutable.Buffer[GameObject] = mutable.Buffer[GameObject]()
   var path: Seq[Path] = _ //will be set at initializeMap
   var pathReversed: Seq[Path] = _
 
@@ -58,7 +60,7 @@ class Map(val dimensions: Dimensions,
   override def draw(shapeRender: ShapeRenderer): Unit = Unit
 
   override def draw(batch: Batch): Unit = {
-    elements.foreach(_.draw(batch))
+    //elements.foreach(_.draw(batch))
   }
 
   /**
@@ -79,8 +81,8 @@ class Map(val dimensions: Dimensions,
   private def createCollisionMap(): Unit = {
     for (x <- collMap.indices) {
       for (y <- collMap.head.indices) {
-        collMap(x)(y) = collObjects.exists(
-          _.collBody.contains(dimensions.maxLeft + x * collAccuracy, dimensions.maxDown + y * collAccuracy))
+        //collMap(x)(y) = collObjects.exists(
+        //  _.collBody.contains(dimensions.maxLeft + x * collAccuracy, dimensions.maxDown + y * collAccuracy))
       }
     }
   }
@@ -140,6 +142,8 @@ class Map(val dimensions: Dimensions,
     addPath()
 
     elements.foreach(_.update())
+    elements.foreach(e => objectHandler.addObject(e, Level.map, update = false))
+    collObjects.foreach(e => objectHandler.addObject(e, Level.map, update = false))
 
     //adds the path
     def addPath(): Unit = {
@@ -378,7 +382,7 @@ class Map(val dimensions: Dimensions,
 
     //a bit prettier way to add a collision block
     def addBlock(collisionBody: CollisionBody): Unit = {
-      collObjects += new CollisionObject(this, physWorld, collisionBody)
+      collObjects += CollisionObject(this, collisionBody, physWorld)
     }
 
     //calculates the middle pos of the element n

@@ -2,10 +2,11 @@ package game.main.units
 
 import java.util.PrimitiveIterator.OfDouble
 
+import com.badlogic.gdx.Gdx
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameMap.{IconPath, Path}
-import game.main.objects.UnitObject
 import game.main.objects.brains._
+import game.main.objects.improved.UnitObject
 import game.main.physics.collision.PolygonBody
 
 object SoldierCreator extends UnitCreator {
@@ -19,6 +20,7 @@ object SoldierCreator extends UnitCreator {
   /** Sets the all stats to to unit */
   override protected def setStats(obj: UnitObject, path: Path): Unit = {
 
+    /*
     obj.mass = 100f
     obj.friction = 0.25f
 
@@ -33,12 +35,20 @@ object SoldierCreator extends UnitCreator {
     obj.maxMovingForce = 0.033f
     obj.maxForwardForceAttack = obj.maxMovingForce * 0.5f
 
-    //add brains
-    obj.brains += new FollowPath(path, obj.collBody.getRadiusScaled * 2)
-    obj.brains += new ShootAhead(attackVision, 150)
-    obj.brains += new Steering(0.008f)
-    obj.brains += new AvoidObstacles(obj.maxMovingForce*0.75f, obj.sWidth * 2f)
-    obj.brains += new SmoothTurn(150f)
+    */
 
+    //add brains
+    obj.addElement(new FollowPath(path, obj.physics.collBody.getRadiusScaled * 2))
+
+    obj.addElement(new Steering(0.008f))
+    obj.addElement(new AvoidObstacles(obj.maxMovingForce*0.75f, obj.sWidth * 2f))
+    obj.addElement(new SmoothTurn(150f))
+
+    /*
+    obj.brains += new ShootAhead(attackVision, 150)
+
+
+    obj.brains += new SmoothTurn(150f)
+    */
   }
 }

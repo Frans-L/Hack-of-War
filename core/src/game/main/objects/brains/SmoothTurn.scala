@@ -4,13 +4,13 @@ import com.badlogic.gdx.math.Interpolation
 import game.main.objects.UnitObject
 import game.util.Utils
 
-class SmoothTurn(maxRotateTime: Float) extends Brain {
+class SmoothTurn(maxRotateTime: Float) extends UnitElement {
 
-  override def update(obj: UnitObject): Unit = {
+  override def update(delta: Int): Unit = {
     //rotates smoothly towards moving direction
-    obj.angle = Utils.closestAngle360(obj.angle, obj.movingForce.angle)
-    obj.angle = Interpolation.linear.apply(obj.angle, obj.movingForce.angle, obj.ticker.delta / maxRotateTime)
-    obj.angle = Utils.absAngle(obj.angle)
+    pUnit.angle = Utils.closestAngle360(pUnit.angle, pUnit.movingForce.angle)
+    pUnit.angle = Interpolation.linear.apply(pUnit.angle, pUnit.movingForce.angle, delta / maxRotateTime)
+    pUnit.angle = Utils.absAngle(pUnit.angle)
   }
 
 }

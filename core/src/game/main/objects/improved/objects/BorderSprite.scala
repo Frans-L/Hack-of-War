@@ -2,7 +2,7 @@ package game.main.objects.improved.objects
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
-import game.main.objects.improved.{GameObject, SpriteElement}
+import game.main.objects.improved.{GameObject, ObjectHandler, SpriteElement}
 
 object BorderSprite {
 
@@ -16,7 +16,6 @@ object BorderSprite {
     inner.size.set(size.x - 2 * padding.y, size.y - 2 * padding.y)
 
     outer.addElementRelatively(inner)
-
   }
 
 }

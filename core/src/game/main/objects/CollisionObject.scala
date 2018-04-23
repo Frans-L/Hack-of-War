@@ -20,7 +20,7 @@ class CollisionObject(var owner: GameElement,
 
   collToOthers = false //doesn't check collision with others by itself
 
-  physWorld.addUnit(owner, this) //add to physics world
+ // physWorld.addUnit(owner, this) //add to physics world
 
 
   override def updatePhysics(): Unit = {

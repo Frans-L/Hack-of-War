@@ -11,10 +11,11 @@ import scala.collection.mutable
 
 trait ObjectElement {
 
+  var parent: GameObject = _
   val elements: mutable.Buffer[ObjectElement] = mutable.Buffer.empty
 
-  def update(father: GameObject, delta: Int): Unit = {
-    elements.foreach(_.update(father, delta))
+  def update(delta: Int): Unit = {
+    elements.foreach(_.update(delta))
   }
 
   def draw(shapeRender: ShapeRenderer): Unit = {
@@ -27,8 +28,14 @@ trait ObjectElement {
 
   /** Adds a new child to a object. */
   def addElement(objectElement: ObjectElement): this.type = {
+    objectElement.setParent(parent)
     elements += objectElement
     this
+  }
+
+  def setParent(f: GameObject): Unit = {
+    parent = f
+    elements.foreach(_.setParent(f))
   }
 
 }

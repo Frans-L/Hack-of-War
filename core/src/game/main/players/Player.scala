@@ -7,6 +7,8 @@ import com.badlogic.gdx.utils.{Pool, Pools}
 import game.GameElement
 import game.main.cards.Card
 import game.main.gameMap.{IconPath, Path}
+import game.main.objects.improved.ObjectHandler
+import game.main.objects.improved.ObjectHandler.Level
 import game.main.objects.{UnitObject, UnitPath}
 import game.main.physics.PhysicsWorld
 import game.main.units.UnitCreator
@@ -16,7 +18,8 @@ import scala.collection.mutable
 /**
   * Created by Frans on 06/03/2018.
   */
-abstract class Player(physWorld: PhysicsWorld, index: Int) extends GameElement {
+abstract class Player(val objectHandler: ObjectHandler, physWorld: PhysicsWorld, index: Int)
+  extends GameElement {
 
   //when the player is dragging card, the player might see the iconPath of the unit
   var iconPath: Option[IconPath] = None

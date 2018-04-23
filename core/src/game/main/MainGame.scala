@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import com.badlogic.gdx.{Gdx, Input, Screen}
 import game.loader.GameTextures
 import game.main.objects.UnitObject
+import game.main.objects.improved.ObjectHandler
 import game.main.ui.GameUI
 import game.util._
 import game.main.physics.PhysicsWorld
@@ -70,17 +71,21 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
   MainGame.debugViewPort = viewport
 
+  //creates the object updater
+  private val objectHandler: ObjectHandler = new ObjectHandler
+
   //creates the physics world
   private val physWorld: PhysicsWorld = new PhysicsWorld(screenDim)
 
   //adds the map
-  private val map: game.main.gameMap.Map = new game.main.gameMap.Map(screenDim, textures, physWorld)
+  private val map: game.main.gameMap.Map =
+    new game.main.gameMap.Map(screenDim, textures, objectHandler, physWorld)
   physWorld.map = map //TODO temporary solution to add map to physWorld
 
   //sets the players
   private val players: Seq[Player] = Seq(
-    new User(physWorld, 0),
-    new Bot(physWorld, 1)
+    new User(objectHandler, physWorld, 0),
+    new Bot(objectHandler, physWorld, 1)
   )
 
   players.head.enemies += players.last
@@ -145,7 +150,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
     batch.begin()
     players.foreach(_.draw(batch))
-    physWorld.draw(batch)
+    objectHandler.draw(batch)
     map.draw(batch)
     batch.end()
 
@@ -163,8 +168,8 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
     shapeRender.setColor(0, 1f, 0f, 1)
     map.draw(shapeRender)
+    objectHandler.draw(shapeRender)
     gameUI.draw(shapeRender)
-    physWorld.draw(shapeRender)
     players.foreach(_.draw(shapeRender))
 
 
@@ -203,7 +208,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
     cam.update()
     players.foreach(_.update())
-    physWorld.update()
+    objectHandler.update()
     gameUI.update()
 
   }

@@ -68,7 +68,7 @@ class UnitObject() extends ObjectType {
 
     updateCollPolygon(collBody) //updates collisionbox
     updateSprite() //updates sprites
-    physWorld.addUnit(owner.asInstanceOf[GameElement], this) //adds update calls
+    //physWorld.addUnit(owner.asInstanceOf[GameElement], this) //adds update calls
 
     this
   }

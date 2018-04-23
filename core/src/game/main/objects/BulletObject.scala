@@ -33,7 +33,7 @@ class BulletObject(textures: UnitTextures, colorIndex: Int, override val size: V
 
   updateCollPolygon(collBody)
   updateSprite()
-  physWorld.addUnit(owner, this) //adds to update calls
+ // physWorld.addUnit(owner, this) //adds to update calls
 
 
   override def update(): Unit = {
