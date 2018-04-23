@@ -31,7 +31,7 @@ class UnitCard(owner: Player, unitCreator: UnitCreator) extends Card(owner) {
 
   override protected def action(x: Float, y: Float): Unit = {
     unitPath.drawTimer.backward().start()
-    owner.spawnUnit(SoldierCreator, x, y, unitPath.getOriginalPath)
+    owner.spawnUnit(SoldierCreator, x, y, unitPath.getOrgPath)
     super.action(x, y)
   }
 

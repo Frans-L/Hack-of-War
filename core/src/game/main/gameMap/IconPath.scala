@@ -12,7 +12,7 @@ class IconPath(private var pathOrg: Path, val icon: Sprite) extends GameElement 
 
   //path info
   val path: Path = pathOrg.copy
-  var offset: Float = 0
+  private var offset: Float = 0
 
   //how to draw icons info
   val drawTimer: CountdownTimer = new CountdownTimer(500)
@@ -41,7 +41,14 @@ class IconPath(private var pathOrg: Path, val icon: Sprite) extends GameElement 
 
   }
 
-  def getOriginalPath: Path = pathOrg
+  /** Returns the copy of the iconPaths */
+  def copy(): IconPath = {
+    val cpy = new IconPath(pathOrg, icon)
+    cpy.setOffset(offset)
+    cpy
+  }
+
+  def getOrgPath: Path = pathOrg
 
   /** Draws the path if the time is still running */
   override def draw(batch: Batch): Unit = {

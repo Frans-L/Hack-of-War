@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.{Pool, Pools}
 import game.GameElement
 import game.main.cards.Card
 import game.main.gameMap.{IconPath, Path}
-import game.main.objects.UnitObject
+import game.main.objects.{UnitObject, UnitPath}
 import game.main.physics.PhysicsWorld
 import game.main.units.UnitCreator
 

@@ -103,7 +103,7 @@ trait ObjectType extends SpriteType with Poolable {
 
   /** Updates collPolygons location, rotation and scale.
     * updatePhysics calls this automatically. */
-  protected def updateCollPolygon(body: CollisionBody = collBody): Unit = {
+  def updateCollPolygon(body: CollisionBody = collBody): Unit = {
     body.setPosition(pos.x - origin.x, pos.y - origin.y)
     body.setScale(scale.x, scale.y)
     body.setRotation(angle)

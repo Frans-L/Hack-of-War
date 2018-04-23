@@ -3,7 +3,10 @@ package game.main.units
 import java.util.PrimitiveIterator.OfDouble
 
 import game.loader.{GameTextures, UnitTextures}
+import game.main.gameMap.{IconPath, Path}
 import game.main.objects.UnitObject
+import game.main.objects.brains._
+import game.main.physics.collision.PolygonBody
 
 object SoldierCreator extends UnitCreator {
 
@@ -14,27 +17,28 @@ object SoldierCreator extends UnitCreator {
   override val height: Float = 75f / 1.5f
 
   /** Sets the all stats to to unit */
-  override protected def setStats(obj: UnitObject): Unit = {
+  override protected def setStats(obj: UnitObject, path: Path): Unit = {
 
     obj.mass = 100f
     obj.friction = 0.25f
 
-    obj.maxForwardForce = 0.033f
-    obj.maxAccelerateForce = 0.008f
-    obj.maxSeeAhead = obj.sWidth * 2f
-
-    obj.maxForceAvoid = 0.025f
-    obj.maxRotateTime = 150f
-
     obj.health = 100f
     obj.damage = 30f
-    obj.reloadTime = 150
     obj.bulletCreator = BasicBullet
 
-    obj.visionMaxHeight = obj.sHeight * 3.5f
-    obj.visionMaxDist = obj.sWidth * 4f
+    val visionMaxHeight = obj.sHeight * 3.5f
+    val visionMaxDist = obj.sWidth * 4f
+    val attackVision = PolygonBody.trapezoidCollBody(obj.sHeight, visionMaxHeight, visionMaxDist)
 
-    obj.maxForwardForceAttack = obj.maxForwardForce * 0.5f
+    obj.maxMovingForce = 0.033f
+    obj.maxForwardForceAttack = obj.maxMovingForce * 0.5f
+
+    //add brains
+    obj.brains += new FollowPath(path, obj.collBody.getRadiusScaled * 2)
+    obj.brains += new ShootAhead(attackVision, 150)
+    obj.brains += new Steering(0.008f)
+    obj.brains += new AvoidObstacles(obj.maxMovingForce*0.75f, obj.sWidth * 2f)
+    obj.brains += new SmoothTurn(150f)
 
   }
 }

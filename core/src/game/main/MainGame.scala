@@ -117,9 +117,9 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
     MainGame.debugRender.end()
 
 
-    if (ticker.interval10) {
-      Gdx.app.log("MainGame", "Render calls: " + batch.renderCalls)
-      Gdx.app.log("MainGame", "Pooled units: " + UnitObject.pool.getFree())
+    if (ticker.interval4) {
+      //Gdx.app.log("MainGame", "Render calls: " + batch.renderCalls)
+      Gdx.app.log("MainGame", "Pooled units: " + UnitObject.pool.getFree)
     }
 
     fPSLogger.log()
