@@ -39,11 +39,11 @@ trait ObjectType extends SpriteType with Poolable {
   override var angle: Float = 0f //degrees
 
   */
-  
+
   //physics to gameObject
   var physWorld: PhysicsWorld
   var mass: Float = 100f
-  var friction: Float = 25f
+  var friction: Float = 0.25f
   val velocity: Vector2 = Vector2e(0f, 0f)
 
   var collToMe: Boolean = true //if others objects checks collision with this object
@@ -51,7 +51,7 @@ trait ObjectType extends SpriteType with Poolable {
 
   //this object checks collision only with these filtered objects, if Option is defined
   var collFilter: mutable.Buffer[GameElement] = mutable.Buffer.empty
-  var collBody: CollisionBody  //the collision body
+  var collBody: CollisionBody //the collision body
 
   //shadows
   protected var shadow: Option[Sprite] = None
@@ -170,6 +170,25 @@ trait ObjectType extends SpriteType with Poolable {
     if (unitTextures.main(colorIndex).length > 0)
       Some(GameTextures.defaultTextures.atlas.createSprite(unitTextures.main(colorIndex)))
     else None
+  }
+
+  /** Resets the all variables of the ObjectType to default values.
+    * Note: Sets few variables to null! Important to initialize this
+    * object before using again. */
+  override def reset(): Unit = {
+    this.physWorld = null
+    this.mass = 100f //default values
+    this.friction = 0.25f //default values
+    this.velocity.set(0, 0)
+
+    this.collToMe = true
+    this.collToOthers = true
+
+    this.collFilter.clear()
+    this.collBody = null
+    this.shadow = None
+    shadowPos.set(0, 0)
+
   }
 
 }
