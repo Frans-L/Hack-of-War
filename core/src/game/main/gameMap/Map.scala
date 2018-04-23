@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import game.GameElement
 import game.loader.GameTextures
+import game.main.objects.improved.GameObject
+import game.main.objects.improved.objects.BorderSprite
 import game.main.objects.{BorderSprite, CollisionObject}
 import game.main.physics.PhysicsWorld
 import game.main.physics.collision.{CollisionBody, PolygonBody}
@@ -33,7 +35,7 @@ class Map(val dimensions: Dimensions,
           textures: GameTextures,
           physWorld: PhysicsWorld) extends GameElement {
 
-  private val elements: mutable.Buffer[BorderSprite] = mutable.Buffer[BorderSprite]()
+  private val elements: mutable.Buffer[GameObject] = mutable.Buffer[GameObject]()
 
   private val collAccuracy = 20 //collisionAccuracy
   private val collMap = Array.ofDim[Boolean](
@@ -136,6 +138,8 @@ class Map(val dimensions: Dimensions,
     addTrenches()
     addMiddle()
     addPath()
+
+    elements.foreach(_.update())
 
     //adds the path
     def addPath(): Unit = {
@@ -368,7 +372,7 @@ class Map(val dimensions: Dimensions,
     //a bit prettier way to add elements + clones the sprite
     def addGraphic(x: Float, y: Float, width: Float, height: Float,
                    sprite: Sprite, borderX: Float = 0, borderY: Float = 0): Unit = {
-      elements += new BorderSprite(Vector2e(x, y), Vector2e(width, height),
+      elements += BorderSprite(Vector2e(x, y), Vector2e(width, height),
         Vector2e(borderX, borderY), new Sprite(sprite))
     }
 
