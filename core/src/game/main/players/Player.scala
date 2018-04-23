@@ -7,7 +7,7 @@ import game.GameElement
 import game.main.cards.Card
 import game.main.gameMap.{IconPath, Path}
 import game.main.physics.PhysicsWorld
-import game.main.units.{Soldier, SoldierCreator, UnitCreator}
+import game.main.units.UnitCreator
 
 import scala.collection.mutable
 

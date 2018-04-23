@@ -2,14 +2,14 @@ package game.main.units
 
 import java.util.PrimitiveIterator.OfDouble
 
-import game.loader.GameTextures
+import game.loader.{GameTextures, UnitTextures}
 import game.main.objects.UnitObject
 
 object SoldierCreator extends UnitCreator {
 
   override val cost: Int = 3
 
-  override val texture: Seq[String] = GameTextures.Units.unit1
+  override val texture: UnitTextures = GameTextures.Units.baseSoldier
   override val width: Float = 100f / 1.5f
   override val height: Float = 75f / 1.5f
 

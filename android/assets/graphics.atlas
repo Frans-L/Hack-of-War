@@ -83,6 +83,13 @@ unit1Blue
   index: -1
 unit1Red
   rotate: false
+  xy: 341, 23
+  size: 100, 75
+  orig: 100, 75
+  offset: 0, 0
+  index: -1
+unit1Shadow
+  rotate: false
   xy: 331, 100
   size: 100, 75
   orig: 100, 75

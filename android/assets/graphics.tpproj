@@ -31,7 +31,7 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1}]
-inputFiles=[{path:mapBorderWide.png,type:Input,regionName:null},{path:mapBorderShort.png,type:Input,regionName:null},{path:card1.png,type:Input,regionName:null},{path:mapBorder.png,type:Input,regionName:null},{path:unit1Red.png,type:Input,regionName:null},{path:unit1Blue.png,type:Input,regionName:null},{path:bullet1Red.png,type:Input,regionName:null},{path:bullet1Blue.png,type:Input,regionName:null},{path:mapMiddleCorner.png,type:Input,regionName:null},{path:mapTrenchCorner.png,type:Input,regionName:null},{path:mapCorner.png,type:Input,regionName:null},{path:pointCircle.png,type:Input,regionName:null}]
+inputFiles=[{path:mapBorderWide.png,type:Input,regionName:null},{path:mapBorderShort.png,type:Input,regionName:null},{path:card1.png,type:Input,regionName:null},{path:mapBorder.png,type:Input,regionName:null},{path:unit1Red.png,type:Input,regionName:null},{path:unit1Blue.png,type:Input,regionName:null},{path:bullet1Red.png,type:Input,regionName:null},{path:bullet1Blue.png,type:Input,regionName:null},{path:mapMiddleCorner.png,type:Input,regionName:null},{path:mapTrenchCorner.png,type:Input,regionName:null},{path:mapCorner.png,type:Input,regionName:null},{path:pointCircle.png,type:Input,regionName:null},{path:unit1Shadow.png,type:Input,regionName:null}]
 
 
 -PROJ-

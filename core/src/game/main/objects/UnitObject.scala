@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Interpolation, MathUtils, Vector2}
 import game.GameElement
+import game.loader.{GameTextures, UnitTextures}
 import game.main.MainGame
 import game.main.physics.{ObjectType, PhysicsWorld}
 import game.main.physics.collision.{CollisionBody, PolygonBody}
@@ -20,15 +21,22 @@ import scala.collection.mutable
 /**
   * Created by Frans on 26/02/2018.
   */
-class UnitObject(override var sprite: Sprite, var owner: Player,
+class UnitObject(textures: UnitTextures, override val size: Vector2,
+                 var owner: Player,
                  override val physWorld: PhysicsWorld,
                  override val collBody: CollisionBody,
                  var steeringPath: Option[UnitPath]) extends ObjectType {
 
-  override val pos: Vector2 = Vector2e(0, 0)
-  override val size: Vector2 = Vector2e(sprite.getWidth * sprite.getScaleX,
-    sprite.getHeight * sprite.getScaleY)
+  //textures
+  override var sprite: Sprite =
+    GameTextures.defaultTextures.atlas.createSprite(textures.main(owner.colorIndex))
+  private val shadow: Sprite =
+    GameTextures.defaultTextures.atlas.createSprite(textures.shadow)
+  shadow.setAlpha(0.7f)
+  private val shadowPos = Vector2e(-3f, -5f)
 
+  //mandatory variables to object with physics
+  override val pos: Vector2 = Vector2e(0, 0)
   override val origin: Vector2 = Vector2e(size.x / 2f, size.y / 2f)
   override var mass: Float = 100f
   override var friction: Float = 0.25f
@@ -84,6 +92,14 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
       updateSprite()
 
     }
+  }
+
+  /** Updates the sprites */
+  override def updateSprite(): Unit = {
+    updateSprite(sprite)
+    updateSprite(shadow)
+    shadow.translateX(shadowPos.x)
+    shadow.translateY(shadowPos.y)
   }
 
   /** Updates the shape info. */
@@ -204,6 +220,7 @@ class UnitObject(override var sprite: Sprite, var owner: Player,
 
   override def draw(batch: Batch): Unit = {
     if (visible) {
+      shadow.draw(batch)
       sprite.draw(batch)
     }
   }

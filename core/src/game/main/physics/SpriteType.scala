@@ -23,15 +23,19 @@ trait SpriteType extends GameElement {
 
   var sprite: Sprite
 
-  /**
-    * Updates sprite location, rotation and size
-    */
+  /** Updates sprite's location, rotation and size. (Public) */
   def updateSprite(): Unit = {
-    sprite.setOrigin(origin.x, origin.y)
-    sprite.setBounds(pos.x - origin.x, pos.y - origin.y, size.width, size.height)
-    sprite.setScale(scale.x, scale.y)
-    sprite.setRotation(angle)
+    updateSprite(sprite)
   }
+
+  /** Updates sprite's location, rotation and size */
+  protected def updateSprite(s: Sprite): Unit = {
+    s.setOrigin(origin.x, origin.y)
+    s.setBounds(pos.x - origin.x, pos.y - origin.y, size.width, size.height)
+    s.setScale(scale.x, scale.y)
+    s.setRotation(angle)
+  }
+
 
   /** Returns scaled width */
   def sWidth: Float = size.width * scale.x

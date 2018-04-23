@@ -2,19 +2,19 @@ package game.main.units
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Sprite
-import game.loader.GameTextures
+import game.loader.{GameTextures, UnitTextures}
 import game.main.gameMap.Path
 import game.main.objects.{UnitObject, UnitPath}
 import game.main.physics.PhysicsWorld
 import game.main.physics.collision.PolygonBody
 import game.main.players.Player
-import game.main.units.Soldier.{height, texture, width}
+import game.util.Vector2e
 
 trait UnitCreator {
 
   val cost: Int
 
-  val texture: Seq[String]
+  val texture: UnitTextures
   val width: Float
   val height: Float
 
@@ -26,8 +26,6 @@ trait UnitCreator {
              x: Float, y: Float, path: Path,
              random: Boolean = false): UnitObject = {
 
-    val sprite = GameTextures.defaultTextures.atlas.createSprite(texture(owner.colorIndex))
-    sprite.setSize(width, height)
     val icon = pathIcon(owner)
     val body: PolygonBody = PolygonBody.triangleCollBody(width, height / 2f, 0, height)
 
@@ -38,7 +36,8 @@ trait UnitCreator {
     }
 
     //creates the unit
-    val obj: UnitObject = new UnitObject(sprite, owner, physWorld, body, Some(unitPath))
+    val size = Vector2e(width, height)
+    val obj: UnitObject = new UnitObject(texture, size, owner, physWorld, body, Some(unitPath))
     obj.pos.set(unitPath.path.head)
     obj.updateShape() //important to remember after force changing pos
 
@@ -49,7 +48,7 @@ trait UnitCreator {
   /** Returns the icon of the unit */
   def pathIcon(owner: Player): Sprite = {
     val darkness = 0.25f
-    val sprite = GameTextures.defaultTextures.atlas.createSprite(texture(owner.colorIndex))
+    val sprite = GameTextures.defaultTextures.atlas.createSprite(texture.main(owner.colorIndex))
     sprite.setColor(darkness, darkness, darkness, 0.15f)
     sprite.setSize(width, height)
     sprite
@@ -58,7 +57,7 @@ trait UnitCreator {
   /** Returns the card icon of the unit */
   def cardIcon(owner: Player): Sprite = {
     val darkness = 0f
-    val sprite = GameTextures.defaultTextures.atlas.createSprite(texture(owner.colorIndex))
+    val sprite = GameTextures.defaultTextures.atlas.createSprite(texture.main(owner.colorIndex))
     //sprite.setColor(darkness, darkness, darkness, 0.15f)
     sprite.setSize(width, height)
     sprite

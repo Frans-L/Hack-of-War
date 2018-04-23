@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2
 import game.main.gameMap.{IconPath, Path}
 import game.main.objects.UnitPath
 import game.main.players.Player
-import game.main.units.{Soldier, SoldierCreator, UnitCreator}
+import game.main.units.{SoldierCreator, UnitCreator}
 
 class UnitCard(owner: Player, unitCreator: UnitCreator) extends Card(owner) {
 
@@ -15,7 +15,7 @@ class UnitCard(owner: Player, unitCreator: UnitCreator) extends Card(owner) {
 
   var unitPath: IconPath = new IconPath(
     new Path(Seq[Vector2](new Vector2(0, 0)), 0),
-    Soldier.pathIcon(owner))
+    unitCreator.pathIcon(owner))
 
   override def beforeUse(x: Float, y: Float): Unit = {
     val path = owner.findPath(x, y)
