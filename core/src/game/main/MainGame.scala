@@ -17,7 +17,7 @@ import game.main.objects.UnitObject
 import game.main.objects.improved.ObjectHandler
 import game.main.ui.GameUI
 import game.util._
-import game.main.physics.PhysicsWorld
+import game.main.physics.CollisionHandler
 import game.main.units.BasicBullet
 import game.main.players.{Bot, Player, User}
 
@@ -72,20 +72,17 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
   MainGame.debugViewPort = viewport
 
   //creates the object updater
-  private val objectHandler: ObjectHandler = new ObjectHandler
-
-  //creates the physics world
-  private val physWorld: PhysicsWorld = new PhysicsWorld(screenDim)
+  private val objectHandler: ObjectHandler = new ObjectHandler(screenDim)
 
   //adds the map
   private val map: game.main.gameMap.Map =
-    new game.main.gameMap.Map(screenDim, textures, objectHandler, physWorld)
-  physWorld.map = map //TODO temporary solution to add map to physWorld
+    new game.main.gameMap.Map(screenDim, textures, objectHandler)
+  objectHandler.collHandler.map = map //TODO temporary solution to add map to physWorld
 
   //sets the players
   private val players: Seq[Player] = Seq(
-    new User(objectHandler, physWorld, 0),
-    new Bot(objectHandler, physWorld, 1)
+    new User(objectHandler, 0),
+    new Bot(objectHandler, 1)
   )
 
   players.head.enemies += players.last
@@ -185,16 +182,16 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
     if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
       if (!tmpPressed) {
-        BasicBullet.create(players.head, physWorld,
+        BasicBullet.create(players.head, objectHandler,
           target, Vector2e(-1, 0),
           players.last.colorIndex)
-        BasicBullet.create(players.head, physWorld,
+        BasicBullet.create(players.head, objectHandler,
           target, Vector2e(1, 0),
           players.last.colorIndex)
-        BasicBullet.create(players.head, physWorld,
+        BasicBullet.create(players.head, objectHandler,
           target, Vector2e(0, 1),
           players.last.colorIndex)
-        BasicBullet.create(players.head, physWorld,
+        BasicBullet.create(players.head, objectHandler,
           target, Vector2e(0, -1),
           players.last.colorIndex)
       }

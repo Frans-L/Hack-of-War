@@ -5,15 +5,16 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import game.GameElement
 import game.main.MainGame
-import game.main.physics.{ObjectType, PhysicsWorld}
+import game.main.physics.{ObjectType, CollisionHandler}
 import game.main.physics.collision.CollisionBody
 import game.util.Vector2e
 import game.util.pools.MinimumTranslationVectorPool
 
 import scala.collection.mutable
 
-class PhysicsElement(var physWorld: PhysicsWorld, var collBody: CollisionBody) extends ObjectElement {
+class PhysicsElement(var physWorld: CollisionHandler, var collBody: CollisionBody) {
 
+  /*
   var mass: Float = 100f //default values
   var friction: Float = 0.25f
   val velocity = Vector2e(0, 0)
@@ -81,5 +82,5 @@ class PhysicsElement(var physWorld: PhysicsWorld, var collBody: CollisionBody) e
     true
   }
 
-
+  */
 }

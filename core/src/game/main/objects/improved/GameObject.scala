@@ -8,7 +8,7 @@ import game.util.Vector2e
 
 import scala.collection.mutable
 
-class GameObject extends GameElement with ObjectElement {
+class GameObject() extends GameElement with ObjectElement {
 
   val pos: Vector2 = Vector2e(0, 0)
   val size: Vector2 = Vector2e(0, 0)
@@ -17,30 +17,45 @@ class GameObject extends GameElement with ObjectElement {
   var angle: Float = 0
 
   var canBeDeleted: Boolean = false
+  val elements: mutable.ListBuffer[ObjectElement] = mutable.ListBuffer.empty
 
+  //avoid throwing objects to garbageCollector
+  lazy private val tmpVec1 = Vector2e(0, 0)
+  lazy private val tmpVec2 = Vector2e(0, 0)
+
+  /** Updates the object and all it's elements */
   override def update(): Unit = {
-    update(ticker.delta)
+    elements.foreach(_.update(this, ticker.delta))
   }
 
-  override def update(delta: Int): Unit = {
-    elements.foreach(_.update(delta))
+  /** Updates the pos relatively to parent object */
+  override final def update(parent: GameObject, delta: Int): Unit = {
+
+    //sets the position to be relative
+    tmpVec1.set(pos)
+    tmpVec2.set(scale)
+    val orgAngle = angle
+    pos.add(parent.pos.x - parent.origin.x, parent.pos.y - parent.origin.y)
+    scale.scl(parent.scale)
+    angle += parent.angle
+
+    update() //updates with its real coords
+
+    //sets back to its own original position
+    pos.set(tmpVec1)
+    scale.set(tmpVec2)
+    angle = orgAngle
   }
 
-  /** Adds a new child to a object relatively to this object. */
-  def addElementRelatively(gameObject: GameObject): this.type = {
-    gameObject.pos.add(pos.x - origin.x, pos.y - origin.y)
-    gameObject.scale.scl(scale)
-    gameObject.angle += angle
-    elements += gameObject
-    this
-  }
+  override def draw(shapeRender: ShapeRenderer): Unit = elements.foreach(_.draw(this, shapeRender))
 
-  /** Adds a new child element to this object. */
-  override def addElement(objectElement: ObjectElement): GameObject.this.type = {
-    objectElement.setParent(this)
-    elements += objectElement
-    this
-  }
+  override def draw(batch: Batch): Unit = elements.foreach(_.draw(this, batch))
+
+
+  override def draw(parent: GameObject, batch: Batch): Unit = draw(batch)
+
+  override def draw(parent: GameObject, shapeRenderer: ShapeRenderer): Unit = draw(shapeRenderer)
+
 
   /*
   def rPos: Vector2 = pPos + father.for
@@ -65,8 +80,20 @@ class GameObject extends GameElement with ObjectElement {
 
   def nextToY: Float = pos.y + sHeight
 
-  override def setParent(f: GameObject): Unit = {
-    parent = f
+  /** Appends new element to object's elements */
+  def appendElement[T <: ObjectElement](objectElement: T): this.type = {
+    objectElement.checkParent(this)
+    elements.append(objectElement)
+    this
   }
+
+  /** Prepends new element to object's elements */
+  def prependElement[T <: ObjectElement](objectElement: T): this.type = {
+    objectElement.checkParent(this)
+    elements.prepend(objectElement)
+    this
+  }
+
+  override def checkParent(parent: GameObject): Unit = Unit //anything works
 
 }

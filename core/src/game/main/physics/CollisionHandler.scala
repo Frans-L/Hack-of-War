@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Intersector, Vector2}
 import game.GameElement
-import game.main.objects.improved.PhysicsElement
+import game.main.objects.improved.PhysicsObject
 import game.main.physics.collision.CollisionBody
 import game.main.players.Player
 import game.util.pools.MinimumTranslationVectorPool
@@ -31,24 +31,37 @@ import scala.collection.mutable
   * drawn on top of everything.
   *
   */
-class PhysicsWorld(val dimensions: Dimensions) {
+class CollisionHandler(val dimensions: Dimensions) extends GameElement {
 
   //global physics stats
   var globalFriction: Float = 1f
-  var globalShadowPos: Vector2 = Vector2e(-3f, -5f)
+  var globalShadowPos: Vector2 = Vector2e(-3f, -5f) //TODO REMOVE
 
   var map: game.main.gameMap.Map = _ //TODO temporary solution, to add map
 
-  private val units: mutable.LinkedHashMap[GameElement, mutable.Buffer[PhysicsElement]] =
+  private val units: mutable.LinkedHashMap[GameElement, mutable.Buffer[PhysicsObject]] =
     mutable.LinkedHashMap()
 
   private lazy val tmpEmptyBuffer = mutable.Buffer.empty[GameElement] //caches an empty buffer
   private lazy val tmpMapBuffer = mutable.Buffer[GameElement](map)
 
 
-  /** Removes deleted units */
+  /** Checks all collisions, and calls the object's method ´collision´ when needed. */
+  override def update(): Unit = {
+    val collForce = MinimumTranslationVectorPool.obtain()
+    for ((owner, obj) <- mapBufferIterator(units, tmpEmptyBuffer) if !obj.static && !obj.collided) {
+      val crashObj = collide(obj, collForce, obj.collFilter)
+      crashObj.foreach(obj2 => {
+        obj.collision(obj2, collForce.normal, collForce.depth / 2f)
+        obj2.collision(obj, collForce.normal.scl(-1), collForce.depth / 2f)
+      })
+    }
+  }
 
-  /*private def clearDeletedUnits(): Unit = {
+
+  /*
+  /** Removes deleted units */
+  private def clearDeletedUnits(): Unit = {
     for (owner <- units) {
       //removes deleted units
       for (i <- owner._2.indices.reverse) {
@@ -65,16 +78,17 @@ class PhysicsWorld(val dimensions: Dimensions) {
   }
   */
 
+
   /** Checks if the obj is colliding with something.
     *
     * @param obj the collisionBody of the object
     * @param mtv sets the minimumTranslationVector that is required to separate objects, can be null
     * @return the body of the collided object
     */
-  def collide(obj: PhysicsElement, mtv: MinimumTranslationVector,
-              category: mutable.Buffer[GameElement]): Option[PhysicsElement] = {
-    var crashObj: Option[PhysicsElement] = None
-    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != obj && o.collToMe) {
+  def collide(obj: PhysicsObject, mtv: MinimumTranslationVector,
+              category: mutable.Buffer[GameElement]): Option[PhysicsObject] = {
+    var crashObj: Option[PhysicsObject] = None
+    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != obj) {
       if (obj.collBody.overlaps(o.collBody, mtv))
         crashObj = Some(o)
     }
@@ -83,18 +97,18 @@ class PhysicsWorld(val dimensions: Dimensions) {
   }
 
   /** Returns true if collided */
-  def isCollided(obj: PhysicsElement, mtv: MinimumTranslationVector,
+  def isCollided(obj: PhysicsObject, mtv: MinimumTranslationVector,
                  category: mutable.Buffer[GameElement]): Boolean = {
     collide(obj, mtv, category).isDefined
   }
 
 
   /** Returns the object that is collided with the point */
-  def collidePoint(excludeObj: PhysicsElement, point: Vector2,
-                   category: mutable.Buffer[GameElement]): Option[PhysicsElement] = {
+  def collidePoint(excludeObj: PhysicsObject, point: Vector2,
+                   category: mutable.Buffer[GameElement]): Option[PhysicsObject] = {
     var coll = false
-    var crashObj: Option[PhysicsElement] = None
-    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != excludeObj && o.collToMe) {
+    var crashObj: Option[PhysicsObject] = None
+    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != excludeObj) {
       coll = o.collBody.contains(point.x, point.y)
       if (coll) crashObj = Some(o)
     }
@@ -103,12 +117,12 @@ class PhysicsWorld(val dimensions: Dimensions) {
   }
 
   /** Returns the object that is collided with the collisionBody */
-  def collideCollisionBody(excludeObj: PhysicsElement, collBody: CollisionBody,
+  def collideCollisionBody(excludeObj: PhysicsObject, collBody: CollisionBody,
                            mtv: MinimumTranslationVector,
-                           category: mutable.Buffer[GameElement]): Option[PhysicsElement] = {
+                           category: mutable.Buffer[GameElement]): Option[PhysicsObject] = {
 
-    var crashObj: Option[PhysicsElement] = None
-    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != excludeObj && o.collToMe) {
+    var crashObj: Option[PhysicsObject] = None
+    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != excludeObj) {
       if (collBody.overlaps(o.collBody, mtv))
         crashObj = Some(o)
     }
@@ -116,14 +130,14 @@ class PhysicsWorld(val dimensions: Dimensions) {
   }
 
   /** Returns the collided object */
-  def collideCircle(obj: PhysicsElement, center: Vector2, radius: Float,
+  def collideCircle(obj: PhysicsObject, center: Vector2, radius: Float,
                     category: mutable.Buffer[GameElement]):
-  Option[PhysicsElement] = {
+  Option[PhysicsObject] = {
 
     val mtvTMP = MinimumTranslationVectorPool.obtain()
     var result: Boolean = false //(is collided, angle)
-    var crashObj: Option[PhysicsElement] = None
-    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != obj && o.collToMe) {
+    var crashObj: Option[PhysicsObject] = None
+    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != obj) {
       result = o.collBody.overlapsCircle(center, radius, mtvTMP)
       if (result) crashObj = Some(o)
     }
@@ -134,17 +148,17 @@ class PhysicsWorld(val dimensions: Dimensions) {
   }
 
   /** Returns the collided object, and the angle of the polyline */
-  def collideCircle(obj: PhysicsElement,
-                    category: mutable.Buffer[GameElement]): Option[PhysicsElement] = {
+  def collideCircle(obj: PhysicsObject,
+                    category: mutable.Buffer[GameElement]): Option[PhysicsObject] = {
     collideCircle(obj, obj.collBody.center, obj.collBody.getRadiusScaled, category)
   }
 
   /** Returns the object that is collided with the line */
-  def collideLine(excludeObj: PhysicsElement, start: Vector2, end: Vector2,
-              category: mutable.Buffer[GameElement]): Option[PhysicsElement] = {
+  def collideLine(excludeObj: PhysicsObject, start: Vector2, end: Vector2,
+                  category: mutable.Buffer[GameElement]): Option[PhysicsObject] = {
     var coll = false
-    var crashObj: Option[PhysicsElement] = None
-    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != excludeObj && o.collToMe) {
+    var crashObj: Option[PhysicsObject] = None
+    for ((owner, o) <- mapBufferIterator(units, category) if crashObj.isEmpty && o != excludeObj) {
       coll = o.collBody.overlapsLine(start, end)
       if (coll) crashObj = Some(o)
     }
@@ -154,19 +168,19 @@ class PhysicsWorld(val dimensions: Dimensions) {
 
 
   /** Adds a new unit to the update list. The owner has to exist! */
-  def addUnit(owner: GameElement, obj: PhysicsElement): Unit = {
+  def addUnit(owner: GameElement, obj: PhysicsObject): Unit = {
     if (units.contains(owner)) units(owner) += obj
-    else units.put(owner, mutable.Buffer[PhysicsElement](obj))
+    else units.put(owner, mutable.Buffer[PhysicsObject](obj))
   }
 
   /** Removes a new unit from the update list. The owner has to exist! */
-  def removeUnit(owner: GameElement, obj: PhysicsElement): Unit = {
+  def removeUnit(owner: GameElement, obj: PhysicsObject): Unit = {
     units(owner) -= obj
     if (units(owner).isEmpty) units.remove(owner)
   }
 
 
-  /** Returns the filter that only includes map*/
+  /** Returns the filter that only includes map */
   def mapFilter: mutable.Buffer[GameElement] = tmpMapBuffer
 
   /** Iterates every T of the
@@ -227,4 +241,7 @@ class PhysicsWorld(val dimensions: Dimensions) {
 
     }
 
+  override def draw(shapeRender: ShapeRenderer): Unit = Unit
+
+  override def draw(batch: Batch): Unit = Unit
 }

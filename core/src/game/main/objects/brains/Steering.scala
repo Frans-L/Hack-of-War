@@ -1,29 +1,35 @@
 package game.main.objects.brains
 
-import game.main.objects.UnitObject
+import game.main.objects.improved.{GameObject, ObjectElement, UnitObject}
 import game.util.Vector2e._
 import game.util.pools
 
-class Steering(maxAccelerateForce: Float) extends UnitElement {
+class Steering(maxAccelerateForce: Float) extends ObjectElement {
 
   /** Updates the movement with collision avoidance */
-  override def update(delta: Int): Unit = {
+  override def update(p: GameObject, delta: Int): Unit = {
+    val parent = p.asInstanceOf[UnitObject]
 
-    val target = pools.VectorPool.obtain(pUnit.moveTarget) //pools.VectorPool.obtain(selectSteeringTarget())
+
+    val target = pools.VectorPool.obtain(parent.moveTarget) //pools.VectorPool.obtain(selectSteeringTarget())
 
     //moves towards target
     val steering =
-      (((pools.VectorPool.obtain(target) -- pUnit.pos).nor ** pUnit.maxMovingForce) -- pUnit.movingForce)
-        .limit(maxAccelerateForce) / pUnit.physics.mass
+      (((pools.VectorPool.obtain(target) -- parent.pos).nor ** parent.maxMovingForce) -- parent.movingForce)
+        .limit(maxAccelerateForce) / parent.mass
 
     //adds steering to moving velocity
-    pUnit.movingForce.mulAdd(steering, delta)
+    parent.movingForce.mulAdd(steering, delta)
 
     //frees the memory
     pools.VectorPool.free(steering)
     pools.VectorPool.free(target)
 
   }
+
+  /** Throws an error if the parent is not valid! */
+  override def checkParent(parent: GameObject): Unit =
+    require(parent.isInstanceOf[UnitObject], "Parent have to be UnitObject")
 
 
 }

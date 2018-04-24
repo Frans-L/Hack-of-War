@@ -3,25 +3,26 @@ package game.main.objects.brains
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
 import game.main.MainGame
-import game.main.objects.improved.{PhysicsElement, UnitObject}
+import game.main.objects.improved.{GameObject, ObjectElement, PhysicsElement, UnitObject}
 import game.util.Vector2e._
 import game.util.pools
 
-class AvoidObstacles(maxForceAvoid: Float, maxSeeAhead: Float) extends UnitElement {
+class AvoidObstacles(maxForceAvoid: Float, maxSeeAhead: Float) extends ObjectElement {
 
-  override def update(delta: Int): Unit = {
+  override def update(p: GameObject, delta: Int): Unit = {
+    val parent = p.asInstanceOf[UnitObject]
 
     //if no obstacle at close distance found, try look further away
     val avoid = pools.VectorPool.obtain()
-    val obstacleFound = avoidObstacles(pUnit, 0, avoid)
+    val obstacleFound = avoidObstacles(parent, 0, avoid)
 
     //if enough speed, try to look further away
-    if (!obstacleFound && pUnit.movingForce.len2() > pUnit.maxMovingForce / 100f) {
-      avoidObstacles(pUnit, maxSeeAhead, avoid)
+    if (!obstacleFound && parent.movingForce.len2() > parent.maxMovingForce / 100f) {
+      avoidObstacles(parent, maxSeeAhead, avoid)
     }
 
     //adds avoid force to moving force
-    pUnit.movingForce.mulAdd(avoid, pUnit.ticker.delta)
+    parent.movingForce.mulAdd(avoid, delta)
 
     pools.VectorPool.free(avoid)
   }
@@ -41,16 +42,16 @@ class AvoidObstacles(maxForceAvoid: Float, maxSeeAhead: Float) extends UnitEleme
 
     //checks collision in the wanted pos
     val obstacle =
-      obj.physics.physWorld.collideCircle(obj.physics, ahead,
-        obj.physics.collBody.getRadiusScaled,
-        obj.physics.collFilter)
+      obj.physWorld.collideCircle(obj, ahead,
+        obj.collBody.getRadiusScaled,
+        obj.collFilter)
 
     //draws debug circle
     if (MainGame.drawCollBox)
-      MainGame.debugRender.circle(ahead.x, ahead.y, obj.physics.collBody.getRadiusScaled)
+      MainGame.debugRender.circle(ahead.x, ahead.y, obj.collBody.getRadiusScaled)
 
     //calculate the force opposite to obstacle center
-    obstacle.foreach(o => ((avoid ++ obj.pos) -- o.collBody.center).nor ** maxForceAvoid / obj.physics.mass)
+    obstacle.foreach(o => ((avoid ++ obj.pos) -- o.collBody.center).nor ** maxForceAvoid / obj.mass)
     pools.VectorPool.free(ahead) //free the memory
 
     obstacle.isDefined
@@ -58,4 +59,7 @@ class AvoidObstacles(maxForceAvoid: Float, maxSeeAhead: Float) extends UnitEleme
     false
   }
 
+  /** Throws an error if the parent is not valid! */
+  override def checkParent(parent: GameObject): Unit =
+    require(parent.isInstanceOf[UnitObject], "Parent have to be UnitObject")
 }

@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.{Pool, Pools}
 import game.GameElement
 import game.loader.{GameTextures, UnitTextures}
 import game.main.MainGame
-import game.main.physics.{ObjectType, PhysicsWorld}
+import game.main.physics.{ObjectType, CollisionHandler}
 import game.main.physics.collision.{CollisionBody, PolygonBody}
 import game.main.units.{BasicBullet, BulletCreator}
 import game.main.players.Player
@@ -30,7 +30,7 @@ class UnitObject() extends ObjectType {
 
   //general
   var owner: Player = _
-  override var physWorld: PhysicsWorld = _
+  override var physWorld: CollisionHandler = _
   override var collBody: CollisionBody = _
 
   override var sprite: Sprite = _
@@ -52,7 +52,7 @@ class UnitObject() extends ObjectType {
 
 
   def this(textures: UnitTextures, size: Vector2, owner: Player,
-           physWorld: PhysicsWorld, collBody: CollisionBody) {
+           physWorld: CollisionHandler, collBody: CollisionBody) {
     this()
     init(textures, size, owner, physWorld, collBody) // sets all variables a value
   }
@@ -62,7 +62,7 @@ class UnitObject() extends ObjectType {
 
   /** Initializes the object. Have to called if obtained from the pool! */
   def init(textures: UnitTextures, size: Vector2, owner: Player,
-           physWorld: PhysicsWorld, collBody: CollisionBody): UnitObject.this.type = {
+           physWorld: CollisionHandler, collBody: CollisionBody): UnitObject.this.type = {
 
     setToDefault(textures, size, owner, physWorld, collBody)
 
@@ -76,7 +76,7 @@ class UnitObject() extends ObjectType {
   /** Initializes the all variables of the object.
     * Makes pooling possible. */
   def setToDefault(textures: UnitTextures, size: Vector2, owner: Player,
-                   physWorld: PhysicsWorld, collBody: CollisionBody): Unit = {
+                   physWorld: CollisionHandler, collBody: CollisionBody): Unit = {
 
     this.enabled = true
     this.visible = true
@@ -138,9 +138,10 @@ class UnitObject() extends ObjectType {
 
   /** Shoots a bullet */
   def shoot(): Unit = {
+      /*
       //calculates the pos of the bullet and create it
       val bulletPos = Vector2e(movingForce).nor ** (sWidth / 2f + bulletCreator.radius) ++ pos
-      val bullet = bulletCreator.create(this, physWorld,
+      val bullet = bulletCreator.create(this, objectHandler,
         bulletPos, Vector2e(movingForce).nor ** (maxSpeed * 5),
         owner.colorIndex)
 
@@ -148,6 +149,7 @@ class UnitObject() extends ObjectType {
       bullet.damage = damage
       bullet.collFilter ++= owner.enemies.asInstanceOf[mutable.Buffer[GameElement]]
       bullet.collFilter += physWorld.map
+      */
   }
 
   /** Reduces the health of the object and checks if object has diead */

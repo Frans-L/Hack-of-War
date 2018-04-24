@@ -2,20 +2,20 @@ package game.main.players
 
 import com.badlogic.gdx.math.MathUtils
 import game.main.objects.improved.ObjectHandler
-import game.main.physics.PhysicsWorld
+import game.main.physics.CollisionHandler
 import game.main.units.SoldierCreator
 import game.util.Ticker
 
-class Bot(objectHandler: ObjectHandler, physWorld: PhysicsWorld, override val colorIndex: Int) extends
-  Player(objectHandler, physWorld, colorIndex) {
+class Bot(objectHandler: ObjectHandler, override val colorIndex: Int) extends
+  Player(objectHandler, colorIndex) {
 
   initialize()
 
   def initialize(): Unit = {
     spawnUnit(
       SoldierCreator,
-      physWorld.dimensions.leftMiddle,
-      physWorld.dimensions.upMiddle, physWorld.map.randomPathReversed)
+      objectHandler.collHandler.dimensions.leftMiddle,
+      objectHandler.collHandler.dimensions.upMiddle, objectHandler.collHandler.map.randomPathReversed)
   }
 
   override def update(): Unit = {
@@ -26,15 +26,17 @@ class Bot(objectHandler: ObjectHandler, physWorld: PhysicsWorld, override val co
       for (i <- 0 to MathUtils.random(3)) {
         spawnUnit(
           SoldierCreator,
-          physWorld.dimensions.leftMiddle,
-          physWorld.dimensions.upMiddle, physWorld.map.randomPathReversed, true)
+          objectHandler.collHandler.dimensions.leftMiddle,
+          objectHandler.collHandler.dimensions.upMiddle,
+          objectHandler.collHandler.map.randomPathReversed, true)
       }
 
       for (i <- 0 to MathUtils.random(2)) {
         enemies.head.spawnUnit(
           SoldierCreator, //spawn to the player
-          physWorld.dimensions.leftMiddle,
-          physWorld.dimensions.upMiddle, physWorld.map.randomPath, true)
+          objectHandler.collHandler.dimensions.leftMiddle,
+          objectHandler.collHandler.dimensions.upMiddle,
+          objectHandler.collHandler.map.randomPath, true)
       }
     }
 

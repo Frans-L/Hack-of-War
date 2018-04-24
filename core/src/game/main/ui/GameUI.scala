@@ -57,7 +57,6 @@ class GameUI(dimensions: Dimensions, viewport: Viewport,
     val width = 170 + 10
 
     val cardAmount = player.hand.filter(_.uiExists).count(_.uiElement.get.hasIdlePlace)
-    Gdx.app.log("GAMEUI", "cardAmount: " + cardAmount)
 
     if (cardAmount > 0) {
       val shift = (cardAmount + 1) % 2 / 2f

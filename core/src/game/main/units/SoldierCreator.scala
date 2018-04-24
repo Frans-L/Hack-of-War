@@ -21,6 +21,9 @@ object SoldierCreator extends UnitCreator {
   override protected def setStats(obj: UnitObject, path: Path): Unit = {
 
     /*
+    obj.maxForwardForceAttack = obj.maxMovingForce * 0.5f
+    */
+
     obj.mass = 100f
     obj.friction = 0.25f
 
@@ -33,22 +36,13 @@ object SoldierCreator extends UnitCreator {
     val attackVision = PolygonBody.trapezoidCollBody(obj.sHeight, visionMaxHeight, visionMaxDist)
 
     obj.maxMovingForce = 0.033f
-    obj.maxForwardForceAttack = obj.maxMovingForce * 0.5f
-
-    */
 
     //add brains
-    obj.addElement(new FollowPath(path, obj.physics.collBody.getRadiusScaled * 2))
+    obj.appendElement(new FollowPath(path, obj.collBody.getRadiusScaled * 2))
+    obj.appendElement(new ShootAhead(attackVision, 150))
+    obj.appendElement(new Steering(0.008f))
+    obj.appendElement(new AvoidObstacles(obj.maxMovingForce*0.75f, obj.sWidth * 2f))
+    obj.appendElement(new SmoothTurn(150f))
 
-    obj.addElement(new Steering(0.008f))
-    obj.addElement(new AvoidObstacles(obj.maxMovingForce*0.75f, obj.sWidth * 2f))
-    obj.addElement(new SmoothTurn(150f))
-
-    /*
-    obj.brains += new ShootAhead(attackVision, 150)
-
-
-    obj.brains += new SmoothTurn(150f)
-    */
   }
 }

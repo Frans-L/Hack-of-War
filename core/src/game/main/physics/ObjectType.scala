@@ -41,7 +41,7 @@ trait ObjectType extends SpriteType with Poolable {
   */
 
   //physics to gameObject
-  var physWorld: PhysicsWorld
+  var physWorld: CollisionHandler
   var mass: Float = 100f
   var friction: Float = 0.25f
   val velocity: Vector2 = Vector2e(0f, 0f)

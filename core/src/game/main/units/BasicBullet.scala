@@ -1,12 +1,7 @@
 package game.main.units
 
-import com.badlogic.gdx.math.Vector2
-import game.GameElement
 import game.loader.{GameTextures, UnitTextures}
-import game.main.physics.PhysicsWorld
-import game.main.physics.collision.{CircleBody, CollisionBody}
-import game.main.objects.{BulletObject, UnitObject}
-import game.util.{Utils, Vector2e}
+import game.main.objects.improved.objects.BulletObject
 
 object BasicBullet extends BulletCreator {
 

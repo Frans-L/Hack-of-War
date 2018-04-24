@@ -10,7 +10,7 @@ import game.main.gameMap.{IconPath, Path}
 import game.main.objects.improved.ObjectHandler
 import game.main.objects.improved.ObjectHandler.Level
 import game.main.objects.{UnitObject, UnitPath}
-import game.main.physics.PhysicsWorld
+import game.main.physics.CollisionHandler
 import game.main.units.UnitCreator
 
 import scala.collection.mutable
@@ -18,7 +18,7 @@ import scala.collection.mutable
 /**
   * Created by Frans on 06/03/2018.
   */
-abstract class Player(val objectHandler: ObjectHandler, physWorld: PhysicsWorld, index: Int)
+abstract class Player(val objectHandler: ObjectHandler, index: Int)
   extends GameElement {
 
   //when the player is dragging card, the player might see the iconPath of the unit
@@ -44,7 +44,7 @@ abstract class Player(val objectHandler: ObjectHandler, physWorld: PhysicsWorld,
   /** Returns true is succeeded */
   def useCard(card: Card, posX: Float, posY: Float): Boolean = {
     //the card can be used
-    if (!physWorld.map.collide(posX, posY)) {
+    if (!objectHandler.collHandler.map.collide(posX, posY)) {
       true
     } else {
       false
@@ -54,16 +54,16 @@ abstract class Player(val objectHandler: ObjectHandler, physWorld: PhysicsWorld,
   /** Spawns a new unit */
   def spawnUnit(unitCreator: UnitCreator, x: Float, y: Float,
                 path: Path, random: Boolean = false): Unit = {
-    unitCreator.create(this, physWorld, x, y, path, random)
+    unitCreator.create(this, x, y, path, random)
   }
 
   /** Returns the closes path from the map. */
   def findPath(x: Float, y: Float): Option[Path] = {
-    physWorld.map.getPath(x, y)
+    objectHandler.collHandler.map.getPath(x, y)
   }
 
-  override def draw(shapeRender: ShapeRenderer): Unit = {
-  }
+  override def draw(shapeRender: ShapeRenderer): Unit = Unit
+
 
   override def draw(batch: Batch): Unit = {
     iconPath.foreach(i => {

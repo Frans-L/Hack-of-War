@@ -7,13 +7,13 @@ import com.badlogic.gdx.math.{Intersector, Vector2}
 import game.GameElement
 import game.loader.UnitTextures
 import game.main.MainGame
-import game.main.physics.{ObjectType, PhysicsWorld}
+import game.main.physics.{ObjectType, CollisionHandler}
 import game.main.physics.collision.{CircleBody, CollisionBody, PolygonBody}
 import game.main.players.Player
 import game.util.Vector2e
 
 class BulletObject(textures: UnitTextures, colorIndex: Int, override val size: Vector2,
-                   var owner: GameElement, override var physWorld: PhysicsWorld,
+                   var owner: GameElement, override var physWorld: CollisionHandler,
                    override var collBody: CollisionBody,
                    override val pos: Vector2, override val velocity: Vector2) extends ObjectType {
 

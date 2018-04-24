@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
 import game.main.MainGame
-import game.main.physics.{ObjectType, PhysicsWorld}
+import game.main.physics.{ObjectType, CollisionHandler}
 import game.main.physics.collision.{CollisionBody, PolygonBody}
 import game.util.Vector2e
 
 class CollisionObject(var owner: GameElement,
-                      override var physWorld: PhysicsWorld,
+                      override var physWorld: CollisionHandler,
                       override var collBody: CollisionBody) extends ObjectType {
 
   pos.set(collBody.getX, collBody.getY)

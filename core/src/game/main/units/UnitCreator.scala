@@ -5,7 +5,7 @@ import game.loader.{GameTextures, UnitTextures}
 import game.main.gameMap.Path
 import game.main.objects.improved.ObjectHandler.Level
 import game.main.objects.improved.{PhysicsElement, SpriteElement, UnitObject}
-import game.main.physics.PhysicsWorld
+import game.main.physics.CollisionHandler
 import game.main.physics.collision.PolygonBody
 import game.main.players.Player
 import game.util.Vector2e
@@ -22,33 +22,29 @@ trait UnitCreator {
   protected def setStats(obj: UnitObject, path: Path): Unit
 
   /** Creates a new unit */
-  def create(owner: Player, physWorld: PhysicsWorld,
-             x: Float, y: Float, path: Path,
+  def create(owner: Player, x: Float, y: Float,
+             path: Path,
              random: Boolean = false): UnitObject = {
 
+    val collHandler = owner.objectHandler.collHandler
     val icon = pathIcon(owner)
     val body: PolygonBody = PolygonBody.triangleCollBody(width, height / 2f, 0, height)
 
     //creates the unit
-    val size = Vector2e(width, height)
-    val obj = new UnitObject()
-
-    val spriteE = new SpriteElement(
-      GameTextures.defaultTextures.atlas.createSprite(texture.main(owner.colorIndex)))
-    val physics = new PhysicsElement(physWorld, body)
-
-    physWorld.addUnit(owner, physics)
-
-    obj.addElement(spriteE)
-    obj.addElement(physics)
-    obj.physics = physics
+    val obj = new UnitObject(collHandler, body)
     obj.owner = owner
 
+    //adds the sprite
+    val spriteE = new SpriteElement(
+      GameTextures.defaultTextures.atlas.createSprite(texture.main(owner.colorIndex)), false)
+    obj.appendElement(spriteE)
+
+    val size = Vector2e(width, height)
     obj.size.set(size)
     obj.origin.set(size.x / 2f, size.y / 2f)
 
-    owner.objectHandler.addObject(obj, Level.ground)
-    //UnitObject.pool.obtain().init(texture, size, owner, physWorld, body)
+    //adds the object to handlers
+    owner.objectHandler.addObject(obj, Level.ground, owner = owner)
 
     //find the route
     val p: Path = path.copy.setOffset(path.findOffset(x, y))
@@ -56,6 +52,7 @@ trait UnitCreator {
     obj.pos.set(p.head)
 
     setStats(obj, p) //sets the specific unit stats
+    obj.update()
 
     obj
   }
