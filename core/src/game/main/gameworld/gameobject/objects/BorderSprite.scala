@@ -1,10 +1,10 @@
-package game.main.gameobject.objects
+package game.main.gameworld.gameobject.objects
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
-import game.main.gameobject.ObjectHandler.Level
-import game.main.gameobject.elements.SpriteElement
-import game.main.gameobject.{GameObject, ObjectHandler}
+import game.main.gameworld.gameobject.{GameObject, ObjectHandler}
+import game.main.gameworld.gameobject.ObjectHandler.Level
+import game.main.gameworld.gameobject.elements.SpriteElement
 
 object BorderSprite {
 

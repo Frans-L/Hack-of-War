@@ -1,14 +1,14 @@
-package game.main.gameobject.elements.ai
+package game.main.gameworld.gameobject.elements.ai
 
 import com.badlogic.gdx.math.Interpolation
-import game.main.gameobject.objects.UnitObject
-import game.main.gameobject.{GameObject, ObjectElement}
+import game.main.gameworld.gameobject
+import game.main.gameworld.gameobject.{ObjectElement, objects}
 import game.util.Utils
 
 class SmoothTurn(maxRotateTime: Float) extends ObjectElement {
 
-  override def update(p: GameObject, delta: Int): Unit = {
-    val parent = p.asInstanceOf[UnitObject]
+  override def update(p: gameobject.GameObject, delta: Int): Unit = {
+    val parent = p.asInstanceOf[objects.UnitObject]
 
     //rotates smoothly towards moving direction
     parent.angle = Utils.closestAngle360(parent.angle, parent.movingForce.angle)
@@ -17,7 +17,7 @@ class SmoothTurn(maxRotateTime: Float) extends ObjectElement {
   }
 
   /** Throws an error if the parent is not valid! */
-  override def checkParent(parent: GameObject): Unit =
-    require(parent.isInstanceOf[UnitObject], "Parent have to be UnitObject")
+  override def checkParent(parent: gameobject.GameObject): Unit =
+    require(parent.isInstanceOf[objects.UnitObject], "Parent have to be UnitObject")
 
 }

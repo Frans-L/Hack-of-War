@@ -1,7 +1,6 @@
-package game.main.gamemap
+package game.main.gameworld.gamemap
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite, SpriteBatch}
 import com.badlogic.gdx.math.{Intersector, MathUtils, Vector2}
 import game.util.Vector2e

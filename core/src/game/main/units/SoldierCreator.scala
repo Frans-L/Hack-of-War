@@ -2,10 +2,10 @@ package game.main.units
 
 import com.badlogic.gdx.Gdx
 import game.loader.{GameTextures, UnitTextures}
-import game.main.gamemap.Path
-import game.main.gameobject.elements.ai._
-import game.main.gameobject.objects.UnitObject
-import game.main.physics.collision.PolygonBody
+import game.main.gameworld.collision.bodies.PolygonBody
+import game.main.gameworld.gameobject.elements.ai
+import game.main.gameworld.gamemap.Path
+import game.main.gameworld.gameobject.objects.UnitObject
 
 object SoldierCreator extends UnitCreator {
 
@@ -34,11 +34,11 @@ object SoldierCreator extends UnitCreator {
     obj.maxMovingForce = 0.030f
 
     //add brains
-    obj.appendElement(new FollowPath(path, obj.collBody.getRadiusScaled * 1.5f))
-    obj.appendElement(new ShootAhead(attackVision, 30f, 200, BasicBullet))
-    obj.appendElement(new Steering(0.006f))
-    obj.appendElement(new AvoidObstacles(0.020f, obj.sWidth * 1.25f))
-    obj.appendElement(new SmoothTurn(150f))
+    obj.appendElement(new ai.FollowPath(path, obj.collBody.getRadiusScaled * 1.5f))
+    obj.appendElement(new ai.ShootAhead(attackVision, 30f, 200, BasicBullet))
+    obj.appendElement(new ai.Steering(0.006f))
+    obj.appendElement(new ai.AvoidObstacles(0.020f, obj.sWidth * 1.25f))
+    obj.appendElement(new ai.SmoothTurn(150f))
 
   }
 }

@@ -2,11 +2,11 @@ package game.main.units
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import game.loader.{GameTextures, UnitTextures}
-import game.main.gamemap.Path
-import game.main.gameobject.ObjectHandler.Level
-import game.main.gameobject.elements.{RelativeSpriteElement, SpriteElement}
-import game.main.gameobject.objects.UnitObject
-import game.main.physics.collision.PolygonBody
+import game.main.gameworld.collision.bodies.PolygonBody
+import game.main.gameworld.gameobject.elements
+import game.main.gameworld.gamemap.Path
+import game.main.gameworld.gameobject.ObjectHandler.Level
+import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.players.Player
 import game.util.Vector2e
 
@@ -35,10 +35,10 @@ trait UnitCreator {
     obj.owner = owner
 
     //adds the sprites
-    val shadow = new RelativeSpriteElement(
+    val shadow = new elements.RelativeSpriteElement(
       GameTextures.defaultTextures.atlas.createSprite(texture.shadow), false,
         Vector2e(-3, -4), Vector2e(1, 1), 0)
-    val spriteE = new SpriteElement(
+    val spriteE = new elements.SpriteElement(
       GameTextures.defaultTextures.atlas.createSprite(texture.main(owner.colorIndex)), false)
     obj.appendElement(shadow)
     obj.appendElement(spriteE)

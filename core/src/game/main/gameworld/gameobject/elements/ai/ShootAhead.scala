@@ -1,10 +1,11 @@
-package game.main.gameobject.elements.ai
+package game.main.gameworld.gameobject.elements.ai
 
 import game.GameElement
-import game.main.MainGame
-import game.main.gameobject.objects.UnitObject
-import game.main.gameobject.{GameObject, ObjectElement}
-import game.main.physics.collision.CollisionBody
+import game.main.gameworld.collision.bodies.CollisionBody
+import game.main.{MainGame, gameworld}
+import game.main.gameworld.gameobject
+import game.main.gameworld.gameobject.ObjectElement
+import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.units.BulletCreator
 import game.util.Vector2e
 import game.util.Vector2e._
@@ -17,7 +18,7 @@ class ShootAhead(attackVision: CollisionBody, damage: Float,
   private var reloadTimer: Int = 0
   private var attackTarget: Option[UnitObject] = None
 
-  override def update(p: GameObject, delta: Int): Unit = {
+  override def update(p: gameobject.GameObject, delta: Int): Unit = {
     val parent = p.asInstanceOf[UnitObject]
 
     parent.updateCollPolygon(attackVision) //update vision
@@ -71,6 +72,6 @@ class ShootAhead(attackVision: CollisionBody, damage: Float,
   }
 
   /** Throws an error if the parent is not valid! */
-  override def checkParent(parent: GameObject): Unit =
+  override def checkParent(parent: gameobject.GameObject): Unit =
     require(parent.isInstanceOf[UnitObject], "Parent have to be UnitObject")
 }

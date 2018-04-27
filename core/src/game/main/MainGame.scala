@@ -10,7 +10,8 @@ import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import com.badlogic.gdx.{Gdx, Input, Screen}
 import game.loader.GameTextures
-import game.main.gameobject.ObjectHandler
+import game.main.gameworld.gamemap
+import game.main.gameworld.gameobject.ObjectHandler
 import game.main.ui.GameUI
 import game.util._
 import game.main.units.BasicBullet
@@ -70,8 +71,8 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
   private val objectHandler: ObjectHandler = new ObjectHandler(screenDim)
 
   //adds the map
-  private val map: game.main.gamemap.Map =
-    new game.main.gamemap.Map(screenDim, textures, objectHandler)
+  private val map: gamemap.Map =
+    new gamemap.Map(screenDim, textures, objectHandler)
   objectHandler.collHandler.map = map //TODO temporary solution to add map to physWorld
 
   //sets the players

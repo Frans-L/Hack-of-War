@@ -1,12 +1,10 @@
-package game.main.physics.collision
+package game.main.gameworld.collision.bodies
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Intersector, Polygon, Vector2}
-import com.badlogic.gdx.utils.{GdxRuntimeException, Pool, Pools}
 import game.util.pools.VectorPool
-import game.util.{Utils, Vector2e}
 
 
 object PolygonBody {

@@ -1,8 +1,8 @@
 package game.main.units
 
 import game.loader.{GameTextures, UnitTextures}
-import game.main.gameobject.elements.BulletCollision
-import game.main.gameobject.objects.BulletObject
+import game.main.gameworld.gameobject.elements.BulletCollision
+import game.main.gameworld.gameobject.objects
 
 object BasicBullet extends BulletCreator {
 
@@ -13,7 +13,7 @@ object BasicBullet extends BulletCreator {
   override val radius: Float = 20f / 2f / scale
 
   /** Sets the all specific stats to the bullet. */
-  override protected def setStats(obj: BulletObject): Unit = {
+  override protected def setStats(obj: objects.BulletObject): Unit = {
     obj.appendElement(BulletCollision)
     obj.mass = 50f
   }

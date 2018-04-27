@@ -5,8 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.GameElement
 import game.main.cards.Card
-import game.main.gamemap.{IconPath, Path}
-import game.main.gameobject.ObjectHandler
+import game.main.gameworld.gamemap
+import game.main.gameworld.gamemap.Path
+import game.main.gameworld.gameobject.ObjectHandler
 import game.main.units.UnitCreator
 
 import scala.collection.mutable
@@ -18,7 +19,7 @@ abstract class Player(val objectHandler: ObjectHandler, index: Int)
   extends GameElement {
 
   //when the player is dragging card, the player might see the iconPath of the unit
-  var iconPath: Option[IconPath] = None
+  var iconPath: Option[gamemap.IconPath] = None
 
   val colorIndex: Int //color of the textures
   val enemies: mutable.Buffer[Player] = mutable.Buffer.empty[Player] //the enemy of this player

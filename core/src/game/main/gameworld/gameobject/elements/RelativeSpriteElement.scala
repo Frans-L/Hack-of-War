@@ -1,15 +1,15 @@
-package game.main.gameobject.elements
+package game.main.gameworld.gameobject.elements
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
-import game.main.gameobject.GameObject
+import game.main.gameworld.gameobject
 
 class RelativeSpriteElement(sprite: Sprite, keepSize: Boolean,
                             val pos: Vector2, val scale: Vector2,
                             var angle: Float) extends SpriteElement(sprite, keepSize) {
 
   /** Updates the sprite loc */
-  override def update(parent: GameObject, delta: Int) {
+  override def update(parent: gameobject.GameObject, delta: Int) {
     sprite.setOrigin(parent.origin.x, parent.origin.y)
 
     if (keepSize) sprite.setPosition(parent.pos.x + pos.x - parent.origin.x,

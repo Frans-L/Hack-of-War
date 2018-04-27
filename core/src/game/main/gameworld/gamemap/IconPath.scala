@@ -1,4 +1,4 @@
-package game.main.gamemap
+package game.main.gameworld.gamemap
 
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer

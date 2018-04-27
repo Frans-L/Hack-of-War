@@ -1,12 +1,12 @@
-package game.main.gameobject.objects
+package game.main.gameworld.gameobject.objects
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
 import game.main.MainGame
-import game.main.gameobject.GameObject
-import game.main.physics.CollisionHandler
-import game.main.physics.collision.CollisionBody
+import game.main.gameworld.collision.CollisionHandler
+import game.main.gameworld.collision.bodies.CollisionBody
+import game.main.gameworld.gameobject
 import game.util.Vector2e
 import game.util.Vector2e._
 import game.util.pools.VectorPool
@@ -14,7 +14,7 @@ import game.util.pools.VectorPool
 import scala.collection.mutable
 
 class PhysicsObject(var physWorld: CollisionHandler,
-                    val collBody: CollisionBody) extends GameObject {
+                    val collBody: CollisionBody) extends gameobject.GameObject {
 
   var mass: Float = 100f
   var friction: Float = 0.25f //values > 0

@@ -1,16 +1,16 @@
-package game.main.gameobject.elements.ai
+package game.main.gameworld.gameobject.elements.ai
 
 import com.badlogic.gdx.math.Vector2
-import game.main.MainGame
-import game.main.gameobject.objects.UnitObject
-import game.main.gameobject.{GameObject, ObjectElement}
+import game.main.{MainGame, gameworld}
+import game.main.gameworld.gameobject
+import game.main.gameworld.gameobject.{ObjectElement, objects}
 import game.util.Vector2e._
 import game.util.pools
 
 class AvoidObstacles(maxForceAvoid: Float, maxSeeAhead: Float) extends ObjectElement {
 
-  override def update(p: GameObject, delta: Int): Unit = {
-    val parent = p.asInstanceOf[UnitObject]
+  override def update(p: gameobject.GameObject, delta: Int): Unit = {
+    val parent = p.asInstanceOf[objects.UnitObject]
 
     //if no obstacle at close distance found, try look further away
     val avoid = pools.VectorPool.obtain()
@@ -34,7 +34,7 @@ class AvoidObstacles(maxForceAvoid: Float, maxSeeAhead: Float) extends ObjectEle
     * @param avoid        a Vector2 that is set to push the player away from the obstacle
     * @return true if there were an obstacle
     */
-  private def avoidObstacles(obj: UnitObject, visionLength: Float, avoid: Vector2): Boolean = {
+  private def avoidObstacles(obj: objects.UnitObject, visionLength: Float, avoid: Vector2): Boolean = {
 
 
     val ahead = pools.VectorPool.obtain(obj.movingForce).nor **
@@ -62,6 +62,6 @@ class AvoidObstacles(maxForceAvoid: Float, maxSeeAhead: Float) extends ObjectEle
   }
 
   /** Throws an error if the parent is not valid! */
-  override def checkParent(parent: GameObject): Unit =
-    require(parent.isInstanceOf[UnitObject], "Parent have to be UnitObject")
+  override def checkParent(parent: gameobject.GameObject): Unit =
+    require(parent.isInstanceOf[objects.UnitObject], "Parent have to be UnitObject")
 }

@@ -1,4 +1,4 @@
-package game.main.gamemap
+package game.main.gameworld.gamemap
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
@@ -6,10 +6,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import game.GameElement
 import game.loader.GameTextures
-import game.main.gameobject.ObjectHandler.Level
-import game.main.gameobject.objects.{BorderSprite, CollisionObject, PhysicsObject}
-import game.main.gameobject.{GameObject, ObjectHandler}
-import game.main.physics.collision.{CollisionBody, PolygonBody}
+import game.main.gameworld.collision.bodies
+import game.main.gameworld.collision.bodies.PolygonBody
+import game.main.gameworld.gameobject
+import game.main.gameworld.gameobject.ObjectHandler.Level
+import game.main.gameworld.gameobject.objects
+import game.main.gameworld.gameobject.objects.BorderSprite
 import game.util.{Dimensions, Vector2e}
 
 import scala.collection.mutable
@@ -32,16 +34,16 @@ object Map {
   */
 class Map(val dimensions: Dimensions,
           textures: GameTextures,
-          objectHandler: ObjectHandler) extends GameElement {
+          objectHandler: gameobject.ObjectHandler) extends GameElement {
 
-  private val elements: mutable.Buffer[GameObject] = mutable.Buffer[GameObject]()
+  private val elements: mutable.Buffer[gameobject.GameObject] = mutable.Buffer[gameobject.GameObject]()
 
   private val collAccuracy = 20 //collisionAccuracy
   private val collMap = Array.ofDim[Boolean](
     dimensions.maxWidth / collAccuracy + 1,
     dimensions.maxHeight / collAccuracy + 1)
 
-  val collObjects: mutable.Buffer[PhysicsObject] = mutable.Buffer[PhysicsObject]()
+  val collObjects: mutable.Buffer[objects.PhysicsObject] = mutable.Buffer[objects.PhysicsObject]()
   var path: Seq[Path] = _ //will be set at initializeMap
   var pathReversed: Seq[Path] = _
 
@@ -374,8 +376,8 @@ class Map(val dimensions: Dimensions,
     }
 
     //a bit prettier way to add a collision block
-    def addBlock(collisionBody: CollisionBody): Unit = {
-      collObjects += CollisionObject(this, collisionBody, objectHandler)
+    def addBlock(collisionBody: bodies.CollisionBody): Unit = {
+      collObjects += objects.CollisionObject(this, collisionBody, objectHandler)
     }
 
     //calculates the middle pos of the element n

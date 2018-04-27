@@ -1,14 +1,14 @@
-package game.main.gameobject.elements
+package game.main.gameworld.gameobject.elements
 
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
-import game.main.gameobject.objects.{BulletObject, PhysicsObject, UnitObject}
-import game.main.gameobject.{GameObject, ObjectElement}
+import game.main.gameworld.gameobject
+import game.main.gameworld.gameobject.{ObjectElement, objects}
 import game.util.pools.MinimumTranslationVectorPool
 
 object BulletCollision extends ObjectElement {
 
-  override def update(p: GameObject, delta: Int): Unit = {
-    val parent = p.asInstanceOf[BulletObject]
+  override def update(p: gameobject.GameObject, delta: Int): Unit = {
+    val parent = p.asInstanceOf[objects.BulletObject]
 
     if (!parent.collided) {
       val collForce = MinimumTranslationVectorPool.obtain()
@@ -19,10 +19,10 @@ object BulletCollision extends ObjectElement {
 
   }
 
-  private def collision(bullet: BulletObject,
-                        crashObj: PhysicsObject, collForce: MinimumTranslationVector): Unit = {
+  private def collision(bullet: objects.BulletObject,
+                        crashObj: objects.PhysicsObject, collForce: MinimumTranslationVector): Unit = {
     crashObj match {
-      case obj: UnitObject =>
+      case obj: objects.UnitObject =>
         obj.reduceHealth(bullet.damage)
         obj.addImpact(bullet.velocity.scl(1f), bullet.mass)
       case _ => Unit
@@ -31,7 +31,7 @@ object BulletCollision extends ObjectElement {
   }
 
   /** Throws an error if the parent is not valid! */
-  override def checkParent(parent: GameObject): Unit =
-    require(parent.isInstanceOf[BulletObject], "Parent have to be BulletObject!")
+  override def checkParent(parent: gameobject.GameObject): Unit =
+    require(parent.isInstanceOf[objects.BulletObject], "Parent have to be BulletObject!")
 
 }

@@ -1,15 +1,15 @@
-package game.main.gameobject.elements.ai
+package game.main.gameworld.gameobject.elements.ai
 
-import game.main.gameobject.objects.UnitObject
-import game.main.gameobject.{GameObject, ObjectElement}
+import game.main.gameworld.gameobject
+import game.main.gameworld.gameobject.{ObjectElement, objects}
 import game.util.Vector2e._
 import game.util.pools
 
 class Steering(maxAccelerateForce: Float) extends ObjectElement {
 
   /** Updates the movement with collision avoidance */
-  override def update(p: GameObject, delta: Int): Unit = {
-    val parent = p.asInstanceOf[UnitObject]
+  override def update(p: gameobject.GameObject, delta: Int): Unit = {
+    val parent = p.asInstanceOf[objects.UnitObject]
 
 
     val target = pools.VectorPool.obtain(parent.moveTarget) //pools.VectorPool.obtain(selectSteeringTarget())
@@ -29,8 +29,8 @@ class Steering(maxAccelerateForce: Float) extends ObjectElement {
   }
 
   /** Throws an error if the parent is not valid! */
-  override def checkParent(parent: GameObject): Unit =
-    require(parent.isInstanceOf[UnitObject], "Parent have to be UnitObject")
+  override def checkParent(parent: gameobject.GameObject): Unit =
+    require(parent.isInstanceOf[objects.UnitObject], "Parent have to be UnitObject")
 
 
 }

@@ -1,8 +1,8 @@
-package game.main.gameobject.objects
+package game.main.gameworld.gameobject.objects
 
 import com.badlogic.gdx.Gdx
-import game.main.physics.CollisionHandler
-import game.main.physics.collision.CollisionBody
+import game.main.gameworld.collision.CollisionHandler
+import game.main.gameworld.collision.bodies.CollisionBody
 
 class BulletObject(physWorld: CollisionHandler, collBody: CollisionBody)
   extends PhysicsObject(physWorld, collBody) {

@@ -1,9 +1,10 @@
-package game.main.gameobject.objects
+package game.main.gameworld.gameobject.objects
 
 import game.GameElement
-import game.main.gameobject.ObjectHandler
-import game.main.gameobject.ObjectHandler.Level
-import game.main.physics.collision.CollisionBody
+import game.main.gameworld.collision.bodies.CollisionBody
+import game.main.gameworld.gameobject
+import game.main.gameworld.gameobject.ObjectHandler
+import game.main.gameworld.gameobject.ObjectHandler.Level
 
 object CollisionObject {
 

@@ -1,8 +1,8 @@
 package game.main.players
 
 import game.main.cards.{Card, UnitCard}
-import game.main.gameobject.ObjectHandler
-import game.main.physics.CollisionHandler
+import game.main.gameworld.collision.CollisionHandler
+import game.main.gameworld.gameobject.ObjectHandler
 import game.main.units.SoldierCreator
 
 class User(objectHandler: ObjectHandler, override val colorIndex: Int) extends

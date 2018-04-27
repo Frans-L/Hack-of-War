@@ -3,7 +3,8 @@ package game.main.cards
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
-import game.main.gamemap.{IconPath, Path}
+import game.main.gameworld.gamemap
+import game.main.gameworld.gamemap.Path
 import game.main.players.Player
 import game.main.units.{SoldierCreator, UnitCreator}
 
@@ -12,7 +13,7 @@ class UnitCard(owner: Player, unitCreator: UnitCreator) extends Card(owner) {
   override val icon: Sprite = unitCreator.cardIcon(owner)
   override val cost: Int = unitCreator.cost
 
-  var unitPath: IconPath = new IconPath(
+  var unitPath: gamemap.IconPath = new gamemap.IconPath(
     new Path(Seq[Vector2](new Vector2(0, 0)), 0),
     unitCreator.pathIcon(owner))
 

@@ -1,4 +1,4 @@
-package game.main.gameobject
+package game.main.gameworld.gameobject
 
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer

@@ -1,8 +1,8 @@
 package game.main.players
 
 import com.badlogic.gdx.math.MathUtils
-import game.main.gameobject.ObjectHandler
-import game.main.physics.CollisionHandler
+import game.main.gameworld.collision.CollisionHandler
+import game.main.gameworld.gameobject.ObjectHandler
 import game.main.units.SoldierCreator
 import game.util.Ticker
 

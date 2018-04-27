@@ -1,4 +1,4 @@
-package game.main.physics
+package game.main.gameworld.collision
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
@@ -6,9 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Intersector, Vector2}
 import game.GameElement
-import game.main.gameobject.objects.PhysicsObject
-import game.main.physics.collision.CollisionBody
-import game.main.players.Player
+import game.main.gameworld.gamemap
+import game.main.gameworld.gameobject.objects.PhysicsObject
 import game.util.pools.MinimumTranslationVectorPool
 import game.util.{Dimensions, Vector2e}
 
@@ -37,7 +36,7 @@ class CollisionHandler(val dimensions: Dimensions) extends GameElement {
   var globalFriction: Float = 1f
   var globalShadowPos: Vector2 = Vector2e(-3f, -5f) //TODO REMOVE
 
-  var map: game.main.gamemap.Map = _ //TODO temporary solution, to add map
+  var map: gamemap.Map = _ //TODO temporary solution, to add map
 
   private val units: mutable.LinkedHashMap[GameElement, mutable.Buffer[PhysicsObject]] =
     mutable.LinkedHashMap()
@@ -116,7 +115,7 @@ class CollisionHandler(val dimensions: Dimensions) extends GameElement {
   }
 
   /** Returns the object that is collided with the collisionBody */
-  def collideCollisionBody(excludeObj: PhysicsObject, collBody: CollisionBody,
+  def collideCollisionBody(excludeObj: PhysicsObject, collBody: bodies.CollisionBody,
                            mtv: MinimumTranslationVector,
                            category: mutable.Buffer[GameElement]): Option[PhysicsObject] = {
 

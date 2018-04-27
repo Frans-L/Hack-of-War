@@ -1,12 +1,13 @@
-package game.main.gameobject.elements
+package game.main.gameworld.gameobject.elements
 
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
-import game.main.gameobject.{GameObject, ObjectElement}
+import game.main.gameworld.gameobject
+import game.main.gameworld.gameobject.ObjectElement
 
 
 class SpriteElement(var sprite: Sprite, keepSize: Boolean) extends ObjectElement {
 
-  override def update(parent: GameObject, delta: Int) {
+  override def update(parent: gameobject.GameObject, delta: Int) {
     //updates sprite loc
     sprite.setOrigin(parent.origin.x, parent.origin.y)
     if (keepSize) sprite.setPosition(parent.pos.x - parent.origin.x, parent.pos.y - parent.origin.y)
@@ -16,10 +17,10 @@ class SpriteElement(var sprite: Sprite, keepSize: Boolean) extends ObjectElement
     sprite.setRotation(parent.angle)
   }
 
-  override def draw(parent: GameObject, batch: Batch): Unit = {
+  override def draw(parent: gameobject.GameObject, batch: Batch): Unit = {
     sprite.draw(batch)
   }
 
   /** Throws an error if the parent is not valid! */
-  override def checkParent(parent: GameObject): Unit = Unit //all fits
+  override def checkParent(parent: gameobject.GameObject): Unit = Unit //all fits
 }

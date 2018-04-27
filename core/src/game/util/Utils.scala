@@ -2,7 +2,7 @@ package game.util
 
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Intersector, Polygon, Rectangle, Vector2}
-import game.main.physics.collision.PolygonBody
+import game.main.gameworld.collision.bodies.PolygonBody
 
 /**
   * Created by Frans on 11/03/2018.
