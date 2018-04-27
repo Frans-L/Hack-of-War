@@ -51,8 +51,8 @@ trait UnitCreator {
     owner.objectHandler.addObject(obj, Level.ground, owner = owner)
 
     //find the route
-    val p: Path = path.copy.setOffset(path.findOffset(x, y))
-    if (random) p.setOffset(p.randomOffset)
+    val p: Path = path.copy
+    if (random) p.setOffset(p.randomOffset) else p.setOffset(path.findOffset(x, y))
     obj.pos.set(p.head)
 
     setStats(obj, p) //sets the specific unit stats
