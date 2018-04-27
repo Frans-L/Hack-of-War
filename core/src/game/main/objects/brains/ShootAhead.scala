@@ -5,12 +5,14 @@ import game.GameElement
 import game.main.MainGame
 import game.main.objects.improved.{GameObject, ObjectElement, UnitObject}
 import game.main.physics.collision.CollisionBody
+import game.main.units.BulletCreator
 import game.util.Vector2e
 import game.util.Vector2e._
 
 import scala.collection.mutable
 
-class ShootAhead(attackVision: CollisionBody, reloadTime: Int) extends ObjectElement {
+class ShootAhead(attackVision: CollisionBody, damage: Float,
+                 reloadTime: Int, bulletCreator: BulletCreator) extends ObjectElement {
 
   private var reloadTimer: Int = 0
   private var attackTarget: Option[UnitObject] = None
@@ -57,13 +59,13 @@ class ShootAhead(attackVision: CollisionBody, reloadTime: Int) extends ObjectEle
     //TODO vector pool
     //calculates the pos of the bullet and create it
     val bulletPos =
-      Vector2e(parent.movingForce).nor ** (parent.sWidth / 2f + parent.bulletCreator.radius) ++ parent.pos
-    val bullet = parent.bulletCreator.create(parent, parent.owner.objectHandler,
+      Vector2e(parent.movingForce).nor ** (parent.sWidth / 2f +bulletCreator.radius) ++ parent.pos
+    val bullet = bulletCreator.create(parent, parent.owner.objectHandler,
       bulletPos, Vector2e(parent.movingForce).nor ** (parent.maxSpeed * 5),
       parent.owner.colorIndex)
 
     //sets the bullet statistics
-    bullet.damage = parent.damage
+    bullet.damage = damage
     bullet.collFilter ++= parent.owner.enemies.asInstanceOf[mutable.Buffer[GameElement]]
     bullet.collFilter += parent.physWorld.map
   }

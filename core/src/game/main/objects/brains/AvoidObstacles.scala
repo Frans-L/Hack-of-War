@@ -47,8 +47,10 @@ class AvoidObstacles(maxForceAvoid: Float, maxSeeAhead: Float) extends ObjectEle
         obj.collFilter)
 
     //draws debug circle
-    if (MainGame.drawCollBox)
+    if (MainGame.drawCollBox){
       MainGame.debugRender.circle(ahead.x, ahead.y, obj.collBody.getRadiusScaled)
+      //obstacle.foreach(o => MainGame.debugRender.circle(o.collBody.center.x, o.collBody.center.y, 10))
+    }
 
     //calculate the force opposite to obstacle center
     obstacle.foreach(o => ((avoid ++ obj.pos) -- o.collBody.center).nor ** maxForceAvoid / obj.mass)

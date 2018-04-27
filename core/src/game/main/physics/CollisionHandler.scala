@@ -52,16 +52,16 @@ class CollisionHandler(val dimensions: Dimensions) extends GameElement {
     for ((owner, obj) <- mapBufferIterator(units, tmpEmptyBuffer) if !obj.static && !obj.collided) {
       val crashObj = collide(obj, collForce, obj.collFilter)
       crashObj.foreach(obj2 => {
-        obj.collision(obj2, collForce.normal, collForce.depth / 2f)
-        obj2.collision(obj, collForce.normal.scl(-1), collForce.depth / 2f)
+        val depth = if (obj.static || obj2.static) collForce.depth else collForce.depth / 2f
+        obj.collision(obj2, collForce.normal, depth)
+        obj2.collision(obj, collForce.normal.scl(-1), depth)
       })
     }
   }
 
 
-  /*
   /** Removes deleted units */
-  private def clearDeletedUnits(): Unit = {
+  def clearDeletedUnits(): Unit = {
     for (owner <- units) {
       //removes deleted units
       for (i <- owner._2.indices.reverse) {
@@ -76,7 +76,6 @@ class CollisionHandler(val dimensions: Dimensions) extends GameElement {
       if (owner._2.isEmpty) units.remove(owner._1)
     }
   }
-  */
 
 
   /** Checks if the obj is colliding with something.

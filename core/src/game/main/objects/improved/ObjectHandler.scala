@@ -39,7 +39,24 @@ class ObjectHandler(dimensions: Dimensions) extends GameElement {
     updateObjects.foreach( //updates every objects
       _.foreach(_.update())
     )
+
+    clearDeletedUnits()
+    collHandler.clearDeletedUnits()
   }
+
+
+  /** Removes deleted units */
+  private def clearDeletedUnits(): Unit = {
+    for (i <- 0 until Level.size) {
+      deleteUnits(drawObjects(i))
+      deleteUnits(updateObjects(i))
+    }
+
+    def deleteUnits(buffer: mutable.Buffer[GameObject]): Unit = {
+      for (i <- buffer.indices.reverse) if (buffer(i).canBeDeleted) buffer.remove(i)
+    }
+  }
+
 
   override def draw(shapeRender: ShapeRenderer): Unit = {
     drawObjects.foreach(

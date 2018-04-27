@@ -19,8 +19,6 @@ class UnitObject(physWorld: CollisionHandler, collBody: CollisionBody) extends P
 
   //basic stats & shooting
   var health: Float = _
-  var damage: Float = _
-  var bulletCreator: BulletCreator = _
 
   override def update(): Unit = {
     updatePhysics()
@@ -38,7 +36,7 @@ class UnitObject(physWorld: CollisionHandler, collBody: CollisionBody) extends P
   /** Reduces the health of the object and checks if object has diead */
   def reduceHealth(damage: Float): Unit = {
     health -= damage
-    //if (health <= 0) destroy()
+    if (health <= 0) this.delete()
   }
 
   /** Returns the max speed of the object */

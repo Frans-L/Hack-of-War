@@ -146,13 +146,13 @@ class Map(val dimensions: Dimensions,
       val routeDown = Seq(
         Vector2e(blockPosX(1), blockPosYMiddle(3)),
         Vector2e(blockPosX(1) + blockWidth(1) / 3, blockPosYMiddle(3)),
-        Vector2e(blockPosXMiddle(1), blockPosYMiddle(1) + blockHeight(2) / 2),
-        Vector2e(blockPosX(2), blockPosYMiddle(1) + blockHeight(2) / 2),
+        Vector2e(blockPosXMiddle(1), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f),
+        Vector2e(blockPosX(2), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f),
         Vector2e(blockPosX(3), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1)),
 
         Vector2e(blockPosX(4), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1)),
-        Vector2e(blockPosX(5), blockPosYMiddle(1) + blockHeight(2) / 2),
-        Vector2e(blockPosXMiddle(5), blockPosYMiddle(1) + blockHeight(2) / 2),
+        Vector2e(blockPosX(5), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f),
+        Vector2e(blockPosXMiddle(5), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f),
         Vector2e(blockPosX(6) - blockWidth(1) / 3, blockPosYMiddle(3)),
         Vector2e(blockPosX(6), blockPosYMiddle(3))
 
@@ -161,20 +161,20 @@ class Map(val dimensions: Dimensions,
       val routeUp = Seq(
         Vector2e(blockPosX(1), blockPosYMiddle(3)),
         Vector2e(blockPosX(1) + blockWidth(1) / 3, blockPosYMiddle(3)),
-        Vector2e(blockPosXMiddle(1), blockPosYMiddle(5) - blockHeight(4) / 2),
-        Vector2e(blockPosX(2), blockPosYMiddle(5) - blockHeight(4) / 2),
+        Vector2e(blockPosXMiddle(1), blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f),
+        Vector2e(blockPosX(2), blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f),
         Vector2e(blockPosX(3), blockPosYMiddle(5) - blockHeight(4) / 2 - blockHeight(1)),
 
         Vector2e(blockPosX(4), blockPosYMiddle(5) - blockHeight(2) / 2 - blockHeight(1)),
-        Vector2e(blockPosX(5), blockPosYMiddle(5) - blockHeight(2) / 2),
-        Vector2e(blockPosXMiddle(5), blockPosYMiddle(5) - blockHeight(4) / 2),
+        Vector2e(blockPosX(5), blockPosYMiddle(5) - blockHeight(2) / 2 / 1.2f),
+        Vector2e(blockPosXMiddle(5), blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f),
         Vector2e(blockPosX(6) - blockWidth(1) / 3, blockPosYMiddle(3)),
         Vector2e(blockPosX(6), blockPosYMiddle(3))
 
       )
 
-      path = Seq(new Path(routeDown, 80f), new Path(routeUp, 80f))
-      pathReversed = Seq(new Path(routeDown, 80f).reverse(), new Path(routeUp, 80f).reverse())
+      path = Seq(new Path(routeDown, 75f), new Path(routeUp, 75f))
+      pathReversed = Seq(new Path(routeDown, 75f).reverse(), new Path(routeUp, 75f).reverse())
     }
 
 

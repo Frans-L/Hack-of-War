@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameMap.Path
 import game.main.objects.improved.ObjectHandler.Level
-import game.main.objects.improved.{PhysicsElement, SpriteElement, UnitObject}
+import game.main.objects.improved.{PhysicsElement, RelativeSpriteElement, SpriteElement, UnitObject}
 import game.main.physics.CollisionHandler
 import game.main.physics.collision.PolygonBody
 import game.main.players.Player
@@ -34,9 +34,13 @@ trait UnitCreator {
     val obj = new UnitObject(collHandler, body)
     obj.owner = owner
 
-    //adds the sprite
+    //adds the sprites
+    val shadow = new RelativeSpriteElement(
+      GameTextures.defaultTextures.atlas.createSprite(texture.shadow), false,
+        Vector2e(-3, -4), Vector2e(1, 1), 0)
     val spriteE = new SpriteElement(
       GameTextures.defaultTextures.atlas.createSprite(texture.main(owner.colorIndex)), false)
+    obj.appendElement(shadow)
     obj.appendElement(spriteE)
 
     val size = Vector2e(width, height)

@@ -8,7 +8,8 @@ import game.main.MainGame
 import game.main.physics.CollisionHandler
 import game.main.physics.collision.CollisionBody
 import game.util.Vector2e
-import game.main.objects.brains.BounceCollision
+import game.util.Vector2e._
+import game.util.pools.VectorPool
 
 import scala.collection.mutable
 
@@ -62,10 +63,19 @@ class PhysicsObject(var physWorld: CollisionHandler,
     true
   }
 
+  /** Adds an impact to the object that will add a force */
+  def addImpact(vel: Vector2, mass2: Float): Unit = {
+    val speed =
+      VectorPool.obtain(velocity).scl(-math.abs(math.cos(velocity.angleRad(vel))).toFloat) ++ vel
+    velocity.mulAdd(speed, mass2 / mass)
+    VectorPool.free(speed)
+  }
+
   /** Draws the collision boxes */
   override def draw(shapeRender: ShapeRenderer): Unit = {
     if (MainGame.drawCollBox) {
       collBody.draw(shapeRender)
+      super.draw(shapeRender)
     }
   }
 

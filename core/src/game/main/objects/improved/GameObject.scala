@@ -20,56 +20,47 @@ class GameObject() extends GameElement with ObjectElement {
   val elements: mutable.ListBuffer[ObjectElement] = mutable.ListBuffer.empty
 
   //avoid throwing objects to garbageCollector
-  lazy private val tmpVec1 = Vector2e(0, 0)
-  lazy private val tmpVec2 = Vector2e(0, 0)
+  lazy private val relativePos = Vector2e(0, 0)
+  lazy private val relativeScale = Vector2e(0, 0)
 
   /** Updates the object and all it's elements */
   override def update(): Unit = {
     elements.foreach(_.update(this, ticker.delta))
   }
 
-  /** Updates the pos relatively to parent object */
-  override final def update(parent: GameObject, delta: Int): Unit = {
+  override def draw(shapeRender: ShapeRenderer): Unit = elements.foreach(_.draw(this, shapeRender))
 
+  override def draw(batch: Batch): Unit = elements.foreach(_.draw(this, batch))
+
+  /** Updates the pos relatively to parent object */
+  override def update(parent: GameObject, delta: Int): Unit =
+    runRelatively(parent, update)
+
+  /** Draws the object relatively to parent. */
+  override def draw(parent: GameObject, batch: Batch): Unit =
+    runRelatively(parent, () => draw(batch))
+
+  override def draw(parent: GameObject, shapeRenderer: ShapeRenderer): Unit =
+    runRelatively(parent, () => draw(shapeRenderer))
+
+
+  /** Calls the method 'run' so that position of this object is relative to parent. */
+  private def runRelatively(parent: GameObject, run: () => Unit): Unit = {
     //sets the position to be relative
-    tmpVec1.set(pos)
-    tmpVec2.set(scale)
+    relativePos.set(pos)
+    relativeScale.set(scale)
     val orgAngle = angle
     pos.add(parent.pos.x - parent.origin.x, parent.pos.y - parent.origin.y)
     scale.scl(parent.scale)
     angle += parent.angle
 
-    update() //updates with its real coords
+    run() //updates with its real coords
 
     //sets back to its own original position
-    pos.set(tmpVec1)
-    scale.set(tmpVec2)
+    pos.set(relativePos)
+    scale.set(relativeScale)
     angle = orgAngle
   }
-
-  override def draw(shapeRender: ShapeRenderer): Unit = elements.foreach(_.draw(this, shapeRender))
-
-  override def draw(batch: Batch): Unit = elements.foreach(_.draw(this, batch))
-
-
-  override def draw(parent: GameObject, batch: Batch): Unit = draw(batch)
-
-  override def draw(parent: GameObject, shapeRenderer: ShapeRenderer): Unit = draw(shapeRenderer)
-
-
-  /*
-  def rPos: Vector2 = pPos + father.for
-
-  override def size: Vector2 = pSize
-
-  override def scale: Vector2 = pScale
-
-  override def origin: Vector2 = pOrigin
-
-  override def angle: Float = pAngle
-
-  override def angle_= (v: Float): Unit = pAngle = v
-  */
 
 
   def sHeight: Float = scale.y * size.y
@@ -95,5 +86,10 @@ class GameObject() extends GameElement with ObjectElement {
   }
 
   override def checkParent(parent: GameObject): Unit = Unit //anything works
+
+  /** Marks that the object can be deleted. */
+  override def delete(): Unit = {
+    canBeDeleted = true
+  }
 
 }

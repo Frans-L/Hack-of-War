@@ -28,8 +28,6 @@ object SoldierCreator extends UnitCreator {
     obj.friction = 0.25f
 
     obj.health = 100f
-    obj.damage = 30f
-    obj.bulletCreator = BasicBullet
 
     val visionMaxHeight = obj.sHeight * 3.5f
     val visionMaxDist = obj.sWidth * 4f
@@ -38,10 +36,10 @@ object SoldierCreator extends UnitCreator {
     obj.maxMovingForce = 0.033f
 
     //add brains
-    obj.appendElement(new FollowPath(path, obj.collBody.getRadiusScaled * 2))
-    obj.appendElement(new ShootAhead(attackVision, 150))
+    obj.appendElement(new FollowPath(path, obj.collBody.getRadiusScaled * 1.5f))
+    obj.appendElement(new ShootAhead(attackVision, 30f, 200, BasicBullet))
     obj.appendElement(new Steering(0.008f))
-    obj.appendElement(new AvoidObstacles(obj.maxMovingForce*0.75f, obj.sWidth * 2f))
+    obj.appendElement(new AvoidObstacles(0.020f, obj.sWidth * 1.5f))
     obj.appendElement(new SmoothTurn(150f))
 
   }
