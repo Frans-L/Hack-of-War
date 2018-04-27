@@ -1,11 +1,9 @@
-package game.main.objects.brains
+package game.main.gameobject.elements
 
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
-import game.main.objects.CollisionObject
-import game.main.objects.improved.objects.BulletObject
-import game.main.objects.improved.{GameObject, ObjectElement, PhysicsObject, UnitObject}
+import game.main.gameobject.objects.{BulletObject, PhysicsObject, UnitObject}
+import game.main.gameobject.{GameObject, ObjectElement}
 import game.util.pools.MinimumTranslationVectorPool
-import gdxfixed.math.Intersector
 
 object BulletCollision extends ObjectElement {
 

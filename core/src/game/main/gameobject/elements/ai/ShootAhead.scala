@@ -1,9 +1,9 @@
-package game.main.objects.brains
+package game.main.gameobject.elements.ai
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.GameElement
 import game.main.MainGame
-import game.main.objects.improved.{GameObject, ObjectElement, UnitObject}
+import game.main.gameobject.objects.UnitObject
+import game.main.gameobject.{GameObject, ObjectElement}
 import game.main.physics.collision.CollisionBody
 import game.main.units.BulletCreator
 import game.util.Vector2e

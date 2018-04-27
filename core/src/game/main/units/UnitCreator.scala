@@ -2,10 +2,10 @@ package game.main.units
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import game.loader.{GameTextures, UnitTextures}
-import game.main.gameMap.Path
-import game.main.objects.improved.ObjectHandler.Level
-import game.main.objects.improved.{PhysicsElement, RelativeSpriteElement, SpriteElement, UnitObject}
-import game.main.physics.CollisionHandler
+import game.main.gamemap.Path
+import game.main.gameobject.ObjectHandler.Level
+import game.main.gameobject.elements.{RelativeSpriteElement, SpriteElement}
+import game.main.gameobject.objects.UnitObject
 import game.main.physics.collision.PolygonBody
 import game.main.players.Player
 import game.util.Vector2e

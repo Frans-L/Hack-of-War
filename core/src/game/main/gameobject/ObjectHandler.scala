@@ -1,10 +1,11 @@
-package game.main.objects.improved
+package game.main.gameobject
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.GameElement
-import game.main.objects.improved.ObjectHandler.Level
+import game.main.gameobject.ObjectHandler.Level
+import game.main.gameobject.objects.PhysicsObject
 import game.main.physics.CollisionHandler
 import game.util.Dimensions
 

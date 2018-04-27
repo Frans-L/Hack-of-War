@@ -1,10 +1,9 @@
-package game.main.objects.improved
+package game.main.gameobject.objects
 
 import com.badlogic.gdx.math.Vector2
 import game.main.physics.CollisionHandler
 import game.main.physics.collision.CollisionBody
 import game.main.players.Player
-import game.main.units.BulletCreator
 import game.util.Vector2e
 
 class UnitObject(physWorld: CollisionHandler, collBody: CollisionBody) extends PhysicsObject(physWorld, collBody)

@@ -1,10 +1,9 @@
-package game.main.gameMap
+package game.main.gamemap
 
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Interpolation
 import game.GameElement
-import game.main.objects.UnitPath
 import game.util.CountdownTimer
 
 /** Holds a path, and an icon. */

@@ -1,7 +1,8 @@
-package game.main.objects.improved
+package game.main.gameobject.elements
 
-import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
+import game.main.gameobject.GameObject
 
 class RelativeSpriteElement(sprite: Sprite, keepSize: Boolean,
                             val pos: Vector2, val scale: Vector2,

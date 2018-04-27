@@ -1,4 +1,4 @@
-package game.main.gameMap
+package game.main.gamemap
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
@@ -6,11 +6,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import game.GameElement
 import game.loader.GameTextures
-import game.main.objects.improved.ObjectHandler.Level
-import game.main.objects.improved.{GameObject, ObjectHandler, PhysicsObject}
-import game.main.objects.improved.objects.{BorderSprite, CollisionObject}
-import game.main.objects.{BorderSprite, CollisionObject}
-import game.main.physics.CollisionHandler
+import game.main.gameobject.ObjectHandler.Level
+import game.main.gameobject.objects.{BorderSprite, CollisionObject, PhysicsObject}
+import game.main.gameobject.{GameObject, ObjectHandler}
 import game.main.physics.collision.{CollisionBody, PolygonBody}
 import game.util.{Dimensions, Vector2e}
 

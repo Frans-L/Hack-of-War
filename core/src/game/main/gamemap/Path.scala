@@ -1,4 +1,4 @@
-package game.main.gameMap
+package game.main.gamemap
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color

@@ -1,6 +1,7 @@
-package game.main.objects.brains
+package game.main.gameobject.elements.ai
 
-import game.main.objects.improved.{GameObject, ObjectElement, UnitObject}
+import game.main.gameobject.objects.UnitObject
+import game.main.gameobject.{GameObject, ObjectElement}
 import game.util.Vector2e._
 import game.util.pools
 

@@ -2,22 +2,17 @@ package game.main
 
 import java.util.concurrent.TimeUnit
 
-import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g2d.{SpriteBatch, TextureAtlas}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
-import com.badlogic.gdx.graphics.profiling.GLProfiler
 import com.badlogic.gdx.graphics.{FPSLogger, GL20, OrthographicCamera}
-import com.badlogic.gdx.math.{MathUtils, Vector2}
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import com.badlogic.gdx.{Gdx, Input, Screen}
 import game.loader.GameTextures
-import game.main.objects.UnitObject
-import game.main.objects.improved.ObjectHandler
+import game.main.gameobject.ObjectHandler
 import game.main.ui.GameUI
 import game.util._
-import game.main.physics.CollisionHandler
 import game.main.units.BasicBullet
 import game.main.players.{Bot, Player, User}
 
@@ -75,8 +70,8 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
   private val objectHandler: ObjectHandler = new ObjectHandler(screenDim)
 
   //adds the map
-  private val map: game.main.gameMap.Map =
-    new game.main.gameMap.Map(screenDim, textures, objectHandler)
+  private val map: game.main.gamemap.Map =
+    new game.main.gamemap.Map(screenDim, textures, objectHandler)
   objectHandler.collHandler.map = map //TODO temporary solution to add map to physWorld
 
   //sets the players
@@ -121,7 +116,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
     if (ticker.interval4) {
       //Gdx.app.log("MainGame", "Render calls: " + batch.renderCalls)
-      Gdx.app.log("MainGame", "Pooled units: " + UnitObject.pool.getFree)
+      //Gdx.app.log("MainGame", "Pooled units: " + UnitObject.pool.getFree)
     }
 
     fPSLogger.log()

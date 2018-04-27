@@ -1,7 +1,7 @@
 package game.main.players
 
 import game.main.cards.{Card, UnitCard}
-import game.main.objects.improved.ObjectHandler
+import game.main.gameobject.ObjectHandler
 import game.main.physics.CollisionHandler
 import game.main.units.SoldierCreator
 

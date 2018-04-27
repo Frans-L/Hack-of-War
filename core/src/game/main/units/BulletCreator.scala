@@ -3,12 +3,11 @@ package game.main.units
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
 import game.loader.{GameTextures, UnitTextures}
-import game.main.objects.improved.ObjectHandler.Level
-import game.main.objects.improved.objects.BulletObject
-import game.main.objects.improved.{ObjectHandler, PhysicsObject, RelativeSpriteElement, SpriteElement}
-import game.main.physics.CollisionHandler
+import game.main.gameobject.elements.{RelativeSpriteElement, SpriteElement}
+import game.main.gameobject.ObjectHandler
+import game.main.gameobject.ObjectHandler.Level
+import game.main.gameobject.objects.BulletObject
 import game.main.physics.collision.{CircleBody, CollisionBody}
-import game.main.units.BasicBullet.{radius, texture}
 import game.util.Vector2e
 
 trait BulletCreator {

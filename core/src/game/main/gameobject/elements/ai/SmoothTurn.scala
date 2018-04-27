@@ -1,8 +1,8 @@
-package game.main.objects.brains
+package game.main.gameobject.elements.ai
 
 import com.badlogic.gdx.math.Interpolation
-import game.GameElement
-import game.main.objects.improved.{GameObject, ObjectElement, UnitObject}
+import game.main.gameobject.objects.UnitObject
+import game.main.gameobject.{GameObject, ObjectElement}
 import game.util.Utils
 
 class SmoothTurn(maxRotateTime: Float) extends ObjectElement {

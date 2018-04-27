@@ -1,7 +1,7 @@
-package game.main.objects.improved
+package game.main.gameobject.elements
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
+import game.main.gameobject.{GameObject, ObjectElement}
 
 
 class SpriteElement(var sprite: Sprite, keepSize: Boolean) extends ObjectElement {

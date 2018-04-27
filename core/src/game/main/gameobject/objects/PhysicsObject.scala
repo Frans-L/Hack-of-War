@@ -1,10 +1,10 @@
-package game.main.objects.improved
+package game.main.gameobject.objects
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
 import game.main.MainGame
+import game.main.gameobject.GameObject
 import game.main.physics.CollisionHandler
 import game.main.physics.collision.CollisionBody
 import game.util.Vector2e

@@ -3,8 +3,7 @@ package game.main.cards
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
-import game.main.gameMap.{IconPath, Path}
-import game.main.objects.UnitPath
+import game.main.gamemap.{IconPath, Path}
 import game.main.players.Player
 import game.main.units.{SoldierCreator, UnitCreator}
 

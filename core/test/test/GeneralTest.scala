@@ -78,17 +78,8 @@ class GeneralTest extends GameTest {
     o.setPosition(3.5f, 2)
 
     assertEquals(true, o.overlaps(p, mtv))
-    // assertEquals(2, mtv.depth, 0.1f)
+    assertEquals(5, mtv.depth, 0.1f)
 
-    println("y:" + o.getY)
-    println("normal: " + mtv.normal + " depth: " + mtv.depth)
-    o.setPosition(3.5f, o.getY + mtv.normal.y * mtv.depth)
-
-    o.overlaps(p, mtv2)
-    println("\ny:" + o.getY)
-    println("normal: " + mtv2.normal + " depth: " + mtv2.depth)
-
-    assertEquals(false, true)
   }
 
 }

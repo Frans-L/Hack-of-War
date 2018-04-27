@@ -3,14 +3,10 @@ package game.main.players
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.utils.{Pool, Pools}
 import game.GameElement
 import game.main.cards.Card
-import game.main.gameMap.{IconPath, Path}
-import game.main.objects.improved.ObjectHandler
-import game.main.objects.improved.ObjectHandler.Level
-import game.main.objects.{UnitObject, UnitPath}
-import game.main.physics.CollisionHandler
+import game.main.gamemap.{IconPath, Path}
+import game.main.gameobject.ObjectHandler
 import game.main.units.UnitCreator
 
 import scala.collection.mutable

@@ -1,9 +1,6 @@
-package game.main.objects.improved.objects
+package game.main.gameobject.objects
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import game.main.objects.improved.{GameObject, PhysicsObject}
 import game.main.physics.CollisionHandler
 import game.main.physics.collision.CollisionBody
 

@@ -1,8 +1,8 @@
-package game.main.objects.brains
+package game.main.gameobject.elements.ai
 
-import com.badlogic.gdx.Gdx
-import game.main.gameMap.{IconPath, Path}
-import game.main.objects.improved.{GameObject, ObjectElement, UnitObject}
+import game.main.gamemap.Path
+import game.main.gameobject.objects.UnitObject
+import game.main.gameobject.{GameObject, ObjectElement}
 
 /** Updates the unitObject's moveTarget. */
 class FollowPath(var path: Path, val acceptDist: Float) extends ObjectElement {

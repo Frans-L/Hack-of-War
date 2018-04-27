@@ -1,9 +1,9 @@
-package game.main.objects.brains
+package game.main.gameobject.elements.ai
 
 import com.badlogic.gdx.math.Vector2
-import game.GameElement
 import game.main.MainGame
-import game.main.objects.improved.{GameObject, ObjectElement, PhysicsElement, UnitObject}
+import game.main.gameobject.objects.UnitObject
+import game.main.gameobject.{GameObject, ObjectElement}
 import game.util.Vector2e._
 import game.util.pools
 
