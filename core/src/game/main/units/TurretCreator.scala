@@ -3,8 +3,6 @@ package game.main.units
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CircleBody, CollisionBody}
 import game.main.gameworld.gamemap.Path
-import game.main.gameworld.gameobject.elements
-import game.main.gameworld.gameobject.elements.{ShadowElement, SpriteElement}
 import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.players.Player
 

@@ -6,7 +6,7 @@ import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
 import game.main.gameworld.gameobject.elements
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.ObjectHandler.Level
-import game.main.gameworld.gameobject.elements.{ShadowElement, SpriteElement}
+import game.main.gameworld.gameobject.elements.{ShadowElement, TextureElement}
 import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.players.Player
 import game.util.Vector2e
@@ -24,6 +24,7 @@ object UnitCreator {
   def defaultCardIcon(sprite: Sprite): Sprite = {
     sprite //icon is the same as the unit
   }
+
 }
 
 trait UnitCreator {
@@ -43,9 +44,9 @@ trait UnitCreator {
   protected def setSprite(obj: UnitObject, owner: Player): Unit = {
     val sprite = GameTextures.default.atlas.createSprite(texture.main(owner.colorIndex))
     obj.appendElement(
-      new ShadowElement(GameTextures.default.atlas.findRegion(texture.shadow), sprite))
+      new ShadowElement(GameTextures.default.atlas.findRegion(texture.shadow)))
     obj.appendElement(
-      new SpriteElement(sprite, false))
+      new TextureElement(GameTextures.default.atlas.findRegion(texture.main(owner.colorIndex))))
   }
 
 

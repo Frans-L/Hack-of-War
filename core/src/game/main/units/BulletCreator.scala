@@ -7,6 +7,7 @@ import game.main.gameworld.collision.bodies
 import game.main.gameworld.collision.bodies.CircleBody
 import game.main.gameworld.gameobject.ObjectHandler
 import game.main.gameworld.gameobject.ObjectHandler.Level
+import game.main.gameworld.gameobject.elements.{ShadowElement, StaticTextureElement, TextureElement}
 import game.main.gameworld.gameobject.objects.BulletObject
 import game.util.Vector2e
 
@@ -26,14 +27,12 @@ trait BulletCreator {
     val body: bodies.CollisionBody = new CircleBody(radius)
 
     val bullet = new BulletObject(objectHandler.collHandler, body)
-    val shadow = new game.main.gameworld.gameobject.elements.RelativeSpriteElement(
-      GameTextures.default.atlas.createSprite(texture.shadow), false,
-      Vector2e(-3, -3), Vector2e(0.9f, 0.9f), 0)
-    val sprite = new game.main.gameworld.gameobject.elements.SpriteElement(
-      GameTextures.default.atlas.createSprite(texture.main(colorIndex)), false)
 
-    bullet.appendElement(shadow)
-    bullet.appendElement(sprite)
+    bullet.appendElement(
+      new ShadowElement(GameTextures.default.atlas.findRegion(texture.shadow)))
+    bullet.appendElement(
+      new TextureElement(GameTextures.default.atlas.findRegion(texture.main(colorIndex))))
+
     bullet.size.set(radius * 2, radius * 2)
     bullet.origin.set(radius, radius)
     bullet.pos.set(pos)

@@ -1,7 +1,7 @@
 package game.main.gameworld.gamemap
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
+import com.badlogic.gdx.graphics.g2d.{Batch, Sprite, TextureRegion}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import game.GameElement
@@ -10,7 +10,7 @@ import game.main.gameworld.collision.bodies
 import game.main.gameworld.collision.bodies.PolygonBody
 import game.main.gameworld.gameobject
 import game.main.gameworld.gameobject.ObjectHandler.Level
-import game.main.gameworld.gameobject.objects
+import game.main.gameworld.gameobject.{GameObject, objects}
 import game.main.gameworld.gameobject.objects.BorderSprite
 import game.util.{Dimensions, Vector2e}
 
@@ -51,6 +51,9 @@ class Map(val dimensions: Dimensions,
 
   var centerX: Float = 0 //the playable areas center
   var centerY: Float = 0 //initializeMap gives right coords
+
+  val mapObject: GameObject = new GameObject()
+  objectHandler.addObject(mapObject, Level.map, update = false)
 
   initializeMap()
   createCollisionMap()
@@ -141,6 +144,9 @@ class Map(val dimensions: Dimensions,
     addTrenches()
     addMiddle()
     addPath()
+
+    elements.foreach(mapObject.appendElement) //add all elements to mapobject
+    collObjects.foreach(mapObject.appendElement)
 
     //adds the path
     def addPath(): Unit = {
@@ -388,9 +394,9 @@ class Map(val dimensions: Dimensions,
 
     //a bit prettier way to add elements + clones the sprite
     def addGraphic(x: Float, y: Float, width: Float, height: Float,
-                   sprite: Sprite, borderX: Float = 0, borderY: Float = 0): Unit = {
+                   texture: TextureRegion, borderX: Float = 0, borderY: Float = 0): Unit = {
       elements += BorderSprite(Vector2e(x, y), Vector2e(width, height),
-        Vector2e(borderX, borderY), new Sprite(sprite), objectHandler, Level.map)
+        Vector2e(borderX, borderY), new TextureRegion(texture))
     }
 
     //a bit prettier way to add a collision block

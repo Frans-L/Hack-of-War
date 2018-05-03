@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import game.GameElement
 import game.main.gameworld.collision.CollisionHandler
 import game.main.gameworld.gameobject.ObjectHandler.Level
+import game.main.gameworld.gameobject.objects.PhysicsObject
 import game.util.Dimensions
 
 import scala.collection.mutable
@@ -78,8 +79,14 @@ class ObjectHandler(dimensions: Dimensions) extends GameElement {
     if (draw) drawObjects(level.id) += obj
     if (collision && obj.isInstanceOf[objects.PhysicsObject]) {
       if (owner == this) Gdx.app.log(this.toString, obj.toString + " is without owner!")
-      collHandler.addUnit(owner, obj.asInstanceOf[objects.PhysicsObject])
+      addToCollHandler(owner, obj.asInstanceOf[objects.PhysicsObject])
     }
+
+  }
+
+  /** Adds a physicsObject to collHandler */
+  def addToCollHandler(owner: GameElement, obj: PhysicsObject): Unit ={
+    collHandler.addUnit(owner, obj)
   }
 
 }
