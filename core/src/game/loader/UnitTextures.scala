@@ -4,4 +4,5 @@ package game.loader
 trait UnitTextures {
   val main: Seq[String] //seq index = player index
   val shadow: String
+  val brightness: Float = 0.85f
 }

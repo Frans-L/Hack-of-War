@@ -146,7 +146,6 @@ class PolygonBody(vertices: Array[Float], private var radius: Float) extends
     }
 
 
-
     VectorPool.free(v1) //frees the memory
     VectorPool.free(v2)
 
@@ -170,6 +169,14 @@ class PolygonBody(vertices: Array[Float], private var radius: Float) extends
   override def draw(shapeRender: ShapeRenderer): Unit = {
     shapeRender.polygon(getTransformedVertices)
     shapeRender.circle(center.x, center.y, 4)
+  }
+
+  /** Returns the y-position of of the highest point of the collision body. */
+  override def highestPointY: Float = {
+    val v = getTransformedVertices
+    var max: Float = Float.MinValue
+    for (i <- v.indices if i % 2 == 1) max = math.max(max, v(i))
+    max
   }
 
 }

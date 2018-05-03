@@ -14,14 +14,11 @@ class GameObject() extends GameElement with ObjectElement {
   val size: Vector2 = Vector2e(0, 0)
   val scale: Vector2 = Vector2e(1, 1)
   val origin: Vector2 = Vector2e(0, 0)
-  var angle: Float = 0
+  var angle: Float = 0 //degrees
+  var opacity: Float = 1f //values between 0-1, can be used with textures
 
   var canBeDeleted: Boolean = false
   val elements: mutable.ListBuffer[ObjectElement] = mutable.ListBuffer.empty
-
-  //avoid throwing objects to garbageCollector
-  lazy private val relativePos = Vector2e(0, 0)
-  lazy private val relativeScale = Vector2e(0, 0)
 
   /** Updates the object and all it's elements */
   override def update(): Unit = {
@@ -46,15 +43,13 @@ class GameObject() extends GameElement with ObjectElement {
 
   /** Calls the method 'run' so that position of this object is relative to parent. */
   private def runRelatively(parent: GameObject, run: () => Unit): Unit = {
-    //sets the position to be relative
-    //relativePos.set(pos)
-    //relativeScale.set(scale)
-
     val orgAngle = angle
-    pos.setAngle(parent.angle + 180)
+    val orgOpacity = opacity
+    pos.setAngle(parent.angle)
     pos.add(parent.pos.x, parent.pos.y)
     scale.scl(parent.scale)
     angle += parent.angle
+    opacity *= parent.opacity
 
     run() //updates with its real coords
 
@@ -63,6 +58,7 @@ class GameObject() extends GameElement with ObjectElement {
     pos.setAngle(orgAngle)
     scale.scl(1f / parent.scale.x, 1f / parent.scale.y)
     angle -= parent.angle
+    opacity = if(opacity != 0) opacity / parent.opacity else orgOpacity
   }
 
 
@@ -86,6 +82,18 @@ class GameObject() extends GameElement with ObjectElement {
     objectElement.checkParent(this)
     elements.prepend(objectElement)
     this
+  }
+
+  /** Returns the first element */
+  def headElement[T <: ObjectElement]: T = {
+    require(elements.head.isInstanceOf[T], "headElement isn't instance of T")
+    elements.head.asInstanceOf[T]
+  }
+
+  /** Returns the first element */
+  def lastElement[T <: ObjectElement]: T = {
+    require(elements.last.isInstanceOf[T], "lastElement isn't instance of T")
+    elements.last.asInstanceOf[T]
   }
 
   override def checkParent(parent: GameObject): Unit = Unit //anything works

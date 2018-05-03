@@ -6,21 +6,21 @@ filter: Nearest,Nearest
 repeat: none
 bullet1Blue
   rotate: false
-  xy: 164, 638
+  xy: 586, 910
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 bullet1Red
   rotate: false
-  xy: 104, 578
+  xy: 2, 118
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 bullet1Shadow
   rotate: false
-  xy: 586, 910
+  xy: 104, 578
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
@@ -30,6 +30,20 @@ card1
   xy: 2, 600
   size: 160, 240
   orig: 160, 240
+  offset: 0, 0
+  index: -1
+healthBar
+  rotate: false
+  xy: 349, 885
+  size: 100, 10
+  orig: 100, 10
+  offset: 0, 0
+  index: -1
+healthBarFill
+  rotate: false
+  xy: 346, 839
+  size: 1, 1
+  orig: 1, 1
   offset: 0, 0
   index: -1
 mapBorder
@@ -76,7 +90,7 @@ mapTrenchCorner
   index: -1
 pointCircle
   rotate: false
-  xy: 349, 865
+  xy: 164, 628
   size: 30, 30
   orig: 30, 30
   offset: 0, 0

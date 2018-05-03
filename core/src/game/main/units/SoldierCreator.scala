@@ -3,8 +3,9 @@ package game.main.units
 import com.badlogic.gdx.Gdx
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
-import game.main.gameworld.gameobject.elements.ai
+import game.main.gameworld.gameobject.elements.unit
 import game.main.gameworld.gamemap.Path
+import game.main.gameworld.gameobject.elements.unit.HealthBarElement
 import game.main.gameworld.gameobject.objects.UnitObject
 
 object SoldierCreator extends UnitCreator {
@@ -36,11 +37,13 @@ object SoldierCreator extends UnitCreator {
     obj.maxMovingForce = 0.030f
 
     //add brains
-    obj.appendElement(new ai.FollowPath(path, obj.collBody.getRadiusScaled * 1.5f))
-    obj.appendElement(new ai.ShootAhead(attackVision, 30f, 200, BasicBullet))
-    obj.appendElement(new ai.Steering(0.006f))
-    obj.appendElement(new ai.AvoidObstacles(0.020f, obj.sWidth * 1.5f))
-    obj.appendElement(new ai.TurnToMovingDirection(150f))
+    obj.appendElement(new unit.FollowPath(path, obj.collBody.getRadiusScaled * 1.5f))
+    obj.appendElement(new unit.ShootAhead(attackVision, 30f, 200, BasicBullet))
+    obj.appendElement(new unit.Steering(0.006f))
+    obj.appendElement(new unit.AvoidObstacles(0.020f, obj.sWidth * 1.5f))
+    obj.appendElement(new unit.TurnToMovingDirection(150f))
+
+    obj.appendElement(new HealthBarElement(obj.health))
 
   }
 }

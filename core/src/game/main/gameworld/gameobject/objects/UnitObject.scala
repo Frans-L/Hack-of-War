@@ -7,6 +7,11 @@ import game.main.gameworld.collision.bodies.CollisionBody
 import game.main.players.Player
 import game.util.Vector2e
 
+object UnitObject{
+
+  val noHitTick: Long = -1
+}
+
 class UnitObject(physWorld: CollisionHandler, collBody: CollisionBody) extends PhysicsObject(physWorld, collBody)
 {
 
@@ -19,6 +24,7 @@ class UnitObject(physWorld: CollisionHandler, collBody: CollisionBody) extends P
 
   //basic stats & shooting
   var health: Float = _
+  var lastHitTick: Long = UnitObject.noHitTick //no hit
 
   override def update(): Unit = {
     updatePhysics()
@@ -36,6 +42,7 @@ class UnitObject(physWorld: CollisionHandler, collBody: CollisionBody) extends P
   /** Reduces the health of the object and checks if object has diead */
   def reduceHealth(damage: Float): Unit = {
     health -= damage
+    lastHitTick = ticker.total
     if (health <= 0) this.delete()
   }
 

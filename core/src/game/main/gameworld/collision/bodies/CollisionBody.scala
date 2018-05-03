@@ -123,4 +123,7 @@ trait CollisionBody {
   /** Draws the collisionBody */
   def draw(shapeRender: ShapeRenderer): Unit
 
+  /** Returns the y-position of of the highest point of the collision body.*/
+  def highestPointY: Float
+
 }

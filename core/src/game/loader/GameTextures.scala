@@ -88,6 +88,9 @@ object GameTextures {
       override val shadow: String = "turret1Shadow"
     }
 
+    val healthBar = "healthBar"
+    val healthBarFill = "healthBarFill"
+
     val card1 = "card1"
     val mapBorderShort = "mapBorderShort"
     val mapBorderWide = "mapBorderWide"

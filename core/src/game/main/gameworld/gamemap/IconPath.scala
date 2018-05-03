@@ -19,7 +19,7 @@ class IconPath(private var pathOrg: Path, val icon: Sprite) extends GameElement 
   var startPos = 0f
 
   private val orginalAlpha = icon.getColor.a
-  var iconGap: Float = 6 * icon.getWidth * icon.getScaleX
+  var iconGap: Float = 5 * icon.getWidth * icon.getScaleX
 
 
   /** Sets the offset. */

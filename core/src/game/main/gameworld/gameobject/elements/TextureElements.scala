@@ -1,5 +1,6 @@
 package game.main.gameworld.gameobject.elements
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite, TextureRegion}
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
@@ -8,9 +9,12 @@ import game.main.gameworld.gameobject.{GameObject, ObjectElement}
 import game.util.Vector2e
 
 /** Draws the texture over the object. */
-class TextureElement(var texture: TextureRegion) extends ObjectElement {
+class TextureElement(var texture: TextureRegion, brightness: Float = 1f) extends ObjectElement {
+
+  var color: Color = new Color(brightness, brightness, brightness, 1)
 
   override def draw(parent: GameObject, batch: Batch): Unit = {
+    batch.setColor(color.r, color.g, color.b, color.a * parent.opacity)
     batch.draw(texture,
       parent.pos.x - parent.origin.x, parent.pos.y - parent.origin.y,
       parent.origin.x, parent.origin.y,
@@ -32,6 +36,7 @@ class RelativeTextureElement(texture: TextureRegion,
                              var overrideSize: Option[Vector2] = None) extends TextureElement(texture) {
 
   override def draw(parent: GameObject, batch: Batch): Unit = {
+    batch.setColor(color.r, color.g, color.b, color.a * parent.opacity)
     batch.draw(texture,
       parent.pos.x - parent.origin.x + pos.x, parent.pos.y - parent.origin.y + pos.y,
       parent.origin.x, parent.origin.y,
@@ -68,6 +73,7 @@ class StaticTextureElement(texture: TextureRegion) extends RelativeTextureElemen
         overrideSize.getOrElse(parent.size).y)
       sprite.setScale(parent.scale.x * scale.x, parent.scale.y * scale.y)
       sprite.setRotation(parent.angle + angle)
+      sprite.setColor(color.r, color.g, color.b, color.a * parent.opacity)
       dirty = false
     }
   }

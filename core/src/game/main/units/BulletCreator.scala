@@ -31,7 +31,8 @@ trait BulletCreator {
     bullet.appendElement(
       new ShadowElement(GameTextures.default.atlas.findRegion(texture.shadow)))
     bullet.appendElement(
-      new TextureElement(GameTextures.default.atlas.findRegion(texture.main(colorIndex))))
+      new TextureElement(
+        GameTextures.default.atlas.findRegion(texture.main(colorIndex)), texture.brightness))
 
     bullet.size.set(radius * 2, radius * 2)
     bullet.origin.set(radius, radius)

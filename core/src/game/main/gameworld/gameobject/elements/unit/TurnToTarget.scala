@@ -1,4 +1,4 @@
-package game.main.gameworld.gameobject.elements.ai
+package game.main.gameworld.gameobject.elements.unit
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Interpolation

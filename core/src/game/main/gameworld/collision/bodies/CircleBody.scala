@@ -120,4 +120,6 @@ class CircleBody(private var radius: Float) extends CollisionBody {
     shapeRender.circle(center.x, center.y, getRadiusScaled)
   }
 
+  /** Returns the y-position of of the highest point of the collision body. */
+  override def highestPointY: Float = y + radius*2
 }

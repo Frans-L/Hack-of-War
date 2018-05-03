@@ -1,4 +1,4 @@
-package game.main.gameworld.gameobject.elements.ai
+package game.main.gameworld.gameobject.elements.unit
 
 import com.badlogic.gdx.math.Vector2
 import game.main.{MainGame, gameworld}

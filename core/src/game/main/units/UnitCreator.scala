@@ -6,6 +6,7 @@ import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
 import game.main.gameworld.gameobject.elements
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.ObjectHandler.Level
+import game.main.gameworld.gameobject.elements.unit.{HealthBarElement, UnitTextureElement}
 import game.main.gameworld.gameobject.elements.{ShadowElement, TextureElement}
 import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.players.Player
@@ -46,7 +47,8 @@ trait UnitCreator {
     obj.appendElement(
       new ShadowElement(GameTextures.default.atlas.findRegion(texture.shadow)))
     obj.appendElement(
-      new TextureElement(GameTextures.default.atlas.findRegion(texture.main(owner.colorIndex))))
+      new UnitTextureElement(
+        GameTextures.default.atlas.findRegion(texture.main(owner.colorIndex)), texture.brightness))
   }
 
 
@@ -91,6 +93,7 @@ trait UnitCreator {
   /** Returns the card icon of the unit */
   def cardIcon(owner: Player): Sprite = {
     val sprite = GameTextures.default.atlas.createSprite(texture.main(owner.colorIndex))
+    sprite.setColor(texture.brightness, texture.brightness, texture.brightness, 1)
     sprite.setSize(width, height)
     UnitCreator.defaultCardIcon(sprite)
   }

@@ -3,8 +3,8 @@ package game.main.units
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CircleBody, CollisionBody, PolygonBody}
 import game.main.gameworld.gamemap.Path
-import game.main.gameworld.gameobject.elements.ai.AvoidObstacles
-import game.main.gameworld.gameobject.elements.{ShadowElement, TextureElement, ai}
+import game.main.gameworld.gameobject.elements.unit.{AvoidObstacles, HealthBarElement, UnitTextureElement}
+import game.main.gameworld.gameobject.elements.{ShadowElement, TextureElement, unit}
 import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.players.Player
 
@@ -12,15 +12,27 @@ object TurretCreator extends UnitCreator {
 
   override lazy val cost: Int = 5
   override lazy val texture: UnitTextures = GameTextures.Units.BaseTurret
-  override lazy val width: Float = 100f
-  override lazy val height: Float = 100f
+  override lazy val width: Float = 75f
+  override lazy val height: Float = 75f
 
   override def collBody: CollisionBody = new CircleBody(width / 2f)
 
   lazy val cannonTexture: UnitTextures = GameTextures.Units.BaseSoldier
-  lazy val cannonWidth: Float = 100f / 1.75f
-  lazy val cannonHeight: Float = 60f / 1.75f
+  lazy val cannonWidth: Float = 100f / 1.33f
+  lazy val cannonHeight: Float = 70f / 1.33f
 
+
+  /** Sets the sprites to units */
+  override protected def setSprite(obj: UnitObject, owner: Player): Unit = {
+    val main = new UnitTextureElement(
+      GameTextures.default.atlas.findRegion(texture.main(owner.colorIndex)), texture.brightness)
+    val shadow = new ShadowElement(GameTextures.default.atlas.findRegion(texture.shadow))
+    //main.color.set(1,1,1,0.5f)
+    //shadow.color.set(1,1,1,0.0f)
+    obj.appendElement(shadow)
+    obj.appendElement(main)
+
+  }
 
   /** Sets the all stats to to unit */
   override protected def setStats(obj: UnitObject, path: Path): Unit = {
@@ -30,7 +42,7 @@ object TurretCreator extends UnitCreator {
     obj.static = true
 
     obj.appendElement(createCannon())
-
+    obj.appendElement(new HealthBarElement(obj.health))
 
     //creates the cannot over the base unit
     def createCannon(): UnitObject = {
@@ -39,18 +51,21 @@ object TurretCreator extends UnitCreator {
       cannon.owner = obj.owner
       cannon.pos.set(0, 0)
       cannon.size.set(cannonWidth, cannonHeight)
-      cannon.origin.set(cannon.size.x / 2f, cannon.size.y / 2f)
+      cannon.origin.set(cannon.size.x / 3f, cannon.size.y / 2f)
+
+      //cannon.appendElement(
+      //  new ShadowElement(GameTextures.default.atlas.findRegion(cannonTexture.shadow)))
+      //cannon.lastElement[ShadowElement].color.set(1, 1, 1, 0.5f)
 
       cannon.appendElement(
-        new ShadowElement(GameTextures.default.atlas.findRegion(cannonTexture.shadow)))
-      cannon.appendElement(
         new TextureElement(GameTextures.default.atlas.findRegion(cannonTexture.main(obj.owner.colorIndex))))
+      cannon.lastElement[ShadowElement].color.set(1, 1, 1, 0.75f)
 
       val visionMaxDist = obj.sWidth * 4f
       val attackVision = new CircleBody(visionMaxDist)
 
-      cannon.appendElement(new ai.ShootAhead(attackVision, 10f, 300, BasicBullet))
-      cannon.appendElement(new ai.TurnToTarget(350f))
+      cannon.appendElement(new unit.ShootAhead(attackVision, 10f, 300, BasicBullet))
+      cannon.appendElement(new unit.TurnToTarget(350f))
 
       cannon.angle = obj.angle
 
@@ -59,4 +74,5 @@ object TurretCreator extends UnitCreator {
 
 
   }
+
 }
