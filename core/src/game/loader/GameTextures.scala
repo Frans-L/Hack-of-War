@@ -83,7 +83,11 @@ object GameTextures {
       override val shadow: String = "bullet1Shadow"
     }
 
-    val bullet1 = Seq("bullet1Blue", "bullet1Red")
+    object BaseTurret extends UnitTextures{
+      override val main: Seq[String] = Seq("turret1Blue", "turret1Red")
+      override val shadow: String = "turret1Shadow"
+    }
+
     val card1 = "card1"
     val mapBorderShort = "mapBorderShort"
     val mapBorderWide = "mapBorderWide"

@@ -8,9 +8,8 @@ import game.util.Vector2e
 
 object CollisionBody {
 
-  lazy val tmp1 = Vector2e(0, 0) //TODO: Does Java 7 support lazy val?
+  lazy val tmp1 = Vector2e(0, 0)
   lazy val tmp2 = Vector2e(0, 0)
-  lazy val tmp3 = Vector2e(0, 0)
 
   /** Returns true if the segment circle collided and sets the MinimumTranslationVector to
     * tell how much and in which direction the circle have to move to avoid collision.
@@ -20,13 +19,16 @@ object CollisionBody {
   def intersectSegmentCircle(start: Vector2, end: Vector2, center: Vector2, radius: Float,
                              mtv: MinimumTranslationVector): Boolean = {
 
-    Intersector.nearestSegmentPoint(start, end, center, tmp1)
+    tmp1.set(0, 0) //reset tmp vectors
     tmp2.set(center)
+
+    Intersector.nearestSegmentPoint(start, end, center, tmp1)
+
 
     if (tmp2.dst2(tmp1) <= radius * radius) {
       if (mtv != null) {
-        mtv.depth = math.abs(tmp2.dst2(tmp1) - radius)
-        mtv.normal = mtv.normal.set(tmp2.sub(tmp1).nor())
+        mtv.depth = math.abs(tmp2.dst(tmp1) - radius)
+        mtv.normal = mtv.normal.set(tmp2.sub(tmp1).nor()).scl(-1)
       }
       true
     } else

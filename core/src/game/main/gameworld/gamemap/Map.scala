@@ -46,6 +46,8 @@ class Map(val dimensions: Dimensions,
   val collObjects: mutable.Buffer[objects.PhysicsObject] = mutable.Buffer[objects.PhysicsObject]()
   var path: Seq[Path] = _ //will be set at initializeMap
   var pathReversed: Seq[Path] = _
+  var turretPath: Seq[Path] = _
+  var turretPathReversed: Seq[Path] = _
 
   var centerX: Float = 0 //the playable areas center
   var centerY: Float = 0 //initializeMap gives right coords
@@ -173,8 +175,24 @@ class Map(val dimensions: Dimensions,
 
       )
 
-      path = Seq(new Path(routeDown, 75f), new Path(routeUp, 75f))
-      pathReversed = Seq(new Path(routeDown, 75f).reverse(), new Path(routeUp, 75f).reverse())
+      val offset = 75f
+
+      path = Seq(new Path(routeDown, offset), new Path(routeUp, offset))
+      pathReversed = Seq(new Path(routeDown, offset).reverse, new Path(routeUp, offset).reverse)
+
+      val routeSize = routeDown.size
+      val turretMiddle = Seq.empty
+      val turretUp = Seq(
+        routeUp(3).cpy.add(0, offset), routeUp(4).cpy.add(0, offset),
+        routeUp(routeSize - 5).cpy.add(0, offset), routeUp(routeSize - 4).cpy.add(0, offset))
+      val turretDown = Seq(
+        routeDown(3).cpy.add(0, -offset), routeDown(4).cpy.add(0, -offset),
+        routeDown(routeSize - 5).cpy.add(0, -offset), routeDown(routeSize - 4).cpy.add(0, -offset))
+
+      turretPath = Seq(new Path(turretMiddle, 0), new Path(turretDown, 0), new Path(turretUp, 0))
+      turretPathReversed = Seq(new Path(turretMiddle, 0).reverse,
+        new Path(turretDown, 0).reverse, new Path(turretUp, 0).reverse)
+
     }
 
 

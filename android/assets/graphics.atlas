@@ -1,103 +1,124 @@
 
 graphics.png
-size: 512,512
+size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bullet1Blue
   rotate: false
-  xy: 184, 275
+  xy: 164, 638
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 bullet1Red
   rotate: false
-  xy: 216, 307
+  xy: 104, 578
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 bullet1Shadow
   rotate: false
-  xy: 206, 275
+  xy: 586, 910
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 card1
   rotate: false
-  xy: 349, 269
+  xy: 2, 600
   size: 160, 240
   orig: 160, 240
   offset: 0, 0
   index: -1
 mapBorder
   rotate: false
-  xy: 2, 13
+  xy: 1017, 1017
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
 mapBorderShort
   rotate: false
-  xy: 2, 147
+  xy: 164, 660
   size: 180, 180
   orig: 180, 180
   offset: 0, 0
   index: -1
 mapBorderWide
   rotate: false
-  xy: 2, 329
+  xy: 2, 842
   size: 345, 180
   orig: 345, 180
   offset: 0, 0
   index: -1
 mapCorner
   rotate: false
-  xy: 239, 85
+  xy: 823, 932
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
 mapMiddleCorner
   rotate: false
-  xy: 2, 20
+  xy: 349, 897
   size: 235, 125
   orig: 235, 125
   offset: 0, 0
   index: -1
 mapTrenchCorner
   rotate: false
-  xy: 184, 177
+  xy: 586, 932
   size: 235, 90
   orig: 235, 90
   offset: 0, 0
   index: -1
 pointCircle
   rotate: false
-  xy: 184, 297
+  xy: 349, 865
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
+turret1Blue
+  rotate: false
+  xy: 2, 396
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+turret1Red
+  rotate: false
+  xy: 2, 498
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+turret1Shadow
+  rotate: false
+  xy: 2, 294
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
 unit1Blue
   rotate: false
-  xy: 239, 8
+  xy: 2, 217
   size: 100, 75
   orig: 100, 75
   offset: 0, 0
   index: -1
 unit1Red
   rotate: false
-  xy: 341, 23
+  xy: 2, 140
   size: 100, 75
   orig: 100, 75
   offset: 0, 0
   index: -1
 unit1Shadow
   rotate: false
-  xy: 331, 100
+  xy: 915, 947
   size: 100, 75
   orig: 100, 75
   offset: 0, 0

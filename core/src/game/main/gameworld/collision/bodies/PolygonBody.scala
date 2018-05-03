@@ -136,12 +136,15 @@ class PolygonBody(vertices: Array[Float], private var radius: Float) extends
           dist2 = l
           mtv.normal.set(v3).scl(-1)
         }
+
       }
 
       mtv.depth = math.sqrt(dist2).toFloat + r
       mtv.normal.nor()
+
       VectorPool.free(v3)
     }
+
 
 
     VectorPool.free(v1) //frees the memory

@@ -2,7 +2,7 @@ package game.main.units
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import game.loader.{GameTextures, UnitTextures}
-import game.main.gameworld.collision.bodies.PolygonBody
+import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
 import game.main.gameworld.gameobject.elements
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.ObjectHandler.Level
@@ -18,6 +18,8 @@ trait UnitCreator {
   val width: Float
   val height: Float
 
+  def collBody: CollisionBody
+
   /** Sets the all stats to to unit */
   protected def setStats(obj: UnitObject, path: Path): Unit
 
@@ -27,17 +29,15 @@ trait UnitCreator {
              random: Boolean = false): UnitObject = {
 
     val collHandler = owner.objectHandler.collHandler
-    val icon = pathIcon(owner)
-    val body: PolygonBody = PolygonBody.triangleCollBody(width, height / 2f, 0, height)
 
     //creates the unit
-    val obj = new UnitObject(collHandler, body)
+    val obj = new UnitObject(collHandler, collBody)
     obj.owner = owner
 
     //adds the sprites
     val shadow = new elements.RelativeSpriteElement(
       GameTextures.defaultTextures.atlas.createSprite(texture.shadow), false,
-        Vector2e(-3, -4), Vector2e(1, 1), 0)
+      Vector2e(-3, -4), Vector2e(1, 1), 0)
     val spriteE = new elements.SpriteElement(
       GameTextures.defaultTextures.atlas.createSprite(texture.main(owner.colorIndex)), false)
     obj.appendElement(shadow)
@@ -54,6 +54,7 @@ trait UnitCreator {
     val p: Path = path.copy
     if (random) p.setOffset(p.randomOffset) else p.setOffset(path.findOffset(x, y))
     obj.pos.set(p.head)
+    obj.angle = p.direction(0).angle
 
     setStats(obj, p) //sets the specific unit stats
     obj.update()

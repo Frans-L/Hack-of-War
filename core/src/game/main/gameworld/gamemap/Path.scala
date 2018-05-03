@@ -24,7 +24,7 @@ class Path(private var route: Seq[Vector2], var maxOffset: Float) {
   def apply(i: Int): Vector2 = route(i)
 
   /** Returns itself because of chaining. */
-  def reverse(): Path = {
+  def reverse: Path = {
     route = route.reverse
     this
   }

@@ -3,7 +3,7 @@ package game.main.players
 import com.badlogic.gdx.math.MathUtils
 import game.main.gameworld.collision.CollisionHandler
 import game.main.gameworld.gameobject.ObjectHandler
-import game.main.units.SoldierCreator
+import game.main.units.{SoldierCreator, TurretCreator}
 import game.util.Ticker
 
 class Bot(objectHandler: ObjectHandler, override val colorIndex: Int) extends
@@ -11,7 +11,13 @@ class Bot(objectHandler: ObjectHandler, override val colorIndex: Int) extends
 
   initialize()
 
-  def initialize(): Unit = {
+  override def initialize(): Unit = {
+    super.initialize()
+
+    //created the turrets
+    spawnUnit(TurretCreator, 0, 0, objectHandler.collHandler.map.turretPathReversed(2))
+    spawnUnit(TurretCreator, 0, 0, objectHandler.collHandler.map.turretPathReversed(1))
+
     spawnUnit(
       SoldierCreator,
       objectHandler.collHandler.dimensions.leftMiddle,

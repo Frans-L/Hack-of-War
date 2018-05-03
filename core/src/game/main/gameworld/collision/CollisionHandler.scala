@@ -47,14 +47,15 @@ class CollisionHandler(val dimensions: Dimensions) extends GameElement {
 
   /** Checks all collisions, and calls the object's method ´collision´ when needed. */
   override def update(): Unit = {
-    val collForce = MinimumTranslationVectorPool.obtain()
     for ((owner, obj) <- mapBufferIterator(units, tmpEmptyBuffer) if !obj.static && !obj.collided) {
+      val collForce = MinimumTranslationVectorPool.obtain()
       val crashObj = collide(obj, collForce, obj.collFilter)
       crashObj.foreach(obj2 => {
         val depth = if (obj.static || obj2.static) collForce.depth else collForce.depth / 2f
         obj.collision(obj2, collForce.normal, depth)
         obj2.collision(obj, collForce.normal.scl(-1), depth)
       })
+      MinimumTranslationVectorPool.free(collForce)
     }
   }
 

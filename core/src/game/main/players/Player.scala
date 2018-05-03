@@ -8,7 +8,7 @@ import game.main.cards.Card
 import game.main.gameworld.gamemap
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.ObjectHandler
-import game.main.units.UnitCreator
+import game.main.units.{TurretCreator, UnitCreator}
 
 import scala.collection.mutable
 
@@ -26,6 +26,9 @@ abstract class Player(val objectHandler: ObjectHandler, index: Int)
 
   private val deck: mutable.Buffer[Card] = mutable.Buffer[Card]()
   val hand: mutable.Buffer[Card] = mutable.Buffer[Card]()
+
+
+  protected def initialize(): Unit = Unit
 
   override def update(): Unit = {
 
