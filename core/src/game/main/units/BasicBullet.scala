@@ -14,6 +14,7 @@ object BasicBullet extends BulletCreator {
 
   /** Sets the all specific stats to the bullet. */
   override protected def setStats(obj: objects.BulletObject): Unit = {
+    obj.collided = true //makes sure that BulletCollision won't destroy itself immediately
     obj.appendElement(BulletCollision)
     obj.mass = 50f
   }

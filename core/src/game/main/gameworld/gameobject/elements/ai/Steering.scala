@@ -5,7 +5,7 @@ import game.main.gameworld.gameobject.{ObjectElement, objects}
 import game.util.Vector2e._
 import game.util.pools
 
-class Steering(maxAccelerateForce: Float) extends ObjectElement {
+class Steering(maxAccelerateForce: Float) extends UnitElement {
 
   /** Updates the movement with collision avoidance */
   override def update(p: gameobject.GameObject, delta: Int): Unit = {
@@ -27,10 +27,5 @@ class Steering(maxAccelerateForce: Float) extends ObjectElement {
     pools.VectorPool.free(target)
 
   }
-
-  /** Throws an error if the parent is not valid! */
-  override def checkParent(parent: gameobject.GameObject): Unit =
-    require(parent.isInstanceOf[objects.UnitObject], "Parent have to be UnitObject")
-
 
 }

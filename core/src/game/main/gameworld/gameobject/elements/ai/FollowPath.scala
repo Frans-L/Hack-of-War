@@ -5,7 +5,7 @@ import game.main.gameworld.gameobject
 import game.main.gameworld.gameobject.{ObjectElement, objects}
 
 /** Updates the unitObject's moveTarget. */
-class FollowPath(var path: Path, val acceptDist: Float) extends ObjectElement {
+class FollowPath(var path: Path, val acceptDist: Float) extends UnitElement {
 
   private var targetI: Int = 0 //current target index
 
@@ -19,9 +19,5 @@ class FollowPath(var path: Path, val acceptDist: Float) extends ObjectElement {
 
     parent.moveTarget.set(path(targetI))
   }
-
-  /** Throws an error if the parent is not valid! */
-  override def checkParent(parent: gameobject.GameObject): Unit =
-    require(parent.isInstanceOf[objects.UnitObject], "Parent have to be UnitObject")
 
 }

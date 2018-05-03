@@ -47,19 +47,22 @@ class GameObject() extends GameElement with ObjectElement {
   /** Calls the method 'run' so that position of this object is relative to parent. */
   private def runRelatively(parent: GameObject, run: () => Unit): Unit = {
     //sets the position to be relative
-    relativePos.set(pos)
-    relativeScale.set(scale)
+    //relativePos.set(pos)
+    //relativeScale.set(scale)
+
     val orgAngle = angle
-    pos.add(parent.pos.x - parent.origin.x, parent.pos.y - parent.origin.y)
+    pos.setAngle(parent.angle + 180)
+    pos.add(parent.pos.x, parent.pos.y)
     scale.scl(parent.scale)
     angle += parent.angle
 
     run() //updates with its real coords
 
     //sets back to its own original position
-    pos.set(relativePos)
-    scale.set(relativeScale)
-    angle = orgAngle
+    pos.sub(parent.pos.x, parent.pos.y)
+    pos.setAngle(orgAngle)
+    scale.scl(1f / parent.scale.x, 1f / parent.scale.y)
+    angle -= parent.angle
   }
 
 

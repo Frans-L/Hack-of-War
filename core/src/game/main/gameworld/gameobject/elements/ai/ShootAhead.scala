@@ -1,5 +1,6 @@
 package game.main.gameworld.gameobject.elements.ai
 
+import com.badlogic.gdx.Gdx
 import game.GameElement
 import game.main.gameworld.collision.bodies.CollisionBody
 import game.main.{MainGame, gameworld}
@@ -13,7 +14,7 @@ import game.util.Vector2e._
 import scala.collection.mutable
 
 class ShootAhead(attackVision: CollisionBody, damage: Float,
-                 reloadTime: Int, bulletCreator: BulletCreator) extends ObjectElement {
+                 reloadTime: Int, bulletCreator: BulletCreator) extends UnitElement {
 
   private var reloadTimer: Int = 0
   private var attackTarget: Option[UnitObject] = None
@@ -27,7 +28,9 @@ class ShootAhead(attackVision: CollisionBody, damage: Float,
     if (attackTarget.isEmpty) {
       val enemy = parent.physWorld.collideCollisionBody(parent, attackVision, null, parent.owner.enemiesAsGameElement)
       enemy.foreach {
-        case enemy: UnitObject => attackTarget = Some(enemy)
+        case enemy: UnitObject => {
+          attackTarget = Some(enemy)
+        }
         case _ => Unit
       }
     }
@@ -59,10 +62,10 @@ class ShootAhead(attackVision: CollisionBody, damage: Float,
 
     //TODO vector pool
     //calculates the pos of the bullet and create it
-    val bulletPos =
-      Vector2e(parent.movingForce).nor ** (parent.sWidth / 2f +bulletCreator.radius) ++ parent.pos
+    val bulletPos = Vector2e(1,0).setAngle(parent.angle) **
+      (parent.sWidth / 2f + bulletCreator.radius) ++ parent.pos
     val bullet = bulletCreator.create(parent, parent.owner.objectHandler,
-      bulletPos, Vector2e(parent.movingForce).nor ** (parent.maxSpeed * 5),
+      bulletPos, Vector2e(1,0).setAngle(parent.angle) ** (parent.maxSpeed * 5),
       parent.owner.colorIndex)
 
     //sets the bullet statistics
@@ -71,7 +74,4 @@ class ShootAhead(attackVision: CollisionBody, damage: Float,
     bullet.collFilter += parent.physWorld.map
   }
 
-  /** Throws an error if the parent is not valid! */
-  override def checkParent(parent: gameobject.GameObject): Unit =
-    require(parent.isInstanceOf[UnitObject], "Parent have to be UnitObject")
 }

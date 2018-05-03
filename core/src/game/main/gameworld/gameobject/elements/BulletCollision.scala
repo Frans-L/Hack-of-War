@@ -1,5 +1,6 @@
 package game.main.gameworld.gameobject.elements
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import game.main.gameworld.gameobject
 import game.main.gameworld.gameobject.{ObjectElement, objects}
@@ -27,6 +28,7 @@ object BulletCollision extends ObjectElement {
         obj.addImpact(bullet.velocity.scl(1f), bullet.mass)
       case _ => Unit
     }
+
     bullet.delete()
   }
 

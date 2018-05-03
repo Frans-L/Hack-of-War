@@ -29,6 +29,8 @@ class PhysicsObject(var physWorld: CollisionHandler,
   override def update() {
     updatePhysics()
     super.update()
+
+    collided = false //resets collide tick
   }
 
   protected def updatePhysics(): Unit = {
@@ -39,7 +41,6 @@ class PhysicsObject(var physWorld: CollisionHandler,
     pos.mulAdd(velocity, ticker.delta) //move the object
 
     updateCollPolygon(collBody) //update collbodies
-    collided = false
   }
 
   /** Updates collPolygons location, rotation and scale.

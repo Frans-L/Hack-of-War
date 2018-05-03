@@ -20,7 +20,7 @@ object CollisionObject {
     obj.pos.set(collBody.getX, collBody.getY)
     obj.update()
 
-    //collbody's origin differs from the parent obj
+    //collBody's origin differs from the parent obj
     obj.collBody.setOrigin(collOriginX, collOriginY)
 
     objectHandler.addToCollHandler(owner, obj) //adds to collhandler

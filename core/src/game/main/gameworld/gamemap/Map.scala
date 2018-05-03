@@ -189,11 +189,11 @@ class Map(val dimensions: Dimensions,
       val routeSize = routeDown.size
       val turretMiddle = Seq.empty
       val turretUp = Seq(
-        routeUp(2).cpy.add(0, offset*2), routeUp(3).cpy.add(0, offset),
-        routeUp(routeSize - 4).cpy.add(0, offset), routeUp(routeSize - 3).cpy.add(0, offset*2))
+        routeUp(2).cpy.add(0, offset*2), routeUp(4).cpy.add(0, offset),
+        routeUp(routeSize - 5).cpy.add(0, offset), routeUp(routeSize - 3).cpy.add(0, offset*2))
       val turretDown = Seq(
-        routeDown(2).cpy.add(0, -offset*2), routeDown(3).cpy.add(0, -offset),
-        routeDown(routeSize - 4).cpy.add(0, -offset), routeDown(routeSize - 3).cpy.add(0, -offset*2))
+        routeDown(2).cpy.add(0, -offset*2), routeDown(4).cpy.add(0, -offset),
+        routeDown(routeSize - 5).cpy.add(0, -offset), routeDown(routeSize - 3).cpy.add(0, -offset*2))
 
       turretPath = Seq(new Path(turretMiddle, 0), new Path(turretDown, 0), new Path(turretUp, 0))
       turretPathReversed = Seq(new Path(turretMiddle, 0).reverse,

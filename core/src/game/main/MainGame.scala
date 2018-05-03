@@ -116,7 +116,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
 
 
     if (ticker.interval4) {
-      //Gdx.app.log("MainGame", "Render calls: " + batch.renderCalls)
+      Gdx.app.log("MainGame", "Render calls: " + batch.renderCalls)
       //Gdx.app.log("MainGame", "Pooled units: " + UnitObject.pool.getFree)
     }
 

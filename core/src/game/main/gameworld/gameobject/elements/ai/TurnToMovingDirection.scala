@@ -5,7 +5,7 @@ import game.main.gameworld.gameobject
 import game.main.gameworld.gameobject.{ObjectElement, objects}
 import game.util.Utils
 
-class SmoothTurn(maxRotateTime: Float) extends ObjectElement {
+class TurnToMovingDirection(maxRotateTime: Float) extends UnitElement {
 
   override def update(p: gameobject.GameObject, delta: Int): Unit = {
     val parent = p.asInstanceOf[objects.UnitObject]
@@ -15,9 +15,5 @@ class SmoothTurn(maxRotateTime: Float) extends ObjectElement {
     parent.angle = Interpolation.linear.apply(parent.angle, parent.movingForce.angle, delta / maxRotateTime)
     parent.angle = Utils.absAngle(parent.angle)
   }
-
-  /** Throws an error if the parent is not valid! */
-  override def checkParent(parent: gameobject.GameObject): Unit =
-    require(parent.isInstanceOf[objects.UnitObject], "Parent have to be UnitObject")
 
 }

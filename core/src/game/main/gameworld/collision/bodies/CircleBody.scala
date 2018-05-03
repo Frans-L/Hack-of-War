@@ -72,7 +72,7 @@ class CircleBody(private var radius: Float) extends CollisionBody {
 
     //the mtv vectors points to wrong direction
     // => idea is to move circle instead of polygon
-    if (result) mtv.normal.scl(-1)
+    if (result && mtv != null) mtv.normal.scl(-1)
     result
   }
 

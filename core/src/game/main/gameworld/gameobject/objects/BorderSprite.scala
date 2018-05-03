@@ -19,6 +19,7 @@ object BorderSprite {
     val texture = new StaticTextureElement(textureRegion)
     texture.pos.set(padding.x, padding.y)
     texture.overrideSize = Some(Vector2e(size.x - 2 * padding.y, size.y - 2 * padding.y))
+    texture.update()
 
     outer.appendElement(texture)
     outer.update()

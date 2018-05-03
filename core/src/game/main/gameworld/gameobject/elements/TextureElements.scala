@@ -60,10 +60,14 @@ class StaticTextureElement(texture: TextureRegion) extends RelativeTextureElemen
   override def update(parent: GameObject, delta: Int) {
     if (dirty) {
       sprite.setOrigin(parent.origin.x, parent.origin.y)
-      sprite.setPosition(parent.pos.x - parent.origin.x, parent.pos.y - parent.origin.y)
-      sprite.setSize(overrideSize.getOrElse(parent.size).x, overrideSize.getOrElse(parent.size).y)
-      sprite.setScale(parent.scale.x, parent.scale.y)
-      sprite.setRotation(parent.angle)
+      sprite.setPosition(
+        parent.pos.x - parent.origin.x + pos.x,
+        parent.pos.y - parent.origin.y + pos.y)
+      sprite.setSize(
+        overrideSize.getOrElse(parent.size).x,
+        overrideSize.getOrElse(parent.size).y)
+      sprite.setScale(parent.scale.x * scale.x, parent.scale.y * scale.y)
+      sprite.setRotation(parent.angle + angle)
       dirty = false
     }
   }

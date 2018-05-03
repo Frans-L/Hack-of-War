@@ -7,7 +7,7 @@ import game.main.gameworld.gameobject.{ObjectElement, objects}
 import game.util.Vector2e._
 import game.util.pools
 
-class AvoidObstacles(maxForceAvoid: Float, maxSeeAhead: Float) extends ObjectElement {
+class AvoidObstacles(maxForceAvoid: Float, maxSeeAhead: Float) extends UnitElement {
 
   override def update(p: gameobject.GameObject, delta: Int): Unit = {
     val parent = p.asInstanceOf[objects.UnitObject]
@@ -61,7 +61,4 @@ class AvoidObstacles(maxForceAvoid: Float, maxSeeAhead: Float) extends ObjectEle
     false
   }
 
-  /** Throws an error if the parent is not valid! */
-  override def checkParent(parent: gameobject.GameObject): Unit =
-    require(parent.isInstanceOf[objects.UnitObject], "Parent have to be UnitObject")
 }
