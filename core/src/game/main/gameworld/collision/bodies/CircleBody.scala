@@ -83,7 +83,7 @@ class CircleBody(private var radius: Float) extends CollisionBody {
   override def overlapsCircle(center: Vector2, r: Float,
                               mtv: MinimumTranslationVector): Boolean = {
 
-    val pos = VectorPool.obtain(x, y)
+    val pos = VectorPool.obtain(this.center.x, this.center.y)
     val radiusS = getRadiusScaled
     val isCollided = pos.dst2(center) <= (r + radiusS) * (r + radiusS)
 

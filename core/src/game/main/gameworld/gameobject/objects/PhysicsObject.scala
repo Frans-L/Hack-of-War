@@ -65,10 +65,12 @@ class PhysicsObject(var physWorld: CollisionHandler,
 
   /** Adds an impact to the object that will add a force */
   def addImpact(vel: Vector2, mass2: Float): Unit = {
-    val speed =
-      VectorPool.obtain(velocity).scl(-math.abs(math.cos(velocity.angleRad(vel))).toFloat) ++ vel
-    velocity.mulAdd(speed, mass2 / mass)
-    VectorPool.free(speed)
+    if(!static){
+      val speed =
+        VectorPool.obtain(velocity).scl(-math.abs(math.cos(velocity.angleRad(vel))).toFloat) ++ vel
+      velocity.mulAdd(speed, mass2 / mass)
+      VectorPool.free(speed)
+    }
   }
 
   /** Draws the collision boxes */

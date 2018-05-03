@@ -28,7 +28,7 @@ object UICard {
   */
 class UICard(cardSprite: Sprite, icon: Sprite, txt: String) extends Actor {
 
-  private val font: BitmapFont = GameTextures.defaultUITextures.Fonts.normal20
+  private val font: BitmapFont = GameTextures.defaultUI.Fonts.normal20
 
   private var startPos: Vector2 = new Vector2(0, 0) //tells the spot to stay when not moved
   var state: UICard.State.Value = UICard.State.IDLE

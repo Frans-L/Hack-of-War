@@ -41,8 +41,8 @@ object GameTextures {
 
   //null value at start =>
   //errors will appear when game starts, if this not set to be something
-  var defaultTextures: GameTextures = _
-  var defaultUITextures: GameTextures = _
+  var default: GameTextures = _
+  var defaultUI: GameTextures = _
 
   val atlasName = "graphics.atlas"
 

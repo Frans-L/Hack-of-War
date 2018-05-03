@@ -27,10 +27,10 @@ trait BulletCreator {
 
     val bullet = new BulletObject(objectHandler.collHandler, body)
     val shadow = new game.main.gameworld.gameobject.elements.RelativeSpriteElement(
-      GameTextures.defaultTextures.atlas.createSprite(texture.shadow), false,
+      GameTextures.default.atlas.createSprite(texture.shadow), false,
       Vector2e(-3, -3), Vector2e(0.9f, 0.9f), 0)
     val sprite = new game.main.gameworld.gameobject.elements.SpriteElement(
-      GameTextures.defaultTextures.atlas.createSprite(texture.main(colorIndex)), false)
+      GameTextures.default.atlas.createSprite(texture.main(colorIndex)), false)
 
     bullet.appendElement(shadow)
     bullet.appendElement(sprite)

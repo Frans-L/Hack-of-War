@@ -48,8 +48,8 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
   ticker.speed = 1f
 
   //sets the default textures
-  GameTextures.defaultTextures = textures
-  GameTextures.defaultUITextures = textures
+  GameTextures.default = textures
+  GameTextures.defaultUI = textures
 
   //sets the drawing batches
   private val batch: SpriteBatch = new SpriteBatch

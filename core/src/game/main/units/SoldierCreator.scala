@@ -39,7 +39,7 @@ object SoldierCreator extends UnitCreator {
     obj.appendElement(new ai.FollowPath(path, obj.collBody.getRadiusScaled * 1.5f))
     obj.appendElement(new ai.ShootAhead(attackVision, 30f, 200, BasicBullet))
     obj.appendElement(new ai.Steering(0.006f))
-    //obj.appendElement(new ai.AvoidObstacles(0.020f, obj.sWidth * 1.25f))
+    obj.appendElement(new ai.AvoidObstacles(0.020f, obj.sWidth * 1.5f))
     obj.appendElement(new ai.SmoothTurn(150f))
 
   }

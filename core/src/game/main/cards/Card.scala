@@ -33,7 +33,7 @@ abstract class Card(owner: Player) {
   def uiCreate(): UICard = {
     uiElement = Some(
       new UICard(
-        GameTextures.defaultUITextures.atlas.createSprite(Card.background), icon, cost.toString))
+        GameTextures.defaultUI.atlas.createSprite(Card.background), icon, cost.toString))
     this.addListeners()
     uiElement.get
   }

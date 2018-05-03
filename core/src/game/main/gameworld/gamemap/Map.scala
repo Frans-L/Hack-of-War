@@ -145,16 +145,18 @@ class Map(val dimensions: Dimensions,
     //adds the path
     def addPath(): Unit = {
 
+      val offset = 75f
+
       val routeDown = Seq(
         Vector2e(blockPosX(1), blockPosYMiddle(3)),
         Vector2e(blockPosX(1) + blockWidth(1) / 3, blockPosYMiddle(3)),
-        Vector2e(blockPosXMiddle(1), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f),
+        Vector2e(blockPosXMiddle(1), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f + offset),
         Vector2e(blockPosX(2), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f),
         Vector2e(blockPosX(3), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1)),
 
         Vector2e(blockPosX(4), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1)),
         Vector2e(blockPosX(5), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f),
-        Vector2e(blockPosXMiddle(5), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f),
+        Vector2e(blockPosXMiddle(5), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f + offset),
         Vector2e(blockPosX(6) - blockWidth(1) / 3, blockPosYMiddle(3)),
         Vector2e(blockPosX(6), blockPosYMiddle(3))
 
@@ -163,19 +165,17 @@ class Map(val dimensions: Dimensions,
       val routeUp = Seq(
         Vector2e(blockPosX(1), blockPosYMiddle(3)),
         Vector2e(blockPosX(1) + blockWidth(1) / 3, blockPosYMiddle(3)),
-        Vector2e(blockPosXMiddle(1), blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f),
+        Vector2e(blockPosXMiddle(1), blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f - offset),
         Vector2e(blockPosX(2), blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f),
         Vector2e(blockPosX(3), blockPosYMiddle(5) - blockHeight(4) / 2 - blockHeight(1)),
 
         Vector2e(blockPosX(4), blockPosYMiddle(5) - blockHeight(2) / 2 - blockHeight(1)),
         Vector2e(blockPosX(5), blockPosYMiddle(5) - blockHeight(2) / 2 / 1.2f),
-        Vector2e(blockPosXMiddle(5), blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f),
+        Vector2e(blockPosXMiddle(5), blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f - offset),
         Vector2e(blockPosX(6) - blockWidth(1) / 3, blockPosYMiddle(3)),
         Vector2e(blockPosX(6), blockPosYMiddle(3))
 
       )
-
-      val offset = 75f
 
       path = Seq(new Path(routeDown, offset), new Path(routeUp, offset))
       pathReversed = Seq(new Path(routeDown, offset).reverse, new Path(routeUp, offset).reverse)
@@ -183,11 +183,11 @@ class Map(val dimensions: Dimensions,
       val routeSize = routeDown.size
       val turretMiddle = Seq.empty
       val turretUp = Seq(
-        routeUp(3).cpy.add(0, offset), routeUp(4).cpy.add(0, offset),
-        routeUp(routeSize - 5).cpy.add(0, offset), routeUp(routeSize - 4).cpy.add(0, offset))
+        routeUp(2).cpy.add(0, offset*2), routeUp(3).cpy.add(0, offset),
+        routeUp(routeSize - 4).cpy.add(0, offset), routeUp(routeSize - 3).cpy.add(0, offset*2))
       val turretDown = Seq(
-        routeDown(3).cpy.add(0, -offset), routeDown(4).cpy.add(0, -offset),
-        routeDown(routeSize - 5).cpy.add(0, -offset), routeDown(routeSize - 4).cpy.add(0, -offset))
+        routeDown(2).cpy.add(0, -offset*2), routeDown(3).cpy.add(0, -offset),
+        routeDown(routeSize - 4).cpy.add(0, -offset), routeDown(routeSize - 3).cpy.add(0, -offset*2))
 
       turretPath = Seq(new Path(turretMiddle, 0), new Path(turretDown, 0), new Path(turretUp, 0))
       turretPathReversed = Seq(new Path(turretMiddle, 0).reverse,
