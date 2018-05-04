@@ -16,22 +16,23 @@ class GameTextures extends Loadable {
   val load: Vector[(String, Class[_])] = Vector((GameTextures.atlasName, classOf[TextureAtlas]))
 
   val loadFont: Vector[(String, Class[BitmapFont], FreeTypeFontLoaderParameter)] = Vector(
-    (GameTextures.Font.Normal20.name, classOf[BitmapFont], GameTextures.Font.Normal20.params)
+    (GameTextures.Font.Normal.name, classOf[BitmapFont], GameTextures.Font.Normal.params),
+    (GameTextures.Font.Big.name, classOf[BitmapFont], GameTextures.Font.Big.params)
   )
 
   var atlas: TextureAtlas = _
 
   object Fonts {
-    var normal20: BitmapFont = _
+    var normal: BitmapFont = _
+    var big: BitmapFont = _
   }
-
-  var font: BitmapFont = _
 
   override def finished(manager: AssetManager): Unit = {
     atlas = manager.get(load(0)._1)
-    Fonts.normal20 = manager.get(loadFont(0)._1)
-    font = new BitmapFont()
+    Fonts.normal = manager.get(loadFont(0)._1)
+    Fonts.big = manager.get(loadFont(1)._1)
   }
+
 
 }
 
@@ -48,26 +49,42 @@ object GameTextures {
 
   object Font {
 
-    object Normal20 {
-      val name = "normal20.ttf"
+    object Normal {
+      val name = "normal.ttf"
       val params = new FreeTypeFontLoaderParameter()
       params.fontFileName = "fonts/DoHyeon.ttf"
       params.fontParameters.size = 45
       params.fontParameters.color = Color.WHITE
-
-      /*
-      params.fontParameters.borderWidth = 1
-      params.fontParameters.borderColor = Color.valueOf("#6b84ff")
-      */
-
       params.fontParameters.shadowColor = Color.BLACK
       params.fontParameters.shadowOffsetX = 2
       params.fontParameters.shadowOffsetY = 2
-
       params.fontParameters.minFilter = TextureFilter.MipMapLinearLinear
       params.fontParameters.magFilter = TextureFilter.Linear
       params.fontParameters.genMipMaps = true
     }
+
+    object Big {
+      val name = "big.ttf"
+      val params = new FreeTypeFontLoaderParameter()
+      params.fontFileName = "fonts/DoHyeon.ttf"
+      params.fontParameters.size = 90
+      params.fontParameters.color = Color.WHITE
+      params.fontParameters.shadowColor = Color.BLACK
+      params.fontParameters.shadowOffsetX = 2
+      params.fontParameters.shadowOffsetY = 2
+      params.fontParameters.minFilter = TextureFilter.MipMapLinearLinear
+      params.fontParameters.magFilter = TextureFilter.Linear
+      params.fontParameters.genMipMaps = true
+    }
+
+  }
+
+  object UI {
+
+    val manaBar = "manaBar"
+    val manaBarFill = "healthBarFill"
+
+    val endBackground = "healthBarFill"
 
   }
 
@@ -86,6 +103,11 @@ object GameTextures {
     object BaseTurret extends UnitTextures{
       override val main: Seq[String] = Seq("turret1Blue", "turret1Red")
       override val shadow: String = "turret1Shadow"
+    }
+
+    object LongTurret extends UnitTextures{
+      override val main: Seq[String] = Seq("turretLongBlue", "turretLongRed")
+      override val shadow: String = "turretLongShadow"
     }
 
     val healthBar = "healthBar"

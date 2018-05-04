@@ -9,34 +9,37 @@ import game.util.Dimensions
 class HackOfWar extends Game {
 
 
-  private var inputMultiplexer: InputMultiplexer = _
+  //is needed if multiple inputs listeners with different actors are used
+  //private var inputMultiplexer: InputMultiplexer = _
 
   private var screenDimensions: Dimensions = new Dimensions(1920, 1080, 2280, 1440)
 
-
   override def create() {
 
-    //creates the game
 
-    //sets the touch listener
     /*
+    //sets the touch listener
     inputMultiplexer = new InputMultiplexer()
     inputMultiplexer.addProcessor(game.inputProcessors)
     Gdx.input.setInputProcessor(inputMultiplexer)
     */
 
+    //creates the game
     Gdx.app.setLogLevel(Application.LOG_DEBUG)
-
     val textures = new GameTextures()
-
     this.setScreen(
       new Loader(
         textures,
-        () => this.setScreen(new MainGame(textures, screenDimensions))
+        () => newGame()
       ))
 
+    def newGame(): Unit = {
+      this.setScreen(new MainGame(textures, screenDimensions, () => newGame()))
+    }
 
   }
+
+
 
   override def render() {
     super.render()

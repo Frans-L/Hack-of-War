@@ -45,18 +45,18 @@ abstract class Card(owner: Player) {
     e.addListener(new InputListener() {
       override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean = {
         e.startDrag(x, y)
-        selected(x, y)
+        Card.this.selected(x, y)
         true
       }
 
       override def touchDragged(event: InputEvent, x: Float, y: Float, pointer: Int): Unit = {
         val (x2, y2) = e.drag(x, y)
-        beforeUse(x2, y2)
+        Card.this.beforeUse(x2, y2)
       }
 
       override def touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Unit = {
         val (x2, y2) = e.stopDrag(x, y)
-        use(x2, y2)
+        Card.this.use(x2, y2)
       }
 
     })
@@ -68,6 +68,7 @@ abstract class Card(owner: Player) {
       uiElement.foreach(_.startUseAnim(x, y, () => action(x, y)))
     } else {
       uiElement.foreach(_.backToStart()) //back to start pos
+      actionFailed(x, y)
     }
   }
 
@@ -86,6 +87,11 @@ abstract class Card(owner: Player) {
   protected def action(x: Float, y: Float): Unit = {
     destroy()
   }
+
+  /** Card's action that is called when the card cannot be used.
+    * Will be called immediately when the action fails. */
+  protected def actionFailed(x: Float, y: Float): Unit = Unit
+
 
 
   /** Destroys the card. */

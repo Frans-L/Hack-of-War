@@ -2,7 +2,7 @@ package game.main.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.{Batch, BitmapFont, Sprite}
+import com.badlogic.gdx.graphics.g2d.{Batch, BitmapFont, GlyphLayout, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.{Interpolation, Vector2, Vector3}
 import com.badlogic.gdx.scenes.scene2d.actions.{Actions, MoveToAction, ParallelAction, ScaleByAction}
@@ -26,15 +26,19 @@ object UICard {
 /**
   * Created by Frans on 28/02/2018.
   */
-class UICard(cardSprite: Sprite, icon: Sprite, txt: String) extends Actor {
+class UICard(cardSprite: Sprite, icon: Sprite, text: String) extends Actor {
 
-  private val font: BitmapFont = GameTextures.defaultUI.Fonts.normal20
+  private val font: BitmapFont = GameTextures.defaultUI.Fonts.normal
+  private val textLayout: GlyphLayout = new GlyphLayout(font, text)
+  private val fontColor: Color = Color.valueOf("#4699a8")
 
   private var startPos: Vector2 = new Vector2(0, 0) //tells the spot to stay when not moved
   var state: UICard.State.Value = UICard.State.IDLE
   private var moved = false
 
   private var dragPos: Vector2 = new Vector2(0, 0) //the pos which were touched
+
+  this.setTouchable(Touchable.enabled)
 
   def updateSprites(): Unit = {
 
@@ -61,13 +65,14 @@ class UICard(cardSprite: Sprite, icon: Sprite, txt: String) extends Actor {
     cardSprite.draw(batch)
     icon.draw(batch)
 
-    if (getScaleX > 0 && getScaleY > 0) {
-      font.getData.setScale(getScaleX, getScaleY)
-      font.setColor(Color.valueOf("#6b84ff"))
-      val center = getX + getWidth * getScaleX / 2f - font.getData.spaceWidth / 2 * txt.length
-      font.draw(batch, txt, center, getY + font.getData.lineHeight)
+    if (this.getScaleX > 0 && this.getScaleY > 0) {
+      font.getData.setScale(this.getScaleX, this.getScaleY)
+      font.setColor(fontColor)
+      textLayout.setText(font, text)
+      val posX = this.getX + this.getWidth * this.getScaleX / 2f - textLayout.width / 2
+      val posY = this.getY + textLayout.height * 2
+      font.draw(batch, textLayout, posX, posY)
     }
-    //shapeRenderer.rect(getX, getY, getWidth, getHeight)
 
   }
 

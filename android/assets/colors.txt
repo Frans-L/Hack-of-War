@@ -9,4 +9,13 @@ RED
 #ff6b69 //kirkas
 #851412 //normaali
 
+CARD
+#192831 //tumman sininen, tausta
+
+
+Wall
+#253441 //tumman sininen
+
+ManaBar
+#4699a8 //kirkahko sininen
 

@@ -3,7 +3,8 @@ package game.main.units
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CircleBody, CollisionBody, PolygonBody}
 import game.main.gameworld.gamemap.Path
-import game.main.gameworld.gameobject.elements.unit.HealthBarElement
+import game.main.gameworld.gameobject.elements.ShadowElement
+import game.main.gameworld.gameobject.elements.unit.{HealthBarElement, UnitTextureElement}
 import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.players.Player
 
@@ -17,11 +18,10 @@ trait BuildingCreator extends SoldierCreator {
                       path: Path, random: Boolean): UnitObject = {
 
     val obj = UnitCreator.createUnit(owner, collBody, width, height)
-    UnitCreator.addTextures(obj, texture, owner)
+    UnitCreator.addTextures(obj, texture, owner, 1.25f, 1.25f)
     UnitCreator.posToStartLoc(obj, path)
 
     setStats(obj, owner, path)
-
     obj
   }
 
@@ -53,7 +53,7 @@ object MainBuilding extends BuildingCreator {
 
   override val cost: Int = 20
 
-  override protected lazy val texture: UnitTextures = GameTextures.Units.BaseTurret
+  override protected lazy val texture: UnitTextures = GameTextures.Units.LongTurret
   override protected lazy val width: Float = 80f
   override protected lazy val height: Float = 200f
 

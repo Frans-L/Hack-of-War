@@ -1,138 +1,152 @@
 
 graphics.png
-size: 1024,1024
+size: 512,512
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 bullet1Blue
   rotate: false
-  xy: 586, 910
+  xy: 2, 2
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 bullet1Red
   rotate: false
-  xy: 2, 118
+  xy: 483, 490
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 bullet1Shadow
   rotate: false
-  xy: 104, 578
+  xy: 24, 2
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 card1
   rotate: false
-  xy: 2, 600
+  xy: 2, 270
   size: 160, 240
   orig: 160, 240
   offset: 0, 0
   index: -1
 healthBar
   rotate: false
-  xy: 349, 885
+  xy: 2, 56
   size: 100, 10
   orig: 100, 10
   offset: 0, 0
   index: -1
 healthBarFill
   rotate: false
-  xy: 346, 839
+  xy: 401, 307
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
+manaBar
+  rotate: false
+  xy: 166, 261
+  size: 280, 30
+  orig: 280, 30
+  offset: 0, 0
+  index: -1
 mapBorder
   rotate: false
-  xy: 1017, 1017
+  xy: 505, 505
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
-mapBorderShort
-  rotate: false
-  xy: 164, 660
-  size: 180, 180
-  orig: 180, 180
-  offset: 0, 0
-  index: -1
-mapBorderWide
-  rotate: false
-  xy: 2, 842
-  size: 345, 180
-  orig: 345, 180
-  offset: 0, 0
-  index: -1
 mapCorner
   rotate: false
-  xy: 823, 932
+  xy: 268, 67
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
 mapMiddleCorner
   rotate: false
-  xy: 349, 897
+  xy: 164, 385
   size: 235, 125
   orig: 235, 125
   offset: 0, 0
   index: -1
 mapTrenchCorner
   rotate: false
-  xy: 586, 932
+  xy: 164, 293
   size: 235, 90
   orig: 235, 90
   offset: 0, 0
   index: -1
 pointCircle
   rotate: false
-  xy: 164, 628
+  xy: 2, 24
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 turret1Blue
   rotate: false
-  xy: 2, 396
+  xy: 166, 57
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 turret1Red
   rotate: false
-  xy: 2, 498
+  xy: 268, 159
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 turret1Shadow
   rotate: false
-  xy: 2, 294
+  xy: 166, 159
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
+turretLongBlue
+  rotate: false
+  xy: 2, 68
+  size: 80, 200
+  orig: 80, 200
+  offset: 0, 0
+  index: -1
+turretLongRed
+  rotate: false
+  xy: 401, 310
+  size: 80, 200
+  orig: 80, 200
+  offset: 0, 0
+  index: -1
+turretLongShadow
+  rotate: false
+  xy: 84, 68
+  size: 80, 200
+  orig: 80, 200
+  offset: 0, 0
+  index: -1
 unit1Blue
   rotate: false
-  xy: 2, 217
+  xy: 370, 184
   size: 100, 75
   orig: 100, 75
   offset: 0, 0
   index: -1
 unit1Red
   rotate: false
-  xy: 2, 140
+  xy: 360, 30
   size: 100, 75
   orig: 100, 75
   offset: 0, 0
   index: -1
 unit1Shadow
   rotate: false
-  xy: 915, 947
+  xy: 370, 107
   size: 100, 75
   orig: 100, 75
   offset: 0, 0

@@ -12,11 +12,21 @@ import game.main.units.{BuildingCreator, UnitCreator}
 
 import scala.collection.mutable
 
+object Player {
+
+  val maxMana: Float = 100f
+  val manaSpeed: Float = 4f / 1000f
+
+}
+
 /**
   * Created by Frans on 06/03/2018.
   */
 abstract class Player(val objectHandler: ObjectHandler, index: Int)
   extends GameElement {
+
+  var mana: Float = 50f
+  var manaSpeed: Float = Player.manaSpeed
 
   //when the player is dragging card, the player might see the iconPath of the unit
   var iconPath: Option[gamemap.IconPath] = None
@@ -32,6 +42,8 @@ abstract class Player(val objectHandler: ObjectHandler, index: Int)
 
   override def update(): Unit = {
 
+    mana = math.min(Player.maxMana, mana + manaSpeed * ticker.delta) //increase mana
+
     //update iconPath if it exists
     iconPath.foreach(i => i.update())
 
@@ -44,7 +56,8 @@ abstract class Player(val objectHandler: ObjectHandler, index: Int)
   /** Returns true is succeeded */
   def useCard(card: Card, posX: Float, posY: Float): Boolean = {
     //the card can be used
-    if (!objectHandler.collHandler.map.collide(posX, posY)) {
+    if (card.cost <= mana && !objectHandler.collHandler.map.collide(posX, posY)) {
+      mana -= card.cost
       true
     } else {
       false

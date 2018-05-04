@@ -49,9 +49,10 @@ class RelativeTextureElement(texture: TextureRegion,
 }
 
 /** Draws the shadow to object. */
-class ShadowElement(texture: TextureRegion)
+class ShadowElement(texture: TextureRegion, shadowX: Float = 0, shadowY: Float = 0)
   extends RelativeTextureElement(texture) {
-  pos.set(-3, -4)
+  pos.set(4 * shadowX, -4 * shadowY)
+  color.set(1, 1, 1, 0.75f)
 }
 
 /** Draws a static texture over the object. */

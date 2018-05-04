@@ -37,9 +37,10 @@ trait UnitCreator {
 object UnitCreator {
 
   /** Sets the sprites to units */
-  def addTextures(obj: UnitObject, texture: UnitTextures, owner: Player): Unit = {
+  def addTextures(obj: UnitObject, texture: UnitTextures, owner: Player,
+                  shadowX: Float = 1, shadowY: Float = 1): Unit = {
     obj.appendElement(
-      new ShadowElement(GameTextures.default.atlas.findRegion(texture.shadow)))
+      new ShadowElement(GameTextures.default.atlas.findRegion(texture.shadow), shadowX, shadowY))
     obj.appendElement(
       new UnitTextureElement(
         GameTextures.default.atlas.findRegion(texture.main(owner.colorIndex)), texture.brightness))

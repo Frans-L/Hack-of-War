@@ -15,8 +15,8 @@ class IconPath(private var pathOrg: Path, val icon: Sprite) extends GameElement 
 
   //how to draw icons info
   val drawTimer: CountdownTimer = new CountdownTimer(500)
-  var movingSpeed = 0.15f
-  var startPos = 0f
+  var movingSpeed: Float = 150f / 1000f
+  var startPos: Float = 0f
 
   private val orginalAlpha = icon.getColor.a
   var iconGap: Float = 5 * icon.getWidth * icon.getScaleX

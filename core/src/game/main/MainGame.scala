@@ -1,11 +1,9 @@
 package game.main
 
-import java.util.concurrent.TimeUnit
-
 import com.badlogic.gdx.graphics.g2d.{SpriteBatch, TextureAtlas}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
-import com.badlogic.gdx.graphics.{FPSLogger, GL20, OrthographicCamera}
+import com.badlogic.gdx.graphics.{Color, FPSLogger, GL20, OrthographicCamera}
 import com.badlogic.gdx.utils.TimeUtils
 import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import com.badlogic.gdx.{Gdx, Input, Screen}
@@ -40,7 +38,7 @@ object MainGame {
 /**
   * Created by Frans on 26/02/2018.
   */
-class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
+class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction:() => Unit) extends Screen {
 
   //sets the default ticker => everything should be time dependent
   private val ticker = new Ticker(TimeUtils.millis())
@@ -84,27 +82,27 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
   players.head.enemies += players.last
   players.last.enemies += players.head
 
+  //sets the game timer
+  private val gameTimer: TimerSecond = new TimerSecond(125)
 
   //sets the ui
   private val gameUI: GameUI =
-    new GameUI(screenDim, viewport, players.head, shapeRender)
+    new GameUI(screenDim, viewport, players.head, shapeRender, gameTimer)
 
   val fPSLogger: FPSLogger = new FPSLogger
 
+  private val backgroundColor = Color.valueOf("#44535e")
 
-  /**
-    * Called every frame
-    *
-    * @param delta Libgdx's mandatory parameter
-    */
+  /** Called every frame */
   override def render(delta: Float): Unit = {
 
     //clears the screen
-    Gdx.gl.glClearColor(74 / 255f, 96 / 255f, 112 / 255f, 1)
+    Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1)
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
     //updates game
     ticker.update(TimeUtils.millis())
+    gameTimer.update(ticker.delta)
 
 
     this.draw() //TODO update should be before draw, change when debug isn't needed
@@ -195,8 +193,10 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
     } else tmpPressed = false
 
 
-    if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) MainGame.drawCollBox = !MainGame.drawCollBox
+    if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) MainGame.drawCollBox = !MainGame.drawCollBox
 
+    if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+      gameUI.showEndSplashScreen("RED WINS", endGame)
 
 
     cam.update()
@@ -211,6 +211,12 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
     cam.position.set(0, 0, 0)
     cam.update()
     gameUI.forceUpdate()
+
+  }
+
+  /** Ends the mainGame and calls the return action*/
+  def endGame(): Unit = {
+    returnAction()
   }
 
 

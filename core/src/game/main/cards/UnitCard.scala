@@ -35,6 +35,12 @@ class UnitCard(owner: Player, unitCreator: UnitCreator) extends Card(owner) {
     super.action(x, y)
   }
 
+  override protected def actionFailed(x: Float, y: Float): Unit = {
+    unitPath.drawTimer.backward().start()
+    super.actionFailed(x, y)
+  }
+
+
   override def destroy(): Unit = {
     super.destroy()
     owner.hand += new UnitCard(owner, BasicSoldier) //new card to the player

@@ -9,7 +9,7 @@ import game.main.players.Player
 
 object BasicSoldier extends SoldierCreator {
 
-  override val cost: Int = 4
+  override val cost: Int = 30
 
   override protected lazy val texture: UnitTextures = GameTextures.Units.BaseSoldier
   override protected lazy val width: Float = 100f / 1.5f
