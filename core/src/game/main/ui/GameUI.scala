@@ -51,9 +51,14 @@ class GameUI(dimensions: Dimensions, viewport: Viewport,
 
   }
 
+  /** Updates cards immediately. */
+  def forceUpdate(): Unit = {
+    this.organizeCards()
+  }
+
   private def organizeCards(): Unit = {
 
-    val y = dimensions.down
+    val y = (dimensions.down - viewport.getWorldHeight / 2) / 2
     val width = 170 + 10
 
     val cardAmount = player.hand.filter(_.uiExists).count(_.uiElement.get.hasIdlePlace)
@@ -79,7 +84,7 @@ class GameUI(dimensions: Dimensions, viewport: Viewport,
     stage.draw()
   }
 
-  def inputProcessor = stage
+  def inputProcessor: Stage = stage
 
   override def draw(batch: Batch): Unit = {
     stage.draw() //stage has its own sprite batch

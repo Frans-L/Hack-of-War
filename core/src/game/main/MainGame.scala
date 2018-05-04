@@ -210,7 +210,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions) extends Screen {
     viewport.update(width, height, true)
     cam.position.set(0, 0, 0)
     cam.update()
-
+    gameUI.forceUpdate()
   }
 
 
