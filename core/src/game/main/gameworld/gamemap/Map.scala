@@ -3,7 +3,7 @@ package game.main.gameworld.gamemap
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite, TextureRegion}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.{MathUtils, Vector2}
 import game.GameElement
 import game.loader.GameTextures
 import game.main.gameworld.collision.bodies
@@ -152,34 +152,35 @@ class Map(val dimensions: Dimensions,
     def addPath(): Unit = {
 
       val offset = 75f
+      val startHeight = 30f
 
       val routeDown = Seq(
-        Vector2e(blockPosX(1), blockPosYMiddle(3)),
-        Vector2e(blockPosX(1) + blockWidth(1) / 3, blockPosYMiddle(3)),
-        Vector2e(blockPosXMiddle(1), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f + offset),
+        Vector2e(blockPosX(1) + blockWidth(1) / 5, blockPosYMiddle(3) - startHeight),
+        Vector2e(blockPosX(1) + blockWidth(1) / 1.75f, blockPosYMiddle(3) - startHeight),
+        Vector2e(blockPosX(1) + blockWidth(1) / 1.75f, blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f + offset),
         Vector2e(blockPosX(2), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f),
         Vector2e(blockPosX(3), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1)),
 
         Vector2e(blockPosX(4), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1)),
         Vector2e(blockPosX(5), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f),
-        Vector2e(blockPosXMiddle(5), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f + offset),
-        Vector2e(blockPosX(6) - blockWidth(1) / 3, blockPosYMiddle(3)),
-        Vector2e(blockPosX(6), blockPosYMiddle(3))
+        Vector2e(blockPosX(6) - blockWidth(1) / 1.75f, blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f + offset),
+        Vector2e(blockPosX(6) - blockWidth(1) / 1.75f, blockPosYMiddle(3) - startHeight),
+        Vector2e(blockPosX(6) - blockWidth(1) / 5, blockPosYMiddle(3) - startHeight)
 
       )
 
       val routeUp = Seq(
-        Vector2e(blockPosX(1), blockPosYMiddle(3)),
-        Vector2e(blockPosX(1) + blockWidth(1) / 3, blockPosYMiddle(3)),
-        Vector2e(blockPosXMiddle(1), blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f - offset),
+        Vector2e(blockPosX(1) + blockWidth(1) / 5, blockPosYMiddle(3) + startHeight),
+        Vector2e(blockPosX(1) + blockWidth(1) / 1.75f, blockPosYMiddle(3) + startHeight),
+        Vector2e(blockPosX(1) + blockWidth(1) / 1.75f, blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f - offset),
         Vector2e(blockPosX(2), blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f),
         Vector2e(blockPosX(3), blockPosYMiddle(5) - blockHeight(4) / 2 - blockHeight(1)),
 
         Vector2e(blockPosX(4), blockPosYMiddle(5) - blockHeight(2) / 2 - blockHeight(1)),
         Vector2e(blockPosX(5), blockPosYMiddle(5) - blockHeight(2) / 2 / 1.2f),
-        Vector2e(blockPosXMiddle(5), blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f - offset),
-        Vector2e(blockPosX(6) - blockWidth(1) / 3, blockPosYMiddle(3)),
-        Vector2e(blockPosX(6), blockPosYMiddle(3))
+        Vector2e(blockPosX(6) - blockWidth(1) / 1.75f, blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f - offset),
+        Vector2e(blockPosX(6) - blockWidth(1) / 1.75f, blockPosYMiddle(3) + startHeight),
+        Vector2e(blockPosX(6) - blockWidth(1) / 5, blockPosYMiddle(3) + startHeight)
 
       )
 
@@ -187,13 +188,25 @@ class Map(val dimensions: Dimensions,
       pathReversed = Seq(new Path(routeDown, offset).reverse, new Path(routeUp, offset).reverse)
 
       val routeSize = routeDown.size
-      val turretMiddle = Seq.empty
-      val turretUp = Seq(
-        routeUp(2).cpy.add(0, offset*2), routeUp(4).cpy.add(0, offset),
-        routeUp(routeSize - 5).cpy.add(0, offset), routeUp(routeSize - 3).cpy.add(0, offset*2))
-      val turretDown = Seq(
-        routeDown(2).cpy.add(0, -offset*2), routeDown(4).cpy.add(0, -offset),
-        routeDown(routeSize - 5).cpy.add(0, -offset), routeDown(routeSize - 3).cpy.add(0, -offset*2))
+
+      //main turrets location and direction look at
+      val turretMiddle = Seq(
+        Vector2e(blockPosX(1) - cornerWidth / 2, blockPosYMiddle(3)), //location
+        Vector2e(blockPosX(1), blockPosYMiddle(3)), //looking dir
+        Vector2e(blockPosX(6), blockPosYMiddle(3)), //looking dir
+        Vector2e(blockPosX(6) + cornerWidth / 2, blockPosYMiddle(3)) //location
+      )
+
+      //returns the pos path of the buildings on the lane
+      def turretLaneLoc(route: Seq[Vector2], mult: Float) = Seq(
+        route(2).cpy.add(0, offset * 2 * mult), //location
+        route(4).cpy.add(0, offset * mult), //looking direction
+        route(routeSize - 5).cpy.add(0, offset * mult), //looking direction
+        route(routeSize - 3).cpy.add(0, offset * 2 * mult) //location
+      )
+
+      val turretUp = turretLaneLoc(routeUp, 1)
+      val turretDown = turretLaneLoc(routeDown, -1)
 
       turretPath = Seq(new Path(turretMiddle, 0), new Path(turretDown, 0), new Path(turretUp, 0))
       turretPathReversed = Seq(new Path(turretMiddle, 0).reverse,

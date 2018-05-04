@@ -1,49 +1,48 @@
 package game.main.units
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.g2d.Sprite
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
-import game.main.gameworld.gameobject.elements.unit
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.elements.unit.HealthBarElement
 import game.main.gameworld.gameobject.objects.UnitObject
+import game.main.players.Player
+import game.main.units.UnitCreator
 
-object SoldierCreator extends UnitCreator {
+trait SoldierCreator extends UnitCreator {
 
-  override lazy val cost: Int = 3
+  protected val texture: UnitTextures
+  protected val width: Float
+  protected val height: Float
 
-  override lazy val texture: UnitTextures = GameTextures.Units.BaseSoldier
-  override lazy val width: Float = 100f / 1.5f
-  override lazy val height: Float = 75f / 1.5f
+  protected def collBody: CollisionBody
 
-  override def collBody: CollisionBody = PolygonBody.triangleCollBody(width, height / 2f, 0, height)
+  protected def setStats(obj: UnitObject, owner: Player, path: Path): Unit
 
   /** Sets the all stats to to unit */
-  override protected def setStats(obj: UnitObject, path: Path): Unit = {
+  override def create(owner: Player,
+                      x: Float, y: Float,
+                      path: Path, random: Boolean): UnitObject = {
 
-    /*
-    obj.maxForwardForceAttack = obj.maxMovingForce * 0.5f
-    */
+    val obj = UnitCreator.createUnit(owner, collBody, width, height)
+    UnitCreator.addTextures(obj, texture, owner)
+    val correctPath = UnitCreator.findPath(obj, path, x, y, random)
 
-    obj.mass = 100f
-    obj.friction = 0.25f
+    setStats(obj, owner, correctPath) //sets all the stats
 
-    obj.health = 100f
+    obj.appendElement(new HealthBarElement(obj.health)) //add healthBar
+    obj.update()
+    obj
+  }
 
-    val visionMaxHeight = obj.sHeight * 3.5f
-    val visionMaxDist = obj.sWidth * 4f
-    val attackVision = PolygonBody.trapezoidCollBody(obj.sHeight, visionMaxHeight, visionMaxDist)
+  /** Returns the icon of the unit */
+  override def pathIcon(owner: Player): Sprite = {
+    UnitCreator.defaultPathIcon(texture, width, height, owner)
+  }
 
-    obj.maxMovingForce = 0.030f
-
-    //add brains
-    obj.appendElement(new unit.FollowPath(path, obj.collBody.getRadiusScaled * 1.5f))
-    obj.appendElement(new unit.ShootAhead(attackVision, 30f, 200, BasicBullet))
-    obj.appendElement(new unit.Steering(0.006f))
-    obj.appendElement(new unit.AvoidObstacles(0.020f, obj.sWidth * 1.5f))
-    obj.appendElement(new unit.TurnToMovingDirection(150f))
-
-    obj.appendElement(new HealthBarElement(obj.health))
-
+  /** Returns the card icon of the unit */
+  override def cardIcon(owner: Player): Sprite = {
+    UnitCreator.defaultCardIcon(texture, width, height, owner)
   }
 }

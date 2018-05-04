@@ -14,8 +14,8 @@ class Path(private var route: Seq[Vector2], var maxOffset: Float) {
   //make sure that path always exists
   if (route == null || route.size <= 1) route = Seq(Vector2e(0, 0), Vector2e(0, 0))
 
-  //how many points from the start and from the end are ignored
-  val ignoreOffsetAmount = 2
+  //how many points from the start and from the end are ignored with offset
+  val startPathLength = 2
 
   def head: Vector2 = route.head
 
@@ -38,7 +38,7 @@ class Path(private var route: Seq[Vector2], var maxOffset: Float) {
 
   /** Changes the current path by offset. Returns itself to make chaining possible. */
   def setOffset(offset: Float): Path = {
-    for (i <- ignoreOffsetAmount until route.length - ignoreOffsetAmount) {
+    for (i <- startPathLength until route.length - startPathLength) {
       route(i) ++ direction(i).nor.rotate90(1).scl(offset)
     }
 
@@ -85,6 +85,9 @@ class Path(private var route: Seq[Vector2], var maxOffset: Float) {
 
     math.min(offset, maxOffset) * dir
   }
+
+  /** Returns a random spot between i and i+1 route's points. */
+  def randomSpot(i: Int): Vector2 = direction(i).scl(MathUtils.random(1f)).add(route(i))
 
   /** Returns a random offset */
   def randomOffset: Float = MathUtils.random(-maxOffset, maxOffset)

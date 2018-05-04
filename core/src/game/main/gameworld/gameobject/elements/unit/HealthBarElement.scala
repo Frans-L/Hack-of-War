@@ -12,14 +12,14 @@ import game.util.{CountdownTimer, Vector2e}
 class HealthBarElement(maxHealth: Float, showTime: Int = Int.MaxValue) extends UnitElement {
 
   val posY: Float = 20 //posY from the highest point of the object
-  val opacity = 0.30f
+  val opacity = 0.5f
 
   val fullHealthColor: Color = Color.valueOf("#0e9302") //green
-  val zeroHealthColor: Color = Color.valueOf("#700101") //red
+  val zeroHealthColor: Color = Color.valueOf("#d10202") //red
 
   private val scale = 2f
   val size: Vector2 = Vector2e(100 / scale, 20 / scale)
-  val margin: Vector2 = Vector2e(2 / scale, 2 / scale)
+  val margin: Vector2 = Vector2e(3 / scale, 3 / scale)
 
   private val bar: Sprite = GameTextures.default.atlas.createSprite(GameTextures.Units.healthBar)
   private val fill: Sprite = GameTextures.default.atlas.createSprite(GameTextures.Units.healthBarFill)
@@ -44,7 +44,7 @@ class HealthBarElement(maxHealth: Float, showTime: Int = Int.MaxValue) extends U
     fill.setSize(size.x * percent - margin.x * 2f, size.y - margin.y * 2f)
     fill.setColor(zeroHealthColor)
     fill.setColor(fill.getColor.lerp(fullHealthColor,
-      Interpolation.fade.apply(percent)))
+      Interpolation.circle.apply(percent)))
 
     //sets visibility with animation
     if (parent.lastHitTick != UnitObject.noHitTick && parent.ticker.total < parent.lastHitTick + showTime)

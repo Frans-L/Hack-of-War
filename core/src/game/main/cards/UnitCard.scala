@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2
 import game.main.gameworld.gamemap
 import game.main.gameworld.gamemap.Path
 import game.main.players.Player
-import game.main.units.{SoldierCreator, UnitCreator}
+import game.main.units.{BasicSoldier, SoldierCreator, UnitCreator}
 
 class UnitCard(owner: Player, unitCreator: UnitCreator) extends Card(owner) {
 
@@ -31,13 +31,13 @@ class UnitCard(owner: Player, unitCreator: UnitCreator) extends Card(owner) {
 
   override protected def action(x: Float, y: Float): Unit = {
     unitPath.drawTimer.backward().start()
-    owner.spawnUnit(SoldierCreator, x, y, unitPath.getOrgPath)
+    owner.spawnUnit(BasicSoldier, x, y, unitPath.getOrgPath)
     super.action(x, y)
   }
 
   override def destroy(): Unit = {
     super.destroy()
-    owner.hand += new UnitCard(owner, SoldierCreator) //new card to the player
+    owner.hand += new UnitCard(owner, BasicSoldier) //new card to the player
   }
 
 }

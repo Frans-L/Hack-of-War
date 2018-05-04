@@ -1,5 +1,6 @@
 package game.main.gameworld.gameobject
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
@@ -43,9 +44,14 @@ class GameObject() extends GameElement with ObjectElement {
 
   /** Calls the method 'run' so that position of this object is relative to parent. */
   private def runRelatively(parent: GameObject, run: () => Unit): Unit = {
-    val orgAngle = angle
-    val orgOpacity = opacity
-    pos.setAngle(parent.angle)
+
+    val orgPosAngle = pos.angle //needed to keep pos angle same
+    val orgOpacity = opacity //needed when parent's opacity is zero
+    val orgScaleX = parent.scale.x //needed when parent's scale is zero
+    val orgScaleY = parent.scale.y
+
+    //sets to relative coords
+    pos.setAngle(pos.angle + parent.angle)
     pos.add(parent.pos.x, parent.pos.y)
     scale.scl(parent.scale)
     angle += parent.angle
@@ -55,10 +61,14 @@ class GameObject() extends GameElement with ObjectElement {
 
     //sets back to its own original position
     pos.sub(parent.pos.x, parent.pos.y)
-    pos.setAngle(orgAngle)
-    scale.scl(1f / parent.scale.x, 1f / parent.scale.y)
     angle -= parent.angle
+    pos.setAngle(orgPosAngle)
     opacity = if(opacity != 0) opacity / parent.opacity else orgOpacity
+
+    if(scale.x != 0 && parent.scale.y != 0) scale.scl(1f / parent.scale.x, 1f / parent.scale.y)
+    else scale.scl(orgScaleX, orgScaleY)
+
+
   }
 
 

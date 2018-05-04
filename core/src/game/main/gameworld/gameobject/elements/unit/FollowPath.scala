@@ -7,7 +7,7 @@ import game.main.gameworld.gameobject.{ObjectElement, objects}
 /** Updates the unitObject's moveTarget. */
 class FollowPath(var path: Path, val acceptDist: Float) extends UnitElement {
 
-  private var targetI: Int = 0 //current target index
+  private var targetI: Int = path.startPathLength //current target index
 
   override def update(p: gameobject.GameObject, delta: Int): Unit = {
     val parent = p.asInstanceOf[objects.UnitObject]

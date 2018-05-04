@@ -8,7 +8,7 @@ import game.main.cards.Card
 import game.main.gameworld.gamemap
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.ObjectHandler
-import game.main.units.{TurretCreator, UnitCreator}
+import game.main.units.{BuildingCreator, UnitCreator}
 
 import scala.collection.mutable
 

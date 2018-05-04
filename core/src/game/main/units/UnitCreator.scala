@@ -12,38 +12,32 @@ import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.players.Player
 import game.util.Vector2e
 
-object UnitCreator {
 
-  /** Changes the sprite to be default pathIcon */
-  def defaultPathIcon(sprite: Sprite): Sprite = {
-    val darkness = 0.25f
-    sprite.setColor(darkness, darkness, darkness, 0.15f)
-    sprite
-  }
-
-  /** Changes the sprite to be default cardIcon */
-  def defaultCardIcon(sprite: Sprite): Sprite = {
-    sprite //icon is the same as the unit
-  }
-
-}
 
 trait UnitCreator {
 
+  /** Cost of the unit */
   val cost: Int
 
-  val texture: UnitTextures
-  val width: Float
-  val height: Float
+  /** Creates a new unit */
+  def create(owner: Player,
+             x: Float, y: Float,
+             path: Path, random: Boolean = false): UnitObject
 
-  def collBody: CollisionBody
+  /** Returns the icon of the unit */
+  def pathIcon(owner: Player): Sprite
 
-  /** Sets the all stats to to unit */
-  protected def setStats(obj: UnitObject, path: Path): Unit
+  /** Returns the card icon of the unit */
+  def cardIcon(owner: Player): Sprite
+
+
+}
+
+/** Helper methods to create units easily. */
+object UnitCreator {
 
   /** Sets the sprites to units */
-  protected def setSprite(obj: UnitObject, owner: Player): Unit = {
-    val sprite = GameTextures.default.atlas.createSprite(texture.main(owner.colorIndex))
+  def addTextures(obj: UnitObject, texture: UnitTextures, owner: Player): Unit = {
     obj.appendElement(
       new ShadowElement(GameTextures.default.atlas.findRegion(texture.shadow)))
     obj.appendElement(
@@ -51,51 +45,65 @@ trait UnitCreator {
         GameTextures.default.atlas.findRegion(texture.main(owner.colorIndex)), texture.brightness))
   }
 
+  /** Creates the empty unitObject */
+  def createUnit(owner: Player, collBody: CollisionBody,
+                           width: Float, height: Float,
+                           update: Boolean = true): UnitObject = {
 
-  /** Creates a new unit */
-  def create(owner: Player, x: Float, y: Float,
-             path: Path,
-             random: Boolean = false): UnitObject = {
-
-    val collHandler = owner.objectHandler.collHandler
-
-    //creates the unit
-    val obj = new UnitObject(collHandler, collBody)
+    val obj = new UnitObject(owner.objectHandler.collHandler, collBody)
     obj.owner = owner
     obj.size.set(width, height)
     obj.origin.set(obj.size.x / 2f, obj.size.y / 2f)
-
-    //adds sprites
-    setSprite(obj, owner)
-
-    //adds the object to handlers
-    owner.objectHandler.addObject(obj, Level.ground, owner = owner)
-
-    //find the route
-    val p: Path = path.copy
-    if (random) p.setOffset(p.randomOffset) else p.setOffset(path.findOffset(x, y))
-    obj.pos.set(p.head)
-    obj.angle = p.direction(0).angle
-
-    setStats(obj, p) //sets the specific unit stats
-
+    if (update) owner.objectHandler.addObject(obj, Level.ground, owner = owner)
     obj.update()
     obj
+
   }
 
-  /** Returns the icon of the unit */
-  def pathIcon(owner: Player): Sprite = {
+  /** Adds a moving path to object. + Moves the object to the beginning of the path. */
+  def findPath(obj: UnitObject, path: Path,
+                         x: Float, y: Float,
+                         random: Boolean = false): Path = {
+
+    val p: Path = path.copy
+    if (random) p.setOffset(p.randomOffset) else p.setOffset(path.findOffset(x, y))
+    posToStartLocRandom(obj, path)
+    p
+
+  }
+
+  /** Moves the object to the beginning of the path. */
+  def posToStartLoc(obj: UnitObject, path: Path): Unit = {
+    obj.pos.set(path.head)
+    obj.angle = path.direction(0).angle
+  }
+
+  /** Moves the object to the beginning of the path between 1st and 2nd point. */
+  def posToStartLocRandom(obj: UnitObject, path: Path): Unit = {
+    obj.pos.set(path.randomSpot(0))
+    obj.angle = path.direction(1).angle
+  }
+
+
+  /** Returns the default path icon. */
+  def defaultPathIcon(texture: UnitTextures,
+                                width: Float, height: Float,
+                                owner: Player): Sprite = {
+    val darkness = 0.25f
     val sprite = GameTextures.default.atlas.createSprite(texture.main(owner.colorIndex))
     sprite.setSize(width, height)
-    UnitCreator.defaultPathIcon(sprite)
+    sprite.setColor(darkness, darkness, darkness, 0.15f)
+    sprite
   }
 
-  /** Returns the card icon of the unit */
-  def cardIcon(owner: Player): Sprite = {
+  /** Returns the default card icon. */
+  def defaultCardIcon(texture: UnitTextures,
+                                width: Float, height: Float,
+                                owner: Player): Sprite = {
     val sprite = GameTextures.default.atlas.createSprite(texture.main(owner.colorIndex))
     sprite.setColor(texture.brightness, texture.brightness, texture.brightness, 1)
     sprite.setSize(width, height)
-    UnitCreator.defaultCardIcon(sprite)
+    sprite
   }
 
 }
