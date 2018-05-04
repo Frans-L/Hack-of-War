@@ -55,6 +55,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction:() =>
 
   MainGame.debugRender = new ShapeRenderer
   MainGame.debugRender.setColor(0, 1f, 0f, 1)
+  MainGame.drawCollBox = false
 
   //sets the game camera
   private val cam: OrthographicCamera = new OrthographicCamera()
