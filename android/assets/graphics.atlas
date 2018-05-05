@@ -1,6 +1,6 @@
 
 graphics.png
-size: 512,512
+size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -13,140 +13,182 @@ bullet1Blue
   index: -1
 bullet1Red
   rotate: false
-  xy: 483, 490
+  xy: 655, 843
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 bullet1Shadow
   rotate: false
-  xy: 24, 2
+  xy: 164, 733
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 card1
   rotate: false
-  xy: 2, 270
+  xy: 2, 732
   size: 160, 240
   orig: 160, 240
   offset: 0, 0
   index: -1
 healthBar
   rotate: false
-  xy: 2, 56
+  xy: 401, 776
   size: 100, 10
   orig: 100, 10
   offset: 0, 0
   index: -1
 healthBarFill
   rotate: false
-  xy: 401, 307
+  xy: 186, 752
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 manaBar
   rotate: false
-  xy: 166, 261
+  xy: 401, 942
   size: 280, 30
   orig: 280, 30
   offset: 0, 0
   index: -1
 mapBorder
   rotate: false
-  xy: 505, 505
+  xy: 176, 521
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
 mapCorner
   rotate: false
-  xy: 268, 67
+  xy: 84, 436
   size: 90, 90
   orig: 90, 90
   offset: 0, 0
   index: -1
 mapMiddleCorner
   rotate: false
-  xy: 164, 385
+  xy: 164, 847
   size: 235, 125
   orig: 235, 125
   offset: 0, 0
   index: -1
 mapTrenchCorner
   rotate: false
-  xy: 164, 293
+  xy: 164, 755
   size: 235, 90
   orig: 235, 90
   offset: 0, 0
   index: -1
 pointCircle
   rotate: false
-  xy: 2, 24
+  xy: 683, 942
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
+tank1Blue
+  rotate: false
+  xy: 553, 865
+  size: 150, 75
+  orig: 150, 75
+  offset: 0, 0
+  index: -1
+tank1Red
+  rotate: false
+  xy: 401, 788
+  size: 150, 75
+  orig: 150, 75
+  offset: 0, 0
+  index: -1
+tank1Shadow
+  rotate: false
+  xy: 401, 865
+  size: 150, 75
+  orig: 150, 75
+  offset: 0, 0
+  index: -1
 turret1Blue
   rotate: false
-  xy: 166, 57
+  xy: 84, 630
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 turret1Red
   rotate: false
-  xy: 268, 159
+  xy: 2, 24
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 turret1Shadow
   rotate: false
-  xy: 166, 159
+  xy: 84, 528
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 turretLongBlue
   rotate: false
-  xy: 2, 68
+  xy: 2, 530
   size: 80, 200
   orig: 80, 200
   offset: 0, 0
   index: -1
 turretLongRed
   rotate: false
-  xy: 401, 310
+  xy: 2, 328
   size: 80, 200
   orig: 80, 200
   offset: 0, 0
   index: -1
 turretLongShadow
   rotate: false
-  xy: 84, 68
+  xy: 2, 126
   size: 80, 200
   orig: 80, 200
   offset: 0, 0
   index: -1
 unit1Blue
   rotate: false
-  xy: 370, 184
+  xy: 84, 282
   size: 100, 75
   orig: 100, 75
   offset: 0, 0
   index: -1
 unit1Red
   rotate: false
-  xy: 360, 30
+  xy: 104, 51
   size: 100, 75
   orig: 100, 75
   offset: 0, 0
   index: -1
 unit1Shadow
   rotate: false
-  xy: 370, 107
+  xy: 84, 205
+  size: 100, 75
+  orig: 100, 75
+  offset: 0, 0
+  index: -1
+unit2Blue
+  rotate: false
+  xy: 553, 788
+  size: 100, 75
+  orig: 100, 75
+  offset: 0, 0
+  index: -1
+unit2Red
+  rotate: false
+  xy: 84, 359
+  size: 100, 75
+  orig: 100, 75
+  offset: 0, 0
+  index: -1
+unit2Shadow
+  rotate: false
+  xy: 84, 128
   size: 100, 75
   orig: 100, 75
   offset: 0, 0

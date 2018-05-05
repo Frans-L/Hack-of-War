@@ -1,10 +1,7 @@
 package game.main.players
 
-import game.loader.GameTextures.Units.BaseSoldier
-import game.main.cards.{Card, UnitCard}
-import game.main.gameworld.collision.CollisionHandler
 import game.main.gameworld.gameobject.ObjectHandler
-import game.main.units.{BasicSoldier, BuildingCreator, LaneBuilding, MainBuilding}
+import game.main.units.{LaneBuilding, MainBuilding}
 
 class User(objectHandler: ObjectHandler, override val colorIndex: Int) extends
   Player(objectHandler, colorIndex) {

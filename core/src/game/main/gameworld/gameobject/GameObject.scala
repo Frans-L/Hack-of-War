@@ -8,6 +8,7 @@ import game.GameElement
 import game.util.Vector2e
 
 import scala.collection.mutable
+import scala.reflect.ClassTag
 
 class GameObject() extends GameElement with ObjectElement {
 
@@ -95,14 +96,16 @@ class GameObject() extends GameElement with ObjectElement {
   }
 
   /** Returns the first element */
-  def headElement[T <: ObjectElement]: T = {
-    require(elements.head.isInstanceOf[T], "headElement isn't instance of T")
+  def headElement[T <: ObjectElement : ClassTag]: T = {
+    val classTag = implicitly[ClassTag[T]].runtimeClass
+    require(classTag.isInstance(elements.head), "headElement isn't instance of T")
     elements.head.asInstanceOf[T]
   }
 
   /** Returns the first element */
-  def lastElement[T <: ObjectElement]: T = {
-    require(elements.last.isInstanceOf[T], "lastElement isn't instance of T")
+  def lastElement[T <: ObjectElement : ClassTag]: T = {
+    val classTag = implicitly[ClassTag[T]].runtimeClass
+    require(classTag.isInstance(elements.last), "lastElement isn't instance of T")
     elements.last.asInstanceOf[T]
   }
 

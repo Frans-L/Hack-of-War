@@ -37,7 +37,7 @@ trait TurretCreator {
 
 object BuildingTurretSmall extends TurretCreator {
 
-  override protected lazy val texture: UnitTextures = GameTextures.Units.BaseSoldier
+  override protected lazy val texture: UnitTextures = GameTextures.Units.SoldierBasic
   override protected lazy val width: Float = 90f / 1.5f
   override protected lazy val height: Float = 70f / 1.5f
 
@@ -58,7 +58,7 @@ object BuildingTurretSmall extends TurretCreator {
 
 object BuildingTurretMain extends TurretCreator {
 
-  override protected lazy val texture: UnitTextures = GameTextures.Units.BaseSoldier
+  override protected lazy val texture: UnitTextures = GameTextures.Units.SoldierBasic
   override protected lazy val width: Float = 90f / 1.5f
   override protected lazy val height: Float = 70f / 1.5f
 

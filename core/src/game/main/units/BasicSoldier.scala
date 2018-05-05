@@ -13,7 +13,7 @@ object BasicSoldier extends SoldierCreator {
 
   override val cost: Int = 30
 
-  override protected lazy val texture: UnitTextures = GameTextures.Units.BaseSoldier
+  override protected lazy val texture: UnitTextures = GameTextures.Units.SoldierBasic
   override protected lazy val width: Float = 100f / 1.5f
   override protected lazy val height: Float = 75f / 1.5f
 

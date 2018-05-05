@@ -29,7 +29,7 @@ trait SwarmSoldier extends SoldierCreator {
 
   val unitAmount: Int //amount of units
 
-  override protected val texture: UnitTextures = GameTextures.Units.BaseSoldier
+  override protected val texture: UnitTextures = GameTextures.Units.SoldierBasic
   private val scale: Float = 2.25f
   override protected val width: Float = 100f / scale
   override protected val height: Float = 75f / scale

@@ -16,8 +16,8 @@ class GameTextures extends Loadable {
   val load: Vector[(String, Class[_])] = Vector((GameTextures.atlasName, classOf[TextureAtlas]))
 
   val loadFont: Vector[(String, Class[BitmapFont], FreeTypeFontLoaderParameter)] = Vector(
-    (GameTextures.Font.Normal.name, classOf[BitmapFont], GameTextures.Font.Normal.params),
-    (GameTextures.Font.Big.name, classOf[BitmapFont], GameTextures.Font.Big.params)
+    (FontLoading.Normal.name, classOf[BitmapFont], FontLoading.Normal.params),
+    (FontLoading.Big.name, classOf[BitmapFont], FontLoading.Big.params)
   )
 
   var atlas: TextureAtlas = _
@@ -33,21 +33,7 @@ class GameTextures extends Loadable {
     Fonts.big = manager.get(loadFont(1)._1)
   }
 
-
-}
-
-
-object GameTextures {
-
-
-  //null value at start =>
-  //errors will appear when game starts, if this not set to be something
-  var default: GameTextures = _
-  var defaultUI: GameTextures = _
-
-  val atlasName = "graphics.atlas"
-
-  object Font {
+  private object FontLoading {
 
     object Normal {
       val name = "normal.ttf"
@@ -79,18 +65,30 @@ object GameTextures {
 
   }
 
+
+}
+
+
+object GameTextures {
+
+  //null value at start =>
+  //errors will appear when game starts, if this not set to be something
+  var default: GameTextures = _
+  var defaultUI: GameTextures = _
+
+  val atlasName = "graphics.atlas"
+
   object UI {
 
     val manaBar = "manaBar"
     val manaBarFill = "healthBarFill"
-
     val endBackground = "healthBarFill"
 
   }
 
   object Units {
 
-    object BaseSoldier extends UnitTextures{
+    object SoldierBasic extends UnitTextures{
       override val main: Seq[String] =  Seq("unit1Blue", "unit1Red")
       override val shadow: String = "unit1Shadow"
     }
@@ -100,12 +98,12 @@ object GameTextures {
       override val shadow: String = "bullet1Shadow"
     }
 
-    object BaseTurret extends UnitTextures{
+    object BuildingSmall extends UnitTextures{
       override val main: Seq[String] = Seq("turret1Blue", "turret1Red")
       override val shadow: String = "turret1Shadow"
     }
 
-    object LongTurret extends UnitTextures{
+    object BuildingLong extends UnitTextures{
       override val main: Seq[String] = Seq("turretLongBlue", "turretLongRed")
       override val shadow: String = "turretLongShadow"
     }

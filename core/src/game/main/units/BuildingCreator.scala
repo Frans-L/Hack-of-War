@@ -31,7 +31,7 @@ object LaneBuilding extends BuildingCreator {
 
   override val cost: Int = 10
 
-  override protected lazy val texture: UnitTextures = GameTextures.Units.BaseTurret
+  override protected lazy val texture: UnitTextures = GameTextures.Units.BuildingSmall
   override protected lazy val width: Float = 75f
   override protected lazy val height: Float = 75f
 
@@ -53,7 +53,7 @@ object MainBuilding extends BuildingCreator {
 
   override val cost: Int = 20
 
-  override protected lazy val texture: UnitTextures = GameTextures.Units.LongTurret
+  override protected lazy val texture: UnitTextures = GameTextures.Units.BuildingLong
   override protected lazy val width: Float = 80f
   override protected lazy val height: Float = 200f
 

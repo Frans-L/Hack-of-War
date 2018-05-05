@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import game.GameElement
-import game.loader.GameTextures.Units.BaseSoldier
 import game.main.cards.{Card, UnitCard}
 import game.main.gameworld.gamemap
 import game.main.gameworld.gamemap.Path
@@ -14,6 +13,7 @@ import game.main.units
 import game.main.units._
 
 import scala.collection.mutable
+import scala.reflect.ClassTag
 
 object Player {
 
@@ -87,8 +87,9 @@ abstract class Player(val objectHandler: ObjectHandler, index: Int)
   }
 
   /** Returns random card from hand. */
-  def randomCard[T <: Card](): Option[T] = {
-    val h = hand.filter(_.isInstanceOf[T])
+  def randomCard[T <: Card : ClassTag](): Option[T] = {
+    val classTag = implicitly[ClassTag[T]].runtimeClass
+    val h = hand.filter(classTag.isInstance)
     if(h.nonEmpty)
       Some(hand(MathUtils.random(h.size - 1)).asInstanceOf[T])
     else None

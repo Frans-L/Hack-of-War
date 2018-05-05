@@ -8,6 +8,7 @@ BLUE
 RED
 #ff6b69 //kirkas
 #851412 //normaali
+#4c1919 //tumma
 
 CARD
 #192831 //tumman sininen, tausta
