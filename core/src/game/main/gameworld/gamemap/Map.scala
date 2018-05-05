@@ -117,8 +117,9 @@ class Map(val dimensions: Dimensions,
     val trenchCornerWidth: Float = 230
     val trenchWidth: Float = 660
 
-    val blockWidth = Seq(borderWidth + cornerWidth, baseWidth, trenchCornerWidth,
-      trenchWidth, trenchCornerWidth, baseWidth, borderWidth + cornerWidth)
+    //mirros from middle
+    val blockWidthLeft = Seq(borderWidth + cornerWidth, baseWidth, trenchCornerWidth)
+    val blockWidth = blockWidthLeft ++ Seq(trenchWidth) ++ blockWidthLeft.reverse
 
     require(blockWidth.sum.toInt == dimensions.maxWidth) //has to match with screen coords
 
@@ -154,40 +155,35 @@ class Map(val dimensions: Dimensions,
       val offset = 75f
       val startHeight = 30f
 
-      val routeDown = Seq(
+      val rDownLeft = Seq(
         Vector2e(blockPosX(1) + blockWidth(1) / 5, blockPosYMiddle(3) - startHeight),
         Vector2e(blockPosX(1) + blockWidth(1) / 1.75f, blockPosYMiddle(3) - startHeight),
         Vector2e(blockPosX(1) + blockWidth(1) / 1.75f, blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f + offset),
         Vector2e(blockPosX(2), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f),
-        Vector2e(blockPosX(3), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1)),
-
-        Vector2e(blockPosX(4), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1)),
-        Vector2e(blockPosX(5), blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f),
-        Vector2e(blockPosX(6) - blockWidth(1) / 1.75f, blockPosYMiddle(1) + blockHeight(2) / 2 / 1.2f + offset),
-        Vector2e(blockPosX(6) - blockWidth(1) / 1.75f, blockPosYMiddle(3) - startHeight),
-        Vector2e(blockPosX(6) - blockWidth(1) / 5, blockPosYMiddle(3) - startHeight)
-
+        Vector2e(blockPosX(3), blockPosYMiddle(1) + blockHeight(2) / 2 + blockHeight(1))
       )
 
-      val routeUp = Seq(
+      val rUpLeft = Seq(
         Vector2e(blockPosX(1) + blockWidth(1) / 5, blockPosYMiddle(3) + startHeight),
         Vector2e(blockPosX(1) + blockWidth(1) / 1.75f, blockPosYMiddle(3) + startHeight),
         Vector2e(blockPosX(1) + blockWidth(1) / 1.75f, blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f - offset),
         Vector2e(blockPosX(2), blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f),
-        Vector2e(blockPosX(3), blockPosYMiddle(5) - blockHeight(4) / 2 - blockHeight(1)),
-
-        Vector2e(blockPosX(4), blockPosYMiddle(5) - blockHeight(2) / 2 - blockHeight(1)),
-        Vector2e(blockPosX(5), blockPosYMiddle(5) - blockHeight(2) / 2 / 1.2f),
-        Vector2e(blockPosX(6) - blockWidth(1) / 1.75f, blockPosYMiddle(5) - blockHeight(4) / 2 / 1.2f - offset),
-        Vector2e(blockPosX(6) - blockWidth(1) / 1.75f, blockPosYMiddle(3) + startHeight),
-        Vector2e(blockPosX(6) - blockWidth(1) / 5, blockPosYMiddle(3) + startHeight)
-
+        Vector2e(blockPosX(3), blockPosYMiddle(5) - blockHeight(4) / 2 - blockHeight(1))
       )
 
-      path = Seq(new Path(routeDown, offset), new Path(routeUp, offset))
-      pathReversed = Seq(new Path(routeDown, offset).reverse, new Path(routeUp, offset).reverse)
+      val rDownFull = rDownLeft ++ rDownLeft.reverse.map(_.cpy().scl(-1, 1))
+      val rUpFull = rUpLeft ++ rUpLeft.reverse.map(_.cpy().scl(-1, 1))
 
-      val routeSize = routeDown.size
+      val rDown = rDownFull.dropRight(2) ++ Seq(Vector2e(blockPosX(6), blockPosYMiddle(3)))
+      val rDownReversed = rDownFull.reverse.dropRight(2) ++ Seq(Vector2e(blockPosX(1), blockPosYMiddle(3)))
+
+      val rUp = rUpFull.dropRight(2) ++ Seq(Vector2e(blockPosX(6), blockPosYMiddle(3)))
+      val rUpReversed = rUpFull.reverse.dropRight(2) ++ Seq(Vector2e(blockPosX(1), blockPosYMiddle(3)))
+
+      path = Seq(new Path(rDown, offset), new Path(rUp, offset))
+      pathReversed = Seq(new Path(rDownReversed, offset), new Path(rUpReversed, offset))
+
+      val routeSize = rDownFull.size
 
       //main turrets location and direction look at
       val turretMiddle = Seq(
@@ -205,8 +201,8 @@ class Map(val dimensions: Dimensions,
         route(routeSize - 3).cpy.add(0, offset * 2 * mult) //location
       )
 
-      val turretUp = turretLaneLoc(routeUp, 1)
-      val turretDown = turretLaneLoc(routeDown, -1)
+      val turretUp = turretLaneLoc(rUpFull, 1)
+      val turretDown = turretLaneLoc(rDownFull, -1)
 
       turretPath = Seq(new Path(turretMiddle, 0), new Path(turretDown, 0), new Path(turretUp, 0))
       turretPathReversed = Seq(new Path(turretMiddle, 0).reverse,
