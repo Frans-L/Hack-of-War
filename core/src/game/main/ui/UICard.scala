@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.{Interpolation, Vector2, Vector3}
 import com.badlogic.gdx.scenes.scene2d.actions.{Actions, MoveToAction, ParallelAction, ScaleByAction}
 import com.badlogic.gdx.scenes.scene2d._
 import game.loader.GameTextures
+import game.main.gameworld.gameobject.GameObject
 import game.util.Ticker
 
 
@@ -26,7 +27,7 @@ object UICard {
 /**
   * Created by Frans on 28/02/2018.
   */
-class UICard(cardSprite: Sprite, icon: Sprite, text: String) extends Actor {
+class UICard(cardSprite: Sprite, icon: GameObject, text: String) extends Actor {
 
   private val font: BitmapFont = GameTextures.defaultUI.Fonts.normal
   private val textLayout: GlyphLayout = new GlyphLayout(font, text)
@@ -47,17 +48,14 @@ class UICard(cardSprite: Sprite, icon: Sprite, text: String) extends Actor {
     cardSprite.setScale(this.getScaleX, this.getScaleY)
     cardSprite.setPosition(this.getX, this.getY)
 
-    icon.setOrigin(0, 0)
-    icon.setSize(icon.getWidth, icon.getHeight)
-    icon.setScale(this.getScaleX, this.getScaleY)
-    icon.setPosition(
-      this.centerX - icon.getWidth * icon.getScaleX / 2,
-      this.centerY)
+    icon.scale.set(this.getScaleX, this.getScaleY)
+    icon.pos.set(this.centerX, this.centerY)
 
   }
 
   def update(): Unit = {
     updateSprites()
+    icon.update()
   }
 
   override def draw(batch: Batch, fl: Float): Unit = {

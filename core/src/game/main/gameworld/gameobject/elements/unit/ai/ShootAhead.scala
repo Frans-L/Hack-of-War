@@ -1,13 +1,12 @@
-package game.main.gameworld.gameobject.elements.unit
+package game.main.gameworld.gameobject.elements.unit.ai
 
-import com.badlogic.gdx.Gdx
 import game.GameElement
+import game.main.MainGame
 import game.main.gameworld.collision.bodies.CollisionBody
-import game.main.{MainGame, gameworld}
 import game.main.gameworld.gameobject
-import game.main.gameworld.gameobject.ObjectElement
+import game.main.gameworld.gameobject.elements.unit.UnitElement
 import game.main.gameworld.gameobject.objects.UnitObject
-import game.main.units.BulletCreator
+import game.main.units.bullet.BulletCreator
 import game.util.Vector2e
 import game.util.Vector2e._
 

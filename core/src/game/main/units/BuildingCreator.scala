@@ -15,14 +15,14 @@ trait BuildingCreator extends SoldierCreator {
 
   override def create(owner: Player,
                       x: Float, y: Float,
-                      path: Path, random: Boolean): UnitObject = {
+                      path: Path, extraOffset: Float): Seq[UnitObject] = {
 
     val obj = UnitCreator.createUnit(owner, collBody, width, height)
     UnitCreator.addTextures(obj, texture, owner, 1.25f, 1.25f)
     UnitCreator.posToStartLoc(obj, path)
 
     setStats(obj, owner, path)
-    obj
+    Seq(obj)
   }
 
 }

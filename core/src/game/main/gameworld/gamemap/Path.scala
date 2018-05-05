@@ -38,10 +38,10 @@ class Path(private var route: Seq[Vector2], var maxOffset: Float) {
 
   /** Changes the current path by offset. Returns itself to make chaining possible. */
   def setOffset(offset: Float): Path = {
+    val off = limitOffset(offset)
     for (i <- startPathLength until route.length - startPathLength) {
-      route(i) ++ direction(i).nor.rotate90(1).scl(offset)
+      route(i) ++ direction(i).nor.rotate90(1).scl(off)
     }
-
     this
   }
 
@@ -85,6 +85,9 @@ class Path(private var route: Seq[Vector2], var maxOffset: Float) {
 
     math.min(offset, maxOffset) * dir
   }
+
+  /** Returns a offset that is limited to be under maxOffset. */
+  def limitOffset(off: Float): Float = math.min(math.max(-maxOffset, off), maxOffset)
 
   /** Returns a random spot between i and i+1 route's points. */
   def randomSpot(i: Int): Vector2 = direction(i).scl(MathUtils.random(1f)).add(route(i))

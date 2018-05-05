@@ -4,8 +4,10 @@ import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.elements.unit
+import game.main.gameworld.gameobject.elements.unit.ai._
 import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.players.Player
+import game.main.units.bullet.BasicBullet
 
 object BasicSoldier extends SoldierCreator {
 
@@ -23,13 +25,13 @@ object BasicSoldier extends SoldierCreator {
     obj.mass = 100f
     obj.friction = 0.25f
     obj.health = 100f
-    obj.maxMovingForce = 0.030f
+    obj.maxMovingForce = 30f / 1000f
 
     //elements stats
     val damage = 30f
     val reloadTime = 200
-    val acceleration = 0.006f
-    val avoidForce = 0.020f
+    val acceleration = 6f / 1000f
+    val avoidForce = 20f / 1000f
     val avoidDistance = obj.sWidth * 1.5f
     val turnSpeed = 150f
     val visionMaxHeight = obj.sHeight * 3.5f
@@ -37,11 +39,11 @@ object BasicSoldier extends SoldierCreator {
     val attackVision = PolygonBody.trapezoidCollBody(obj.sHeight, visionMaxHeight, visionMaxDist)
 
     //add elements
-    obj.appendElement(new unit.FollowPath(path, obj.collBody.getRadiusScaled * 1.5f))
-    obj.appendElement(new unit.ShootAhead(attackVision, damage, reloadTime, BasicBullet))
-    obj.appendElement(new unit.Steering(acceleration))
-    obj.appendElement(new unit.AvoidObstacles(avoidForce, avoidDistance))
-    obj.appendElement(new unit.TurnToMovingDirection(turnSpeed))
+    obj.appendElement(new FollowPath(path, obj.collBody.getRadiusScaled * 1.5f))
+    obj.appendElement(new ShootAhead(attackVision, damage, reloadTime, BasicBullet))
+    obj.appendElement(new Steering(acceleration))
+    obj.appendElement(new AvoidObstacles(avoidForce, avoidDistance))
+    obj.appendElement(new TurnToMovingDirection(turnSpeed))
 
   }
 }

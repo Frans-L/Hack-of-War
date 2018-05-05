@@ -18,11 +18,6 @@ class User(objectHandler: ObjectHandler, override val colorIndex: Int) extends
     spawnUnit(MainBuilding, 0, 0, objectHandler.collHandler.map.turretPath(0)) //main buildings
     spawnUnit(LaneBuilding, 0, 0, objectHandler.collHandler.map.turretPath(1)) //lanes
     spawnUnit(LaneBuilding, 0, 0, objectHandler.collHandler.map.turretPath(2))
-
-    hand.append(new UnitCard(this, BasicSoldier))
-    hand.append(new UnitCard(this, BasicSoldier))
-    hand.append(new UnitCard(this, BasicSoldier))
-    hand.append(new UnitCard(this, BasicSoldier))
   }
 
 }

@@ -88,7 +88,7 @@ class CircleBody(private var radius: Float) extends CollisionBody {
     val isCollided = pos.dst2(center) <= (r + radiusS) * (r + radiusS)
 
     //sets the mtv vector if collided
-    if (isCollided) {
+    if (isCollided && mtv != null) {
       mtv.normal.set(
         center.x - pos.x,
         center.y - pos.y)

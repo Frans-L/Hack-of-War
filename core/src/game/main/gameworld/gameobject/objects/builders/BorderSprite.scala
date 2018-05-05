@@ -1,9 +1,8 @@
-package game.main.gameworld.gameobject.objects
+package game.main.gameworld.gameobject.objects.builders
 
-import com.badlogic.gdx.graphics.g2d.{Sprite, TextureRegion}
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
-import game.main.gameworld.gameobject.{GameObject, ObjectHandler}
-import game.main.gameworld.gameobject.ObjectHandler.Level
+import game.main.gameworld.gameobject.GameObject
 import game.main.gameworld.gameobject.elements.StaticTextureElement
 import game.util.Vector2e
 

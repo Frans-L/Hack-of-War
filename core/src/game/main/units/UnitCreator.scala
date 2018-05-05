@@ -3,15 +3,14 @@ package game.main.units
 import com.badlogic.gdx.graphics.g2d.Sprite
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
-import game.main.gameworld.gameobject.elements
+import game.main.gameworld.gameobject.{GameObject, elements}
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.ObjectHandler.Level
 import game.main.gameworld.gameobject.elements.unit.{HealthBarElement, UnitTextureElement}
-import game.main.gameworld.gameobject.elements.{ShadowElement, TextureElement}
-import game.main.gameworld.gameobject.objects.UnitObject
+import game.main.gameworld.gameobject.elements.{IconTextureElement, ShadowElement, TextureElement}
+import game.main.gameworld.gameobject.objects.{IconObject, UnitObject}
 import game.main.players.Player
 import game.util.Vector2e
-
 
 
 trait UnitCreator {
@@ -22,13 +21,13 @@ trait UnitCreator {
   /** Creates a new unit */
   def create(owner: Player,
              x: Float, y: Float,
-             path: Path, random: Boolean = false): UnitObject
+             path: Path, extraOffset: Float = 0): Seq[UnitObject]
 
   /** Returns the icon of the unit */
   def pathIcon(owner: Player): Sprite
 
   /** Returns the card icon of the unit */
-  def cardIcon(owner: Player): Sprite
+  def cardIcon(owner: Player, cost: Int): GameObject
 
 
 }
@@ -48,8 +47,8 @@ object UnitCreator {
 
   /** Creates the empty unitObject */
   def createUnit(owner: Player, collBody: CollisionBody,
-                           width: Float, height: Float,
-                           update: Boolean = true): UnitObject = {
+                 width: Float, height: Float,
+                 update: Boolean = true): UnitObject = {
 
     val obj = new UnitObject(owner.objectHandler.collHandler, collBody)
     obj.owner = owner
@@ -63,14 +62,13 @@ object UnitCreator {
 
   /** Adds a moving path to object. + Moves the object to the beginning of the path. */
   def findPath(obj: UnitObject, path: Path,
-                         x: Float, y: Float,
-                         random: Boolean = false): Path = {
+               x: Float, y: Float,
+               extraOffset: Float = 0): Path = {
 
     val p: Path = path.copy
-    if (random) p.setOffset(p.randomOffset) else p.setOffset(path.findOffset(x, y))
+    p.setOffset(path.findOffset(x, y + extraOffset))
     posToStartLocRandom(obj, path)
     p
-
   }
 
   /** Moves the object to the beginning of the path. */
@@ -88,8 +86,8 @@ object UnitCreator {
 
   /** Returns the default path icon. */
   def defaultPathIcon(texture: UnitTextures,
-                                width: Float, height: Float,
-                                owner: Player): Sprite = {
+                      width: Float, height: Float,
+                      owner: Player): Sprite = {
     val darkness = 0.25f
     val sprite = GameTextures.default.atlas.createSprite(texture.main(owner.colorIndex))
     sprite.setSize(width, height)
@@ -99,12 +97,27 @@ object UnitCreator {
 
   /** Returns the default card icon. */
   def defaultCardIcon(texture: UnitTextures,
-                                width: Float, height: Float,
-                                owner: Player): Sprite = {
-    val sprite = GameTextures.default.atlas.createSprite(texture.main(owner.colorIndex))
-    sprite.setColor(texture.brightness, texture.brightness, texture.brightness, 1)
-    sprite.setSize(width, height)
-    sprite
+                      width: Float, height: Float,
+                      owner: Player, cost: Int,
+                      unitAmount: Int = 1): GameObject = {
+
+    val icon = new IconObject(owner, cost)
+    icon.size.set(width, height)
+    icon.origin.set(width / 2f, 0)
+
+    //adds multiple units to be shown if needed
+    val gapDistX = 10f
+    val gapDistY = -10f
+
+    for (i <- -unitAmount / 2 until unitAmount / 2 + unitAmount % 2) {
+      val textureElement = new IconTextureElement(
+        GameTextures.default.atlas.findRegion(texture.main(owner.colorIndex)))
+      textureElement.color.set(texture.brightness, texture.brightness, texture.brightness, 1)
+      textureElement.pos.set(i * gapDistX, i * gapDistY)
+      icon.appendElement(textureElement)
+    }
+
+    icon
   }
 
 }

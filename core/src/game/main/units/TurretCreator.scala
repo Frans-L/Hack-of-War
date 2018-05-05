@@ -2,9 +2,11 @@ package game.main.units
 
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.CircleBody
+import game.main.gameworld.gameobject.elements.unit.ai.{ShootAhead, TurnToTarget}
 import game.main.gameworld.gameobject.elements.{TextureElement, unit}
 import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.players.Player
+import game.main.units.bullet.BasicBullet
 
 trait TurretCreator {
 
@@ -20,7 +22,7 @@ trait TurretCreator {
     val turret = UnitCreator.createUnit(owner, collBody, width, height, update = false)
 
     turret.opacity = 0.75f
-    turret.angle = baseObj.angle
+    turret.angle = 0
     turret.origin.set(turret.size.x / 3f, turret.size.y / 2f)
 
     //add textures
@@ -48,8 +50,8 @@ object BuildingTurretSmall extends TurretCreator {
     val attackVision = new CircleBody(visionMaxDist)
 
     //add elements
-    turret.appendElement(new unit.ShootAhead(attackVision, damage, reloadTime, BasicBullet))
-    turret.appendElement(new unit.TurnToTarget(turnSpeed))
+    turret.appendElement(new ShootAhead(attackVision, damage, reloadTime, BasicBullet))
+    turret.appendElement(new TurnToTarget(turnSpeed))
   }
 
 }
@@ -69,8 +71,8 @@ object BuildingTurretMain extends TurretCreator {
     val attackVision = new CircleBody(visionMaxDist)
 
     //add elements
-    turret.appendElement(new unit.ShootAhead(attackVision, damage, reloadTime, BasicBullet))
-    turret.appendElement(new unit.TurnToTarget(turnSpeed))
+    turret.appendElement(new ShootAhead(attackVision, damage, reloadTime, BasicBullet))
+    turret.appendElement(new TurnToTarget(turnSpeed))
   }
 
 }

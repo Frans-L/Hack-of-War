@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, InputListener}
 import game.loader.GameTextures
+import game.main.gameworld.gameobject.GameObject
 import game.main.players.Player
 import game.main.ui.UICard
 
@@ -18,7 +19,7 @@ object Card {
   */
 abstract class Card(owner: Player) {
 
-  val icon: Sprite
+  val icon: GameObject
   val cost: Int
 
   var used = false
@@ -93,11 +94,13 @@ abstract class Card(owner: Player) {
   protected def actionFailed(x: Float, y: Float): Unit = Unit
 
 
-
   /** Destroys the card. */
   def destroy(): Unit = {
     uiElement.foreach(_.remove()) //remove UI element
     used = true //mark that card can be destroyed
   }
+
+  /** Returns a copy of the card. */
+  def cpy(): Card
 
 }

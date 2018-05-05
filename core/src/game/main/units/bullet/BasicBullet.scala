@@ -1,4 +1,4 @@
-package game.main.units
+package game.main.units.bullet
 
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.gameobject.elements.BulletCollision

@@ -12,8 +12,8 @@ import game.main.gameworld.gamemap
 import game.main.gameworld.gameobject.ObjectHandler
 import game.main.ui.GameUI
 import game.util._
-import game.main.units.BasicBullet
 import game.main.players.{Bot, Player, User}
+import game.main.units.bullet.BasicBullet
 
 
 /**

@@ -1,9 +1,10 @@
-package game.main.gameworld.gameobject.elements.unit
+package game.main.gameworld.gameobject.elements.unit.ai
 
 import com.badlogic.gdx.math.Vector2
-import game.main.{MainGame, gameworld}
+import game.main.MainGame
 import game.main.gameworld.gameobject
-import game.main.gameworld.gameobject.{ObjectElement, objects}
+import game.main.gameworld.gameobject.elements.unit.UnitElement
+import game.main.gameworld.gameobject.objects
 import game.util.Vector2e._
 import game.util.pools
 

@@ -1,8 +1,9 @@
-package game.main.gameworld.gameobject.elements.unit
+package game.main.gameworld.gameobject.elements.unit.ai
 
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject
-import game.main.gameworld.gameobject.{ObjectElement, objects}
+import game.main.gameworld.gameobject.elements.unit.UnitElement
+import game.main.gameworld.gameobject.objects
 
 /** Updates the unitObject's moveTarget. */
 class FollowPath(var path: Path, val acceptDist: Float) extends UnitElement {

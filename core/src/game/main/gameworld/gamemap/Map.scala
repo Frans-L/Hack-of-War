@@ -10,8 +10,8 @@ import game.main.gameworld.collision.bodies
 import game.main.gameworld.collision.bodies.PolygonBody
 import game.main.gameworld.gameobject
 import game.main.gameworld.gameobject.ObjectHandler.Level
+import game.main.gameworld.gameobject.objects.builders.{BorderSprite, CollisionObject}
 import game.main.gameworld.gameobject.{GameObject, objects}
-import game.main.gameworld.gameobject.objects.BorderSprite
 import game.util.{Dimensions, Vector2e}
 
 import scala.collection.mutable
@@ -414,7 +414,7 @@ class Map(val dimensions: Dimensions,
 
     //a bit prettier way to add a collision block
     def addBlock(collisionBody: bodies.CollisionBody): Unit = {
-      collObjects += objects.CollisionObject(this, collisionBody, objectHandler)
+      collObjects += CollisionObject(this, collisionBody, objectHandler)
     }
 
     //calculates the middle pos of the element n

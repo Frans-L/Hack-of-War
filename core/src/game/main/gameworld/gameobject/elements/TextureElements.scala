@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.{Batch, Sprite, TextureRegion}
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
 import game.main.gameworld.gameobject
+import game.main.gameworld.gameobject.objects.IconObject
 import game.main.gameworld.gameobject.{GameObject, ObjectElement}
 import game.util.Vector2e
 
@@ -81,6 +82,32 @@ class StaticTextureElement(texture: TextureRegion) extends RelativeTextureElemen
 
   override def draw(parent: GameObject, batch: Batch): Unit = {
     sprite.draw(batch)
+  }
+
+}
+
+/** Icon's texture element that supports parent's color. */
+class IconTextureElement(texture: TextureRegion)
+  extends RelativeTextureElement(texture) {
+
+  override def draw(p: GameObject, batch: Batch): Unit = {
+    val parent = p.asInstanceOf[IconObject]
+    batch.setColor(
+      color.r * parent.color.r,
+      color.g * parent.color.g,
+      color.b * parent.color.b,
+      color.a * parent.opacity * parent.color.a)
+    batch.draw(texture,
+      parent.pos.x - parent.origin.x + pos.x, parent.pos.y - parent.origin.y + pos.y,
+      parent.origin.x, parent.origin.y,
+      overrideSize.getOrElse(parent.size).x, overrideSize.getOrElse(parent.size).y,
+      parent.scale.x * scale.x, parent.scale.y * scale.y,
+      parent.angle + angle
+    )
+  }
+
+  override def checkParent(parent: GameObject): Unit = {
+    require(parent.isInstanceOf[IconObject], "Parent have to be IconObject.")
   }
 
 }
