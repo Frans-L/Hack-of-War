@@ -20,7 +20,7 @@ object UnitObject{
 
   object Category extends Enumeration {
     type State = Value
-    val none, soldier, building = Value
+    val none, soldier, tank, building = Value
   }
 }
 

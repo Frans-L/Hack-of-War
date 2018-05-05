@@ -48,7 +48,7 @@ object BuildingTurretMain extends TurretCreator {
     val damage = 20f
     val reloadTime = 300
     val turnSpeed = 350f
-    val visionMaxDist = baseObj.sWidth * 4f
+    val visionMaxDist = baseObj.sWidth * 4.25f
     val attackVision = new CircleBody(visionMaxDist)
 
     //add elements

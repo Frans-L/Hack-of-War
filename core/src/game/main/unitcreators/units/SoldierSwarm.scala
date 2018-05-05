@@ -13,7 +13,7 @@ import game.main.unitcreators.{SoldierCreator, UnitCreator}
 object SoldierSwarm1 extends SoldierSwarm {
 
   /** Cost of the unit */
-  override val cost: Int = 15
+  override val cost: Int = 10
   override val unitAmount: Int = 1
 }
 
@@ -21,7 +21,7 @@ object SoldierSwarm1 extends SoldierSwarm {
 object SoldierSwarm3 extends SoldierSwarm {
 
   /** Cost of the unit */
-  override val cost: Int = 40
+  override val cost: Int = 30
   override val unitAmount: Int = 3
 }
 

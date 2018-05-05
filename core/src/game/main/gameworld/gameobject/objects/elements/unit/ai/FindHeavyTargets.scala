@@ -7,7 +7,7 @@ import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.gameworld.gameobject.objects.elements.unit.UnitElement
 import game.util.Vector2e._
 
-class FindBuildings(findRange: Float) extends UnitElement {
+class FindHeavyTargets(findRange: Float) extends UnitElement {
 
   private var range2: Float = findRange * findRange
   private var target: Option[UnitObject] = None
@@ -22,7 +22,8 @@ class FindBuildings(findRange: Float) extends UnitElement {
           if (target.isEmpty) {
             if (obj.isInstanceOf[GameObject]) {
               val o = obj.asInstanceOf[UnitObject]
-              if (o.category == UnitObject.Category.building && parent.pos.dst2(o.pos) <= range2) {
+              if ((o.category == UnitObject.Category.building || o.category == UnitObject.Category.tank)
+                && parent.pos.dst2(o.pos) <= range2) {
                 target = Some(o)
               }
             }
@@ -33,7 +34,7 @@ class FindBuildings(findRange: Float) extends UnitElement {
 
     //if target exists, stop the object
     target.foreach(obj => {
-      if(parent.pos.dst2(obj.pos) <= range2){
+      if (!obj.canBeDeleted && parent.pos.dst2(obj.pos) <= range2) {
         parent.movingForce ** 0
       } else target = None
     })

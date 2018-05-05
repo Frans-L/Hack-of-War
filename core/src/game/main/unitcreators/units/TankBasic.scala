@@ -14,7 +14,7 @@ import game.util.Vector2e
 
 object TankBasic extends SoldierCreator {
 
-  override val cost: Int = 50
+  override val cost: Int = 60
 
   override protected lazy val texture: UnitTextures = GameTextures.Units.Tank
   private val scale = 1.1f
@@ -26,6 +26,7 @@ object TankBasic extends SoldierCreator {
   override protected def setStats(obj: UnitObject, owner: Player, path: Path): Unit = {
 
     //units stats
+    obj.category = UnitObject.Category.tank
     obj.mass = 750f
     obj.friction = 0.4f
     obj.health = 800f
@@ -38,14 +39,14 @@ object TankBasic extends SoldierCreator {
     val avoidForce = 10f / 1000f
     val avoidDistance = obj.sWidth * 1.0f
     val turnSpeed = 300f
-    val stopNearBuildingDist = obj.collBody.getRadiusScaled * 5.5f
+    val stopNearBuildingDist = obj.collBody.getRadiusScaled * 5.0f
 
     //add elements
     obj.appendElement(new FollowPath(path, acceptPathPointDist))
     obj.appendElement(new Steering(steeringMass, acceleration))
     obj.appendElement(new AvoidObstacles(avoidForce, avoidDistance))
     obj.appendElement(new TurnToMovingDirection(turnSpeed))
-    obj.appendElement(new FindBuildings(stopNearBuildingDist))
+    obj.appendElement(new FindHeavyTargets(stopNearBuildingDist))
 
     //add turret
     val turret = TankTurretSmall.create(owner, obj)
@@ -79,7 +80,7 @@ object TankTurretSmall extends TurretCreator {
 
     val visionMinHeight = baseObj.sHeight * 2f
     val visionMaxHeight = baseObj.sHeight * 5f
-    val visionMaxDist = baseObj.sWidth * 4f
+    val visionMaxDist = baseObj.sWidth * 3.5f
     val attackVision =
       PolygonBody.trapezoidCollBody(visionMinHeight, visionMaxHeight, visionMaxDist,
         0, -(visionMinHeight - baseObj.sHeight) / 2)

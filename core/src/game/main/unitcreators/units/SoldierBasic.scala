@@ -11,7 +11,7 @@ import game.main.unitcreators.bullet.BasicBullet
 
 object SoldierBasic extends SoldierCreator {
 
-  override val cost: Int = 30
+  override val cost: Int = 25
 
   override protected lazy val texture: UnitTextures = GameTextures.Units.SoldierBasic
   private val scale = 1.5f
