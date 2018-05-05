@@ -34,7 +34,7 @@ class CollisionHandler(val dimensions: Dimensions) extends GameElement {
 
   //global physics stats
   var globalFriction: Float = 1f
-  var globalShadowPos: Vector2 = Vector2e(-3f, -5f) //TODO REMOVE
+  var globalShadowPos: Vector2 = Vector2e(-3f, -5f) //TODO move to other pos
 
   var map: gamemap.Map = _ //TODO temporary solution, to add map
 
@@ -72,7 +72,6 @@ class CollisionHandler(val dimensions: Dimensions) extends GameElement {
       }
 
       //removes empty owners
-      //TODO not sure if safe way to delete? it seems like it safe...
       if (owner._2.isEmpty) units.remove(owner._1)
     }
   }
@@ -163,6 +162,14 @@ class CollisionHandler(val dimensions: Dimensions) extends GameElement {
     }
 
     crashObj
+  }
+
+  /** Returns all PhysicsObjects of wanted category. */
+  def getPhysicsObjects(category: GameElement): mutable.Buffer[PhysicsObject] = {
+    if(units.keys.exists(_ == category))
+      units(category)
+    else
+      mutable.Buffer.empty[PhysicsObject]
   }
 
 

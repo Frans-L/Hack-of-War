@@ -1,12 +1,12 @@
-package game.main.gameworld.gameobject.elements.unit.ai
+package game.main.gameworld.gameobject.objects.elements.unit.ai
 
 import game.GameElement
 import game.main.MainGame
 import game.main.gameworld.collision.bodies.CollisionBody
-import game.main.gameworld.gameobject
-import game.main.gameworld.gameobject.elements.unit.UnitElement
+import game.main.gameworld.gameobject.GameObject
+import game.main.gameworld.gameobject.objects.elements.unit.UnitElement
 import game.main.gameworld.gameobject.objects.UnitObject
-import game.main.units.bullet.BulletCreator
+import game.main.unitcreators.bullet.BulletCreator
 import game.util.Vector2e
 import game.util.Vector2e._
 
@@ -18,18 +18,21 @@ class ShootAhead(attackVision: CollisionBody, damage: Float,
   private var reloadTimer: Int = 0
   private var attackTarget: Option[UnitObject] = None
 
-  override def update(p: gameobject.GameObject, delta: Int): Unit = {
+  override def update(p: GameObject, delta: Int): Unit = {
     val parent = p.asInstanceOf[UnitObject]
 
     parent.updateCollPolygon(attackVision) //update vision
 
     //finds a enemy
     if (attackTarget.isEmpty) {
-      val enemy = parent.physWorld.collideCollisionBody(parent, attackVision, null, parent.owner.enemiesAsGameElement)
+      if (parent.state == UnitObject.State.attack) //marks that unit isn't attacking
+        parent.state = UnitObject.State.normal
+
+      val enemy = parent.collHandler.collideCollisionBody(parent, attackVision, null, parent.owner.enemiesAsGameElement)
       enemy.foreach {
-        case enemy: UnitObject => {
+        case enemy: UnitObject =>
           attackTarget = Some(enemy)
-        }
+
         case _ => Unit
       }
     }
@@ -38,16 +41,20 @@ class ShootAhead(attackVision: CollisionBody, damage: Float,
     attackTarget.foreach(target => {
       if (target.canBeDeleted) attackTarget = None
       else {
-
-        parent.moveTarget.set(target.pos)
-        val blockingWall = parent.physWorld.collideLine(parent, parent.pos, target.pos, parent.physWorld.mapFilter)
-
+        val blockingWall = parent.collHandler.collideLine(parent, parent.pos, target.pos, parent.collHandler.mapFilter)
         if (blockingWall.isDefined) attackTarget = None
-        else if (reloadTimer >= reloadTime) {
-          shoot(parent)
-          reloadTimer = 0 //reset the timers
+        else { //unit can attack
+          parent.state = UnitObject.State.attack //marks that unit is attacking
+          parent.moveTarget.set(target.pos) //move towards enemy
+
+          if (reloadTimer >= reloadTime) {
+            shoot(parent)
+            reloadTimer = 0 //reset the timers
+          }
+
         }
       }
+
     })
 
     if (MainGame.drawCollBox) attackVision.draw(MainGame.debugRender)
@@ -61,16 +68,16 @@ class ShootAhead(attackVision: CollisionBody, damage: Float,
 
     //TODO vector pool
     //calculates the pos of the bullet and create it
-    val bulletPos = Vector2e(1,0).setAngle(parent.angle) **
+    val bulletPos = Vector2e(1, 0).setAngle(parent.angle) **
       (parent.sWidth / 2f + bulletCreator.radius) ++ parent.pos
     val bullet = bulletCreator.create(parent, parent.owner.objectHandler,
-      bulletPos, Vector2e(1,0).setAngle(parent.angle) ** (parent.maxSpeed * 5),
+      bulletPos, Vector2e(1, 0).setAngle(parent.angle) ** (parent.maxSpeed * 5),
       parent.owner.colorIndex)
 
     //sets the bullet statistics
     bullet.damage = damage
     bullet.collFilter ++= parent.owner.enemies.asInstanceOf[mutable.Buffer[GameElement]]
-    bullet.collFilter += parent.physWorld.map
+    bullet.collFilter += parent.collHandler.map
   }
 
 }

@@ -49,7 +49,7 @@ class UICard(cardSprite: Sprite, icon: GameObject, text: String) extends Actor {
     cardSprite.setPosition(this.getX, this.getY)
 
     icon.scale.set(this.getScaleX, this.getScaleY)
-    icon.pos.set(this.centerX, this.centerY)
+    icon.pos.set(this.centerX, this.centerY + icon.sHeight / 2)
 
   }
 

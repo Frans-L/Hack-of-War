@@ -1,4 +1,4 @@
-package game.main.units.bullet
+package game.main.unitcreators.bullet
 
 import com.badlogic.gdx.math.Vector2
 import game.GameElement
@@ -7,7 +7,7 @@ import game.main.gameworld.collision.bodies
 import game.main.gameworld.collision.bodies.CircleBody
 import game.main.gameworld.gameobject.ObjectHandler
 import game.main.gameworld.gameobject.ObjectHandler.Level
-import game.main.gameworld.gameobject.elements.{ShadowElement, TextureElement}
+import game.main.gameworld.gameobject.objects.elements.{ShadowElement, TextureElement}
 import game.main.gameworld.gameobject.objects.BulletObject
 
 trait BulletCreator {

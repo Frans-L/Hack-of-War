@@ -88,22 +88,32 @@ object GameTextures {
 
   object Units {
 
-    object SoldierBasic extends UnitTextures{
-      override val main: Seq[String] =  Seq("unit1Blue", "unit1Red")
+    object Tank extends UnitTextures {
+      override val main: Seq[String] = Seq("tank1Blue", "tank1Red")
+      override val shadow: String = "tank1Shadow"
+    }
+
+    object SoldierBasic extends UnitTextures {
+      override val main: Seq[String] = Seq("unit1Blue", "unit1Red")
       override val shadow: String = "unit1Shadow"
     }
 
-    object BaseBullet extends UnitTextures{
+    object SoldierShooter extends UnitTextures {
+      override val main: Seq[String] = Seq("unit2Blue", "unit2Red")
+      override val shadow: String = "unit2Shadow"
+    }
+
+    object BaseBullet extends UnitTextures {
       override val main: Seq[String] = Seq("bullet1Blue", "bullet1Red")
       override val shadow: String = "bullet1Shadow"
     }
 
-    object BuildingSmall extends UnitTextures{
+    object BuildingSmall extends UnitTextures {
       override val main: Seq[String] = Seq("turret1Blue", "turret1Red")
       override val shadow: String = "turret1Shadow"
     }
 
-    object BuildingLong extends UnitTextures{
+    object BuildingLong extends UnitTextures {
       override val main: Seq[String] = Seq("turretLongBlue", "turretLongRed")
       override val shadow: String = "turretLongShadow"
     }

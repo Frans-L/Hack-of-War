@@ -4,18 +4,32 @@ import com.badlogic.gdx.math.Vector2
 import game.main.gameworld.collision
 import game.main.gameworld.collision.CollisionHandler
 import game.main.gameworld.collision.bodies.CollisionBody
+import game.main.gameworld.gameobject.objects.UnitObject.State.Value
 import game.main.players.Player
 import game.util.Vector2e
 
 object UnitObject{
 
   val noHitTick: Long = -1
+
+  //state of the object
+  object State extends Enumeration {
+    type State = Value
+    val normal, attack = Value
+  }
+
+  object Category extends Enumeration {
+    type State = Value
+    val none, soldier, building = Value
+  }
 }
 
 class UnitObject(physWorld: CollisionHandler, collBody: CollisionBody) extends PhysicsObject(physWorld, collBody)
 {
 
   var owner: Player = _
+  var category: UnitObject.Category.Value = UnitObject.Category.none
+  var state: UnitObject.State.Value = UnitObject.State.normal
 
   //movement stats
   var maxMovingForce: Float = 0.033f

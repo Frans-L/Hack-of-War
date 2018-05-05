@@ -22,6 +22,9 @@ class GameObject() extends GameElement with ObjectElement {
   var canBeDeleted: Boolean = false
   val elements: mutable.ListBuffer[ObjectElement] = mutable.ListBuffer.empty
 
+  //parent of the this object, updated in each relative call
+  private var objectParent: Option[GameObject] = None
+
   /** Updates the object and all it's elements */
   override def update(): Unit = {
     elements.foreach(_.update(this, ticker.delta))
@@ -46,6 +49,7 @@ class GameObject() extends GameElement with ObjectElement {
   /** Calls the method 'run' so that position of this object is relative to parent. */
   private def runRelatively(parent: GameObject, run: () => Unit): Unit = {
 
+    objectParent = Some(parent) //sets the parent object
     val orgPosAngle = pos.angle //needed to keep pos angle same
     val orgOpacity = opacity //needed when parent's opacity is zero
     val orgScaleX = parent.scale.x //needed when parent's scale is zero
@@ -69,9 +73,18 @@ class GameObject() extends GameElement with ObjectElement {
     if(scale.x != 0 && parent.scale.y != 0) scale.scl(1f / parent.scale.x, 1f / parent.scale.y)
     else scale.scl(orgScaleX, orgScaleY)
 
-
+    //clears the parent object, so if this object is called without relativity
+    //there will be no parents
+    objectParent = None
   }
 
+  /** Returns the parent, if it exists. */
+  def getParent: Option[GameObject] = objectParent
+
+  /** Returns the parent, or itself*/
+  def grandParent: GameObject = {
+    objectParent.map(_.grandParent).getOrElse(this)
+  }
 
   def sHeight: Float = scale.y * size.y
 

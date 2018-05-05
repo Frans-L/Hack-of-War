@@ -1,6 +1,5 @@
 package game.main.players
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
@@ -9,8 +8,8 @@ import game.main.cards.{Card, UnitCard}
 import game.main.gameworld.gamemap
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.ObjectHandler
-import game.main.units
-import game.main.units._
+import game.main.unitcreators._
+import game.main.unitcreators.units._
 
 import scala.collection.mutable
 import scala.reflect.ClassTag
@@ -18,7 +17,7 @@ import scala.reflect.ClassTag
 object Player {
 
   val maxMana: Float = 100f
-  val manaSpeed: Float = 10f / 1000f
+  val manaSpeed: Float = 6f / 1000f
 
 }
 
@@ -44,9 +43,20 @@ abstract class Player(val objectHandler: ObjectHandler, index: Int)
 
 
   protected def initialize(): Unit = {
-    deck += new UnitCard(this, BasicSoldier)
-    deck += new UnitCard(this, SwarmSoldier3)
-    deck += new UnitCard(this, SwarmSoldier5)
+
+    val basicAmount = 3
+    val swarm1Amount = 1
+    val swarm3Amount = 1
+    val swarm5Amount = 1
+    val tankAmount = 2
+    val shooterAmount = 2
+
+    for (i <- 0 until basicAmount) deck += new UnitCard(this, SoldierBasic)
+    for (i <- 0 until swarm1Amount) deck += new UnitCard(this, SoldierSwarm1)
+    for (i <- 0 until swarm3Amount) deck += new UnitCard(this, SoldierSwarm3)
+    for (i <- 0 until swarm5Amount) deck += new UnitCard(this, SoldierSwarm5)
+    for (i <- 0 until tankAmount) deck += new UnitCard(this, TankBasic)
+    for (i <- 0 until shooterAmount) deck += new UnitCard(this, SoldierShooter)
 
     for (i <- 0 until cardsInHand) drawCard()
   }
@@ -90,7 +100,7 @@ abstract class Player(val objectHandler: ObjectHandler, index: Int)
   def randomCard[T <: Card : ClassTag](): Option[T] = {
     val classTag = implicitly[ClassTag[T]].runtimeClass
     val h = hand.filter(classTag.isInstance)
-    if(h.nonEmpty)
+    if (h.nonEmpty)
       Some(hand(MathUtils.random(h.size - 1)).asInstanceOf[T])
     else None
   }

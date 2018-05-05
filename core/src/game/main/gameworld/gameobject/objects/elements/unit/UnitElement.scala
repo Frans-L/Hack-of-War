@@ -1,4 +1,4 @@
-package game.main.gameworld.gameobject.elements.unit
+package game.main.gameworld.gameobject.objects.elements.unit
 
 import game.main.gameworld.gameobject
 import game.main.gameworld.gameobject.{ObjectElement, objects}

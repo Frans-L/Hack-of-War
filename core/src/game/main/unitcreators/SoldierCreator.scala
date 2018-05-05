@@ -1,4 +1,4 @@
-package game.main.units
+package game.main.unitcreators
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Sprite
@@ -6,7 +6,7 @@ import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.GameObject
-import game.main.gameworld.gameobject.elements.unit.HealthBarElement
+import game.main.gameworld.gameobject.objects.elements.unit.HealthBarElement
 import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.players.Player
 
@@ -26,9 +26,10 @@ trait SoldierCreator extends UnitCreator {
                       path: Path, extraOffset: Float): Seq[UnitObject] = {
 
     val obj = UnitCreator.createUnit(owner, collBody, width, height)
+    obj.category = UnitObject.Category.soldier
+
     UnitCreator.addTextures(obj, texture, owner)
     val correctPath = UnitCreator.findPath(obj, path, x, y, extraOffset)
-
     setStats(obj, owner, correctPath) //sets all the stats
 
     obj.appendElement(new HealthBarElement(obj.health)) //add healthBar

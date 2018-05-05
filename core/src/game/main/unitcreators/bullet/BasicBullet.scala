@@ -1,7 +1,7 @@
-package game.main.units.bullet
+package game.main.unitcreators.bullet
 
 import game.loader.{GameTextures, UnitTextures}
-import game.main.gameworld.gameobject.elements.BulletCollision
+import game.main.gameworld.gameobject.objects.elements.BulletCollision
 import game.main.gameworld.gameobject.objects
 
 object BasicBullet extends BulletCreator {
@@ -16,6 +16,6 @@ object BasicBullet extends BulletCreator {
   override protected def setStats(obj: objects.BulletObject): Unit = {
     obj.collided = true //makes sure that BulletCollision won't destroy itself immediately
     obj.appendElement(BulletCollision)
-    obj.mass = 50f
+    obj.mass = 15f
   }
 }

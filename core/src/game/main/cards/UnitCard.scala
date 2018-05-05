@@ -7,7 +7,7 @@ import game.main.gameworld.gamemap
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.GameObject
 import game.main.players.Player
-import game.main.units.{BasicSoldier, SoldierCreator, UnitCreator}
+import game.main.unitcreators.{SoldierCreator, UnitCreator}
 
 class UnitCard(owner: Player, val unitCreator: UnitCreator) extends Card(owner) {
 

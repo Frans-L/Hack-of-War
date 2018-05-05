@@ -3,7 +3,7 @@ package game.main.gameworld.gameobject.objects.builders
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import game.main.gameworld.gameobject.GameObject
-import game.main.gameworld.gameobject.elements.StaticTextureElement
+import game.main.gameworld.gameobject.objects.elements.StaticTextureElement
 import game.util.Vector2e
 
 object BorderSprite {

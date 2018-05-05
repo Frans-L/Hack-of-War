@@ -1,4 +1,4 @@
-package game.main.gameworld.gameobject.elements.unit
+package game.main.gameworld.gameobject.objects.elements.unit
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}

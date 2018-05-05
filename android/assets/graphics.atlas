@@ -90,21 +90,21 @@ pointCircle
   index: -1
 tank1Blue
   rotate: false
-  xy: 553, 865
+  xy: 401, 788
   size: 150, 75
   orig: 150, 75
   offset: 0, 0
   index: -1
 tank1Red
   rotate: false
-  xy: 401, 788
+  xy: 401, 865
   size: 150, 75
   orig: 150, 75
   offset: 0, 0
   index: -1
 tank1Shadow
   rotate: false
-  xy: 401, 865
+  xy: 553, 865
   size: 150, 75
   orig: 150, 75
   offset: 0, 0
@@ -132,63 +132,63 @@ turret1Shadow
   index: -1
 turretLongBlue
   rotate: false
-  xy: 2, 530
+  xy: 2, 328
   size: 80, 200
   orig: 80, 200
   offset: 0, 0
   index: -1
 turretLongRed
   rotate: false
-  xy: 2, 328
+  xy: 2, 126
   size: 80, 200
   orig: 80, 200
   offset: 0, 0
   index: -1
 turretLongShadow
   rotate: false
-  xy: 2, 126
+  xy: 2, 530
   size: 80, 200
   orig: 80, 200
   offset: 0, 0
   index: -1
 unit1Blue
   rotate: false
-  xy: 84, 282
+  xy: 553, 788
   size: 100, 75
   orig: 100, 75
   offset: 0, 0
   index: -1
 unit1Red
   rotate: false
-  xy: 104, 51
+  xy: 84, 128
   size: 100, 75
   orig: 100, 75
   offset: 0, 0
   index: -1
 unit1Shadow
   rotate: false
-  xy: 84, 205
+  xy: 84, 359
   size: 100, 75
   orig: 100, 75
   offset: 0, 0
   index: -1
 unit2Blue
   rotate: false
-  xy: 553, 788
+  xy: 84, 205
   size: 100, 75
   orig: 100, 75
   offset: 0, 0
   index: -1
 unit2Red
   rotate: false
-  xy: 84, 359
+  xy: 104, 51
   size: 100, 75
   orig: 100, 75
   offset: 0, 0
   index: -1
 unit2Shadow
   rotate: false
-  xy: 84, 128
+  xy: 84, 282
   size: 100, 75
   orig: 100, 75
   offset: 0, 0

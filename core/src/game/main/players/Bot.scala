@@ -3,7 +3,7 @@ package game.main.players
 import com.badlogic.gdx.math.MathUtils
 import game.main.cards.UnitCard
 import game.main.gameworld.gameobject.ObjectHandler
-import game.main.units.{BasicSoldier, LaneBuilding, MainBuilding}
+import game.main.unitcreators.units.{SoldierBasic, BuildingLane, BuildingMain}
 import game.util.Ticker
 
 class Bot(objectHandler: ObjectHandler, override val colorIndex: Int) extends
@@ -15,12 +15,12 @@ class Bot(objectHandler: ObjectHandler, override val colorIndex: Int) extends
     super.initialize()
 
     //created the turrets
-    spawnUnit(MainBuilding, 0, 0, objectHandler.collHandler.map.turretPathReversed(0)) //main buildings
-    spawnUnit(LaneBuilding, 0, 0, objectHandler.collHandler.map.turretPathReversed(1)) //lanes
-    spawnUnit(LaneBuilding, 0, 0, objectHandler.collHandler.map.turretPathReversed(2))
+    spawnUnit(BuildingMain, 0, 0, objectHandler.collHandler.map.turretPathReversed(0)) //main buildings
+    spawnUnit(BuildingLane, 0, 0, objectHandler.collHandler.map.turretPathReversed(1)) //lanes
+    spawnUnit(BuildingLane, 0, 0, objectHandler.collHandler.map.turretPathReversed(2))
 
     spawnUnit(
-      BasicSoldier,
+      SoldierBasic,
       objectHandler.collHandler.dimensions.leftMiddle,
       objectHandler.collHandler.dimensions.upMiddle, objectHandler.collHandler.map.randomPathReversed)
   }
@@ -36,11 +36,14 @@ class Bot(objectHandler: ObjectHandler, override val colorIndex: Int) extends
           spawnUnit(card.unitCreator, path.head.x, path.head.y, path, true))
       }
 
+      /*
       for (i <- 0 to MathUtils.random(2)) {
         val path = objectHandler.collHandler.map.randomPath
         enemies.head.randomCard[UnitCard]().foreach(card =>
           enemies.head.spawnUnit(card.unitCreator, path.head.x, path.head.y, path, true))
       }
+      */
+
     }
 
   }

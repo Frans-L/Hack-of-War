@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.{Batch, TextureRegion}
 import com.badlogic.gdx.math.Interpolation
 import game.main.gameworld.gameobject.GameObject
-import game.main.gameworld.gameobject.elements.RelativeTextureElement
+import game.main.gameworld.gameobject.objects.elements.RelativeTextureElement
 import game.main.players.Player
 import game.util.CountdownTimer
 

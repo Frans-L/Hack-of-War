@@ -1,12 +1,15 @@
-package game.main.gameworld.gameobject.elements.unit.ai
+package game.main.gameworld.gameobject.objects.elements.unit.ai
 
+import com.badlogic.gdx.Gdx
 import game.main.gameworld.gameobject
-import game.main.gameworld.gameobject.elements.unit.UnitElement
+import game.main.gameworld.gameobject.objects.elements.unit.UnitElement
 import game.main.gameworld.gameobject.objects
+import game.main.gameworld.gameobject.objects.UnitObject
 import game.util.Vector2e._
 import game.util.pools
 
-class Steering(maxAccelerateForce: Float) extends UnitElement {
+/** Adds steering to the unit. Unit needs moveTarget. */
+class Steering(steeringMass: Float, maxAccelerateForce: Float) extends UnitElement {
 
   /** Updates the movement with collision avoidance */
   override def update(p: gameobject.GameObject, delta: Int): Unit = {
@@ -17,8 +20,13 @@ class Steering(maxAccelerateForce: Float) extends UnitElement {
 
     //moves towards target
     val steering =
-      (((pools.VectorPool.obtain(target) -- parent.pos).nor ** parent.maxMovingForce) -- parent.movingForce)
-        .limit(maxAccelerateForce) / parent.mass
+      ((pools.VectorPool.obtain(target) -- parent.pos).nor ** parent.maxMovingForce) -- parent.movingForce
+
+    //limit max acceleration speed
+    steering.limit(maxAccelerateForce)
+
+    //smooth it out with mass
+    steering / steeringMass
 
     //adds steering to moving velocity
     parent.movingForce.mulAdd(steering, delta)

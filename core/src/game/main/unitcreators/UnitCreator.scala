@@ -1,13 +1,13 @@
-package game.main.units
+package game.main.unitcreators
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
-import game.main.gameworld.gameobject.{GameObject, elements}
+import game.main.gameworld.gameobject.{GameObject}
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.ObjectHandler.Level
-import game.main.gameworld.gameobject.elements.unit.{HealthBarElement, UnitTextureElement}
-import game.main.gameworld.gameobject.elements.{IconTextureElement, ShadowElement, TextureElement}
+import game.main.gameworld.gameobject.objects.elements.unit.{HealthBarElement, UnitTextureElement}
+import game.main.gameworld.gameobject.objects.elements.{IconTextureElement, ShadowElement, TextureElement}
 import game.main.gameworld.gameobject.objects.{IconObject, UnitObject}
 import game.main.players.Player
 import game.util.Vector2e
@@ -103,11 +103,11 @@ object UnitCreator {
 
     val icon = new IconObject(owner, cost)
     icon.size.set(width, height)
-    icon.origin.set(width / 2f, 0)
+    icon.origin.set(width / 2f, height / 2)
 
     //adds multiple units to be shown if needed
-    val gapDistX = 10f
-    val gapDistY = -10f
+    val gapDistX = 12f
+    val gapDistY = -12f
 
     for (i <- -unitAmount / 2 until unitAmount / 2 + unitAmount % 2) {
       val textureElement = new IconTextureElement(

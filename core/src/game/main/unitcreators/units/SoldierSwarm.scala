@@ -1,31 +1,37 @@
-package game.main.units
+package game.main.unitcreators.units
 
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CircleBody, CollisionBody, PolygonBody}
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.GameObject
-import game.main.gameworld.gameobject.elements.IconTextureElement
-import game.main.gameworld.gameobject.elements.unit.ai._
-import game.main.gameworld.gameobject.objects.{IconObject, UnitObject}
+import game.main.gameworld.gameobject.objects.elements.unit.ai._
+import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.players.Player
-import game.main.units.BasicSoldier.{height, width}
-import game.main.units.bullet.BasicBullet
+import game.main.unitcreators.bullet.BasicBullet
+import game.main.unitcreators.{SoldierCreator, UnitCreator}
+
+object SoldierSwarm1 extends SoldierSwarm {
+
+  /** Cost of the unit */
+  override val cost: Int = 15
+  override val unitAmount: Int = 1
+}
 
 
-object SwarmSoldier3 extends SwarmSoldier{
+object SoldierSwarm3 extends SoldierSwarm {
 
   /** Cost of the unit */
   override val cost: Int = 40
   override val unitAmount: Int = 3
 }
 
-object SwarmSoldier5 extends SwarmSoldier{
+object SoldierSwarm5 extends SoldierSwarm {
 
   override val cost: Int = 50
   override val unitAmount: Int = 5
 }
 
-trait SwarmSoldier extends SoldierCreator {
+trait SoldierSwarm extends SoldierCreator {
 
   val unitAmount: Int //amount of units
 
@@ -58,19 +64,26 @@ trait SwarmSoldier extends SoldierCreator {
     //elements stats
     val damage = 30f
     val reloadTime = 200
+    val steeringMass = 75f
     val acceleration = 9f / 1000f
+
+    val acceptPathPointDist = obj.collBody.getRadiusScaled * 1.5f
     val avoidForce = 40f / 1000f
     val avoidDistance = obj.sWidth * 1.2f
-    val turnSpeed = 185f
-    val visionMaxDist = obj.sWidth * 3f
+    val turnTime = 185f
+
+    val visionMaxDist = obj.sWidth * 3.75f
     val attackVision = new CircleBody(visionMaxDist)
+    val attackMovingMultiplier = 0.9f
+    val attackStopMovingDist = visionMaxDist / 1.1f
 
     //add elements
-    obj.appendElement(new FollowPath(path, obj.collBody.getRadiusScaled * 1.5f))
+    obj.appendElement(new FollowPath(path, acceptPathPointDist))
     obj.appendElement(new ShootAhead(attackVision, damage, reloadTime, BasicBullet))
-    obj.appendElement(new Steering(acceleration))
+    obj.appendElement(new Steering(steeringMass, acceleration))
     obj.appendElement(new AvoidObstacles(avoidForce, avoidDistance))
-    obj.appendElement(new TurnToMovingDirection(turnSpeed))
+    obj.appendElement(new TurnToMovingDirection(turnTime))
+    obj.appendElement(new MoveWhileAttacking(attackMovingMultiplier, attackStopMovingDist))
   }
 
   override def cardIcon(owner: Player, cost: Int): GameObject = {

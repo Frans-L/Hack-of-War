@@ -10,14 +10,14 @@ import game.util.pools.VectorPool
 object PolygonBody {
 
   /** Creates CollisionBody that is shaped trapezoid. */
-  def trapezoidCollBody(leftHeight: Float, rightHeight: Float, length: Float): PolygonBody = {
+  def trapezoidCollBody(leftHeight: Float, rightHeight: Float, length: Float, posX: Float = 0, posY: Float = 0): PolygonBody = {
     val radius = math.max(math.max(leftHeight, rightHeight), length) / 2f
-    val middle = leftHeight / 2f
+    val middle = leftHeight / 2f + posY
     val p: PolygonBody = new PolygonBody(Array(
-      0, 0,
-      length, middle - rightHeight / 2f,
-      length, middle + rightHeight / 2f,
-      0, leftHeight), radius)
+      posX, posY,
+      posX + length, middle - rightHeight / 2f,
+      posX + length, middle + rightHeight / 2f,
+      posX, leftHeight + posY), radius)
 
     p
   }

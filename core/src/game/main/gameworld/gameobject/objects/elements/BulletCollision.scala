@@ -1,4 +1,4 @@
-package game.main.gameworld.gameobject.elements
+package game.main.gameworld.gameobject.objects.elements
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
@@ -13,7 +13,7 @@ object BulletCollision extends ObjectElement {
 
     if (!parent.collided) {
       val collForce = MinimumTranslationVectorPool.obtain()
-      val crashObj = parent.physWorld.collide(parent, collForce, parent.collFilter)
+      val crashObj = parent.collHandler.collide(parent, collForce, parent.collFilter)
       crashObj.foreach(o => collision(parent, o, collForce))
       MinimumTranslationVectorPool.free(collForce) //free the memory
     }

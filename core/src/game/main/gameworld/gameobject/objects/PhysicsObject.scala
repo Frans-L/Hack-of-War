@@ -13,7 +13,7 @@ import game.util.pools.VectorPool
 
 import scala.collection.mutable
 
-class PhysicsObject(var physWorld: CollisionHandler,
+class PhysicsObject(var collHandler: CollisionHandler,
                     val collBody: CollisionBody) extends gameobject.GameObject {
 
   var mass: Float = 100f
@@ -35,7 +35,7 @@ class PhysicsObject(var physWorld: CollisionHandler,
 
   protected def updatePhysics(): Unit = {
     //reduces the velocity if the total friction isn't zero
-    val fric = friction + physWorld.globalFriction
+    val fric = friction + collHandler.globalFriction
     if (fric != 0) velocity.scl(1f / fric)
 
     pos.mulAdd(velocity, ticker.delta) //move the object
@@ -46,8 +46,8 @@ class PhysicsObject(var physWorld: CollisionHandler,
   /** Updates collPolygons location, rotation and scale.
     * updatePhysics calls this automatically. */
   def updateCollPolygon(body: CollisionBody): Unit = {
-    body.setOrigin(origin.x, origin.y)
     body.setPosition(pos.x - origin.x, pos.y - origin.y)
+    body.setOrigin(origin.x, origin.y)
     body.setScale(scale.x, scale.y)
     body.setRotation(angle)
   }

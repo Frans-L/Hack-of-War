@@ -1,11 +1,11 @@
-package game.main.gameworld.gameobject.elements.unit
+package game.main.gameworld.gameobject.objects.elements.unit
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Interpolation
 import game.main.gameworld.gameobject.{GameObject, objects}
-import game.main.gameworld.gameobject.elements.TextureElement
+import game.main.gameworld.gameobject.objects.elements.TextureElement
 import game.main.gameworld.gameobject.objects.UnitObject
 import game.util.CountdownTimer
 
