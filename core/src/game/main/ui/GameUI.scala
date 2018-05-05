@@ -104,9 +104,7 @@ class GameUI(dimensions: Dimensions, viewport: Viewport,
   /** Returns "average" the y-pos of the screen resolution. */
   private def adjustedDownY: Float = (dimensions.down - viewport.getWorldHeight / 2) / 2
 
-  override def draw(shapeRender: ShapeRenderer): Unit = {
-    stage.draw()
-  }
+  override def draw(shapeRender: ShapeRenderer): Unit = Unit
 
   /** Needed if have to combine different inputProcessors. Currently no need. */
   def inputProcessor: Stage = stage

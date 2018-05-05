@@ -22,6 +22,9 @@ class GameObject() extends GameElement with ObjectElement {
   var canBeDeleted: Boolean = false
   val elements: mutable.ListBuffer[ObjectElement] = mutable.ListBuffer.empty
 
+  //extra actions when unit is deleted
+  private lazy val deleteActions: mutable.ListBuffer[() => Unit] = mutable.ListBuffer.empty
+
   //parent of the this object, updated in each relative call
   private var objectParent: Option[GameObject] = None
 
@@ -122,10 +125,17 @@ class GameObject() extends GameElement with ObjectElement {
     elements.last.asInstanceOf[T]
   }
 
+  /** Checks if the parent is valid for this object. */
   override def checkParent(parent: GameObject): Unit = Unit //anything works
+
+  /** Adds new deadAction */
+  def addDeleteAction(action: () => Unit): Unit ={
+    deleteActions += action
+  }
 
   /** Marks that the object can be deleted. */
   override def delete(): Unit = {
+    if(!canBeDeleted) deleteActions.foreach(_()) //call each action once
     canBeDeleted = true
   }
 

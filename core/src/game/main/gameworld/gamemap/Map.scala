@@ -171,9 +171,11 @@ class Map(val dimensions: Dimensions,
         Vector2e(blockPosX(3), blockPosYMiddle(5) - blockHeight(4) / 2 - blockHeight(1))
       )
 
+      //left and right side combined
       val rDownFull = rDownLeft ++ rDownLeft.reverse.map(_.cpy().scl(-1, 1))
       val rUpFull = rUpLeft ++ rUpLeft.reverse.map(_.cpy().scl(-1, 1))
 
+      //the final path positions won't be mirrored
       val rDown = rDownFull.dropRight(2) ++ Seq(Vector2e(blockPosX(6), blockPosYMiddle(3)))
       val rDownReversed = rDownFull.reverse.dropRight(2) ++ Seq(Vector2e(blockPosX(1), blockPosYMiddle(3)))
 
@@ -183,8 +185,8 @@ class Map(val dimensions: Dimensions,
       path = Seq(new Path(rDown, offset), new Path(rUp, offset))
       pathReversed = Seq(new Path(rDownReversed, offset), new Path(rUpReversed, offset))
 
-      val routeSize = rDownFull.size
 
+      val routeSize = rDownFull.size
       //main turrets location and direction look at
       val turretMiddle = Seq(
         Vector2e(blockPosX(1) - cornerWidth / 2, blockPosYMiddle(3)), //location

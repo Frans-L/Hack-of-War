@@ -2,22 +2,21 @@ package game.main.players
 
 import com.badlogic.gdx.math.MathUtils
 import game.main.cards.UnitCard
+import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.ObjectHandler
-import game.main.unitcreators.units.{SoldierBasic, BuildingLane, BuildingMain}
+import game.main.unitcreators.units.{BuildingLane, BuildingMain, SoldierBasic}
 import game.util.Ticker
 
 class Bot(objectHandler: ObjectHandler, override val colorIndex: Int) extends
   Player(objectHandler, colorIndex) {
 
+  override protected val turretPaths: Seq[Path] = objectHandler.collHandler.map.turretPathReversed
+  override protected val paths: Seq[Path] = objectHandler.collHandler.map.pathReversed
+
   initialize()
 
   override def initialize(): Unit = {
     super.initialize()
-
-    //created the turrets
-    spawnUnit(BuildingMain, 0, 0, objectHandler.collHandler.map.turretPathReversed(0)) //main buildings
-    spawnUnit(BuildingLane, 0, 0, objectHandler.collHandler.map.turretPathReversed(1)) //lanes
-    spawnUnit(BuildingLane, 0, 0, objectHandler.collHandler.map.turretPathReversed(2))
 
     spawnUnit(
       SoldierBasic,

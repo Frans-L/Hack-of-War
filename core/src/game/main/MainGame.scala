@@ -17,28 +17,19 @@ import game.main.unitcreators.bullet.BasicBullet
 
 
 /**
-  * For the debug reasons
+  * Global variables makes debugging easier
   */
 object MainGame {
 
   var drawCollBox: Boolean = false
-
   var debugViewPort: Viewport = _
   var debugRender: ShapeRenderer = _
-
-  def setColorBlack(): Unit = MainGame.debugRender.setColor(0, 0, 0, 1)
-
-  def setColorWhite(): Unit = MainGame.debugRender.setColor(1, 1, 1, 1)
-
-  def setColorMagenta(): Unit = MainGame.debugRender.setColor(1, 0, 1, 1)
-
-  def setColorRed(): Unit = MainGame.debugRender.setColor(1, 0, 0, 1)
 }
 
 /**
   * Created by Frans on 26/02/2018.
   */
-class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction:() => Unit) extends Screen {
+class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () => Unit) extends Screen {
 
   //sets the default ticker => everything should be time dependent
   private val ticker = new Ticker(TimeUtils.millis())
@@ -52,7 +43,6 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction:() =>
   //sets the drawing batches
   private val batch: SpriteBatch = new SpriteBatch
   private val shapeRender: ShapeRenderer = new ShapeRenderer
-
   MainGame.debugRender = new ShapeRenderer
   MainGame.debugRender.setColor(0, 1f, 0f, 1)
   MainGame.drawCollBox = false
@@ -63,7 +53,6 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction:() =>
     screenDim.width, screenDim.height,
     screenDim.maxWidth, screenDim.maxHeight, cam)
   viewport.apply()
-
   MainGame.debugViewPort = viewport
 
   //creates the object updater
@@ -77,9 +66,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction:() =>
   //sets the players
   private val players: Seq[Player] = Seq(
     new User(objectHandler, 0),
-    new Bot(objectHandler, 1)
-  )
-
+    new Bot(objectHandler, 1))
   players.head.enemies += players.last
   players.last.enemies += players.head
 
@@ -90,39 +77,115 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction:() =>
   private val gameUI: GameUI =
     new GameUI(screenDim, viewport, players.head, shapeRender, gameTimer)
 
-  val fPSLogger: FPSLogger = new FPSLogger
-
+  private val fPSLogger: FPSLogger = new FPSLogger
   private val backgroundColor = Color.valueOf("#44535e")
 
-  /** Called every frame */
-  override def render(delta: Float): Unit = {
 
+  /**
+    * Called each frame by libGDX => main loop
+    */
+  override def render(delta: Float): Unit = {
     //clears the screen
     Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1)
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-    //updates game
+    //draws the game
+    this.draw()
+
+    MainGame.debugRender.setProjectionMatrix(cam.combined) //Debug render
+    MainGame.debugRender.begin(ShapeType.Line)
+    this.updateDebug() //Debug controlls
+
+
+    this.updateGameLogic() //update the game logic
+
+    MainGame.debugRender.end() //Stop debug render
+  }
+
+
+  /**
+    * Called each frame by render()
+    **/
+  private def draw(): Unit = {
+
+    //update camera
+    batch.setProjectionMatrix(cam.combined)
+
+    //draw objects
+    batch.begin()
+    players.foreach(_.draw(batch))
+    objectHandler.draw(batch)
+    map.draw(batch)
+    batch.end()
+
+    //gameUI has own batch, no need to pass anything
+    gameUI.draw(batch)
+
+    //draw lines (mostly debug ones)
+    shapeRender.setProjectionMatrix(cam.combined)
+    shapeRender.begin(ShapeType.Line)
+    shapeRender.setColor(0, 1f, 0f, 1)
+    players.foreach(_.draw(shapeRender))
+    objectHandler.draw(shapeRender)
+    map.draw(shapeRender)
+    gameUI.draw(shapeRender)
+    shapeRender.end()
+
+  }
+
+  /**
+    * Called each frame by render()
+    **/
+  private def updateGameLogic(): Unit = {
+
+    //updates the timers
     ticker.update(TimeUtils.millis())
     gameTimer.update(ticker.delta)
 
-
-    this.draw() //TODO update should be before draw, change when debug isn't needed
-
-    MainGame.debugRender.setProjectionMatrix(cam.combined)
-    MainGame.debugRender.begin(ShapeType.Line)
-    this.update()
-    MainGame.debugRender.end()
+    if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+      gameUI.showEndSplashScreen("RESIGNED", endGame)
 
 
-    if (ticker.interval4) {
-      Gdx.app.log("MainGame", "Render calls: " + batch.renderCalls)
-      //Gdx.app.log("MainGame", "Pooled units: " + UnitObject.pool.getFree)
-    }
+    cam.update()
+    players.foreach(_.update())
+    objectHandler.update()
+    gameUI.update()
 
-    fPSLogger.log()
+    //checks if the game has the winner
+    checkGameOver()
+    
+  }
 
-    //TimeUnit.MILLISECONDS.sleep(400)
+  /** Updates viewport when resolution changes. */
+  def resize(width: Int, height: Int): Unit = {
+    viewport.update(width, height, true)
+    cam.position.set(0, 0, 0)
+    cam.update()
+    gameUI.forceUpdate()
+  }
 
+  /** Ends the mainGame and calls the return action */
+  def endGame(): Unit = {
+    returnAction()
+  }
+
+  /** Calls endSplashScreen if needed*/
+  private def checkGameOver(): Unit = {
+    val winner = this.hasWinner
+    winner.foreach(winner => {
+      if (winner == players.head) gameUI.showEndSplashScreen("VICTORY", endGame)
+      else gameUI.showEndSplashScreen("DEFEAT", endGame)
+    })
+    if (winner.isEmpty && gameTimer.isOver) gameUI.showEndSplashScreen("DRAW", endGame)
+  }
+
+  /** Returns the winner if it exists. */
+  private def hasWinner: Option[Player] = {
+    if (players.head.score <= 0 || (gameTimer.isOver && players.last.score > players.head.score))
+      Some(players.last)
+    else if (players.last.score <= 0 || (gameTimer.isOver && players.head.score > players.last.score))
+      Some(players.head)
+    else None
   }
 
   override def show(): Unit = Unit
@@ -136,47 +199,14 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction:() =>
   override def dispose(): Unit = Unit
 
 
-  def draw(): Unit = {
+  private var debugSpacePressed = false
 
-    batch.setProjectionMatrix(cam.combined)
-
-    batch.begin()
-    players.foreach(_.draw(batch))
-    objectHandler.draw(batch)
-    map.draw(batch)
-    batch.end()
-
-    shapeRender.setProjectionMatrix(cam.combined)
-    shapeRender.begin(ShapeType.Line)
-
-    shapeRender.setColor(1, 0, 1, 1)
-
-    /*
-    shapeRender.circle(0, 0, 25)
-    shapeRender.rect(screenDim.left, screenDim.maxDown, screenDim.width - 1, screenDim.maxHeight - 1)
-    shapeRender.rect(screenDim.maxLeft, screenDim.down, screenDim.maxWidth - 1, screenDim.height - 1)
-    a.draw(shapeRender)
-     */
-
-    shapeRender.setColor(0, 1f, 0f, 1)
-    map.draw(shapeRender)
-    objectHandler.draw(shapeRender)
-    gameUI.draw(shapeRender)
-    players.foreach(_.draw(shapeRender))
-
-
-    shapeRender.end()
-
-  }
-
-  var tmpPressed = false
-
-  def update(): Unit = {
-
+  /** Updates debug stuff... */
+  def updateDebug(): Unit = {
     def target = MainGame.debugViewPort.unproject(Vector2e(Gdx.input.getX, Gdx.input.getY))
 
     if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-      if (!tmpPressed) {
+      if (!debugSpacePressed) {
         BasicBullet.create(players.head, objectHandler,
           target, Vector2e(-1, 0),
           players.last.colorIndex)
@@ -190,39 +220,15 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction:() =>
           target, Vector2e(0, -1),
           players.last.colorIndex)
       }
-      tmpPressed = true
-    } else tmpPressed = false
+      debugSpacePressed = true
+    } else debugSpacePressed = false
 
-
+    //Debug collBoxes
     if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) MainGame.drawCollBox = !MainGame.drawCollBox
 
-    if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
-      gameUI.showEndSplashScreen("RED WINS", endGame)
-
-
-    cam.update()
-    players.foreach(_.update())
-    objectHandler.update()
-    gameUI.update()
-
+    //Debug printing
+    if (ticker.interval4) Gdx.app.log("MainGame", "Render calls: " + batch.renderCalls)
+    fPSLogger.log()
   }
-
-  def resize(width: Int, height: Int): Unit = {
-    viewport.update(width, height, true)
-    cam.position.set(0, 0, 0)
-    cam.update()
-    gameUI.forceUpdate()
-
-  }
-
-  /** Ends the mainGame and calls the return action*/
-  def endGame(): Unit = {
-    returnAction()
-  }
-
-
-  //return all inputProcessors aka input listeners
-  //def inputProcessors = gameUI.inputProcessor
-
 
 }

@@ -7,8 +7,10 @@ class TimerSecond(var startTime: Float) {
 
   /** Delta as milliseconds. */
   def update(delta: Int): Unit = {
-    time -= delta / 1000f
+    time = math.max(time - delta / 1000f, 0)
   }
+
+  def isOver: Boolean = time == 0f
 
   override def toString: String = {
     val minutes = (time / 60).toInt

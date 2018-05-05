@@ -8,6 +8,7 @@ import game.main.cards.{Card, UnitCard}
 import game.main.gameworld.gamemap
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.ObjectHandler
+import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.unitcreators._
 import game.main.unitcreators.units._
 
@@ -27,23 +28,39 @@ object Player {
 abstract class Player(val objectHandler: ObjectHandler, index: Int)
   extends GameElement {
 
-  var mana: Float = 50f
-  var manaSpeed: Float = Player.manaSpeed
-
-  //when the player is dragging card, the player might see the iconPath of the unit
-  var iconPath: Option[gamemap.IconPath] = None
-
   val colorIndex: Int //color of the textures
   val enemies: mutable.Buffer[Player] = mutable.Buffer.empty[Player] //the enemy of this player
 
   private val deck: mutable.Buffer[Card] = mutable.Buffer[Card]()
   val hand: mutable.Buffer[Card] = mutable.Buffer[Card]()
 
+  //when the player is dragging card, the player might see the iconPath of the unit
+  var iconPath: Option[gamemap.IconPath] = None
+
+  //stats
+  var mana: Float = 50f
+  var manaSpeed: Float = Player.manaSpeed
   var cardsInHand: Int = 3
+
+  //the amount of buildings alive is the score
+  var score: Int = 3
+
+  protected val turretPaths: Seq[Path] //0 -> main, 1 -> down, 2 -> up
+  protected val paths: Seq[Path] //0 - down, 1 -> up
 
 
   protected def initialize(): Unit = {
 
+    //created the turrets
+    val main = spawnUnit(BuildingMain, 0, 0, turretPaths(0)).head //main buildings
+    val down = spawnUnit(BuildingLane, 0, 0, turretPaths(1)).head //lanes
+    val up = spawnUnit(BuildingLane, 0, 0, turretPaths(2)).head
+    main.addDeleteAction(() => score -= 3)
+    down.addDeleteAction(() => score -= 1)
+    up.addDeleteAction(() => score -= 1)
+
+
+    //add cards to deck
     val basicAmount = 3
     val swarm1Amount = 1
     val swarm3Amount = 1
@@ -107,7 +124,7 @@ abstract class Player(val objectHandler: ObjectHandler, index: Int)
 
   /** Spawns a new unit */
   def spawnUnit(unitCreator: UnitCreator, x: Float, y: Float,
-                path: Path, random: Boolean = false): Unit = {
+                path: Path, random: Boolean = false): Seq[UnitObject] = {
     val extraOffset = if (random) path.randomOffset else 0
     unitCreator.create(this, x, y, path, extraOffset)
   }
