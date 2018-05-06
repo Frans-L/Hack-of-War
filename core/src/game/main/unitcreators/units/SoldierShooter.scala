@@ -29,13 +29,13 @@ object SoldierShooter extends SoldierCreator {
     obj.mass = 150f
     obj.friction = 0.25f
     obj.health = 65f
-    obj.maxMovingForce = 25f / 1000f
+    obj.maxMovingForce = 30f / 1000f
 
     //elements stats
-    val damage = 25f
+    val damage = 20f
     val reloadTime = 175
     val steeringMass = 100f
-    val acceleration = 5f / 1000f
+    val acceleration = 7f / 1000f
 
     val acceptPathPointDist = obj.collBody.getRadiusScaled * 1.5f
     val avoidForce = 20f / 1000f
@@ -43,7 +43,7 @@ object SoldierShooter extends SoldierCreator {
     val turnTime = 150f
 
     val visionMaxHeight = obj.sHeight * 4.5f
-    val visionMaxDist = obj.sWidth * 6.5f
+    val visionMaxDist = obj.sWidth * 6f
     val attackVision = PolygonBody.trapezoidCollBody(obj.sHeight, visionMaxHeight, visionMaxDist)
     val attackMovingMultiplier = 0.90f
     val attackStopMovingDist = visionMaxDist / 1.2f

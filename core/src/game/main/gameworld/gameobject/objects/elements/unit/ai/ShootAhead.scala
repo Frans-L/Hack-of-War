@@ -71,11 +71,10 @@ class ShootAhead(attackVision: CollisionBody, damage: Float,
     val bulletPos = Vector2e(1, 0).setAngle(parent.angle) **
       (parent.sWidth / 2f + bulletCreator.radius) ++ parent.pos
     val bullet = bulletCreator.create(parent, parent.owner.objectHandler,
-      bulletPos, Vector2e(1, 0).setAngle(parent.angle) ** (parent.maxSpeed * 5),
-      parent.owner.colorIndex)
+      bulletPos, parent.angle,
+      parent.owner.colorIndex, damage)
 
     //sets the bullet statistics
-    bullet.damage = damage
     bullet.collFilter ++= parent.owner.enemies.asInstanceOf[mutable.Buffer[GameElement]]
     bullet.collFilter += parent.collHandler.map
   }

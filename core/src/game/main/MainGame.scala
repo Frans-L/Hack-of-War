@@ -208,17 +208,17 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () =
     if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
       if (!debugSpacePressed) {
         BasicBullet.create(players.head, objectHandler,
-          target, Vector2e(-1, 0),
-          players.last.colorIndex)
+          target, 0,
+          players.last.colorIndex, 30)
         BasicBullet.create(players.head, objectHandler,
-          target, Vector2e(1, 0),
-          players.last.colorIndex)
+          target, 90,
+          players.last.colorIndex, 30)
         BasicBullet.create(players.head, objectHandler,
-          target, Vector2e(0, 1),
-          players.last.colorIndex)
+          target, 180,
+          players.last.colorIndex, 30)
         BasicBullet.create(players.head, objectHandler,
-          target, Vector2e(0, -1),
-          players.last.colorIndex)
+          target,  270,
+          players.last.colorIndex, 30)
       }
       debugSpacePressed = true
     } else debugSpacePressed = false

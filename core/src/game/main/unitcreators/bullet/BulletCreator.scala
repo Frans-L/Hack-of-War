@@ -20,8 +20,8 @@ trait BulletCreator {
 
   /** Creates a new bullet and returns it. */
   def create(owner: GameElement, objectHandler: ObjectHandler,
-             pos: Vector2, velocity: Vector2,
-             colorIndex: Int): BulletObject = {
+             pos: Vector2, angle: Float,
+             colorIndex: Int, damage: Float): BulletObject = {
 
     val body: bodies.CollisionBody = new CircleBody(radius)
 
@@ -36,9 +36,12 @@ trait BulletCreator {
     bullet.size.set(radius * 2, radius * 2)
     bullet.origin.set(radius, radius)
     bullet.pos.set(pos)
-    bullet.velocity.set(velocity)
+    bullet.velocity.set(1, 0).setAngle(angle)
+    bullet.damage = damage
     bullet.friction = 0f
+
     objectHandler.addObject(bullet, Level.top, collision = false) //no general collision
+    bullet.collided = true //makes sure that BulletCollision won't destroy itself immediately
 
     setStats(bullet) //sets the specific stats
     bullet.update()

@@ -30,13 +30,13 @@ object TankBasic extends SoldierCreator {
     obj.mass = 300f
     obj.friction = 0.25f
     obj.health = 600f
-    obj.maxMovingForce = 15f / 1000f
+    obj.maxMovingForce = 20f / 1000f
 
     //elements stats
     val acceptPathPointDist = obj.collBody.getRadiusScaled * 2.25f
     val steeringMass = 1000f
-    val acceleration = 5f / 1000f
-    val avoidForce = 12f / 1000f
+    val acceleration = 6f / 1000f
+    val avoidForce = 18f / 1000f
     val avoidDistance = obj.sWidth * 1.0f
     val turnSpeed = 300f
     val stopNearBuildingDist = obj.collBody.getRadiusScaled * 4.75f
@@ -83,8 +83,8 @@ object TankTurretSmall extends TurretCreator {
 
   override def setStats(turret: UnitObject, baseObj: UnitObject): Unit = {
     //element stats
-    val damage = 40f
-    val reloadTime = 800
+    val damage = 65f
+    val reloadTime = 1200
     val turnSpeed = 350f
 
     val visionMinHeight = baseObj.sHeight * 2f

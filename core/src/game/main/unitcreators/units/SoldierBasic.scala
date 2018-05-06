@@ -27,14 +27,14 @@ object SoldierBasic extends SoldierCreator {
     //units stats
     obj.mass = 100f
     obj.friction = 0.25f
-    obj.health = 125f
-    obj.maxMovingForce = 30f / 1000f
+    obj.health = 135f
+    obj.maxMovingForce = 35f / 1000f
 
     //elements stats
-    val damage = 30f
+    val damage = 35f
     val reloadTime = 300
     val steeringMass = 100f
-    val acceleration = 6f / 1000f
+    val acceleration = 7f / 1000f
 
     val acceptPathPointDist = obj.collBody.getRadiusScaled * 1.5f
     val avoidForce = 20f / 1000f

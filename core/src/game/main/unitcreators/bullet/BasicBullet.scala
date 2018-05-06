@@ -14,8 +14,10 @@ object BasicBullet extends BulletCreator {
 
   /** Sets the all specific stats to the bullet. */
   override protected def setStats(obj: objects.BulletObject): Unit = {
-    obj.collided = true //makes sure that BulletCollision won't destroy itself immediately
+    val speed = 0.7f + obj.damage * 0.003f //speed will be relative to damage
+    obj.velocity.scl(speed)
+
+    obj.mass = 13f
     obj.appendElement(BulletCollision)
-    obj.mass = 15f
   }
 }

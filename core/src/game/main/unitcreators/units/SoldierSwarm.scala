@@ -60,13 +60,13 @@ trait SoldierSwarm extends SoldierCreator {
     obj.mass = 50f
     obj.friction = 0.25f
     obj.health = 50f
-    obj.maxMovingForce = 35f / 1000f
+    obj.maxMovingForce = 40f / 1000f
 
     //elements stats
     val damage = 30f
     val reloadTime = 200
     val steeringMass = 75f
-    val acceleration = 9f / 1000f
+    val acceleration = 10f / 1000f
 
     val acceptPathPointDist = obj.collBody.getRadiusScaled * 1.5f
     val avoidForce = 40f / 1000f
