@@ -59,9 +59,9 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () =
   private val objectHandler: ObjectHandler = new ObjectHandler(screenDim)
 
   //adds the map
-  private val map: gamemap.Map =
-    new gamemap.Map(screenDim, textures, objectHandler)
-  objectHandler.collHandler.map = map //TODO temporary solution to add map to physWorld
+  //private val map: gamemap.Map =
+   // new gamemap.Map(screenDim, textures, objectHandler)
+  //objectHandler.collHandler.map = map //TODO temporary solution to add map to physWorld
 
   //sets the players
   private val players: Seq[Player] = Seq(
@@ -116,7 +116,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () =
     batch.begin()
     players.foreach(_.draw(batch))
     objectHandler.draw(batch)
-    map.draw(batch)
+    //map.draw(batch)
     batch.end()
 
     //gameUI has own batch, no need to pass anything
@@ -128,7 +128,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () =
     shapeRender.setColor(0, 1f, 0f, 1)
     players.foreach(_.draw(shapeRender))
     objectHandler.draw(shapeRender)
-    map.draw(shapeRender)
+    //map.draw(shapeRender)
     gameUI.draw(shapeRender)
     shapeRender.end()
 

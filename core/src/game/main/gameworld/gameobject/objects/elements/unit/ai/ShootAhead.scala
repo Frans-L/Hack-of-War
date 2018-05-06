@@ -76,7 +76,7 @@ class ShootAhead(attackVision: CollisionBody, damage: Float,
 
     //sets the bullet statistics
     bullet.collFilter ++= parent.owner.enemies.asInstanceOf[mutable.Buffer[GameElement]]
-    bullet.collFilter += parent.collHandler.map
+    bullet.collFilter += parent.owner.objectHandler.map.owner
   }
 
 }

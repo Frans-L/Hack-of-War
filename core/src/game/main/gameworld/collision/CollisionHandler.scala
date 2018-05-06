@@ -36,18 +36,16 @@ class CollisionHandler(val dimensions: Dimensions) extends GameElement {
   var globalFriction: Float = 1f
   var globalShadowPos: Vector2 = Vector2e(-3f, -5f) //TODO move to other pos
 
-  var map: gamemap.Map = _ //TODO temporary solution, to add map
-
   private val units: mutable.LinkedHashMap[GameElement, mutable.Buffer[PhysicsObject]] =
     mutable.LinkedHashMap()
 
-  private lazy val tmpEmptyBuffer = mutable.Buffer.empty[GameElement] //caches an empty buffer
-  private lazy val tmpMapBuffer = mutable.Buffer[GameElement](map)
-
+  //caches simple buffers
+  val emptyFilter: mutable.Buffer[GameElement] = mutable.Buffer.empty[GameElement]
+  val mapFilter: mutable.Buffer[GameElement] = mutable.Buffer.empty[GameElement]
 
   /** Checks all collisions, and calls the object's method ´collision´ when needed. */
   override def update(): Unit = {
-    for ((owner, obj) <- mapBufferIterator(units, tmpEmptyBuffer) if !obj.static && !obj.collided) {
+    for ((owner, obj) <- mapBufferIterator(units, emptyFilter) if !obj.static && !obj.collided) {
       val collForce = MinimumTranslationVectorPool.obtain()
       val crashObj = collide(obj, collForce, obj.collFilter)
       crashObj.foreach(obj2 => {
@@ -166,7 +164,7 @@ class CollisionHandler(val dimensions: Dimensions) extends GameElement {
 
   /** Returns all PhysicsObjects of wanted category. */
   def getPhysicsObjects(category: GameElement): mutable.Buffer[PhysicsObject] = {
-    if(units.keys.exists(_ == category))
+    if (units.keys.exists(_ == category))
       units(category)
     else
       mutable.Buffer.empty[PhysicsObject]
@@ -185,17 +183,13 @@ class CollisionHandler(val dimensions: Dimensions) extends GameElement {
     if (units(owner).isEmpty) units.remove(owner)
   }
 
-
-  /** Returns the filter that only includes map */
-  def mapFilter: mutable.Buffer[GameElement] = tmpMapBuffer
-
   /** Iterates every T of the
     *  mutable.LinkedHashMap[GameElement, mutable.Buffer[T]]
     *
     * @param mapBuffer A map which has a buffer in it.
     * @param catFilter CategoryFilter => If defined, iterator selects only one buffer from the map.
     * @return a new iterator.
-    * */
+    **/
   private def mapBufferIterator[T]
   (mapBuffer: mutable.Map[GameElement, mutable.Buffer[T]],
    catFilter: mutable.Buffer[GameElement]): Iterator[(GameElement, T)] =

@@ -91,7 +91,7 @@ class GameUI(dimensions: Dimensions, viewport: Viewport,
   /** Shows the start splash screen */
   def showStartSplashScreen(action: () => Unit): Unit = {
     val splashScreen: SplashScreen =
-      new SplashScreen("READY?", dimensions.maxWidth, dimensions.maxHeight, action)
+      new SplashScreen("READY", dimensions.maxWidth, dimensions.maxHeight, action)
     stage.addActor(splashScreen)
   }
 

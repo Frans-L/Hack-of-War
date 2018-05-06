@@ -7,12 +7,12 @@ import com.badlogic.gdx.math.{MathUtils, Vector2}
 import game.GameElement
 import game.loader.GameTextures
 import game.main.gameworld.collision.bodies
-import game.main.gameworld.collision.bodies.PolygonBody
+import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
 import game.main.gameworld.gamemap.Map.PathIndex
 import game.main.gameworld.gameobject
 import game.main.gameworld.gameobject.ObjectHandler.Level
 import game.main.gameworld.gameobject.objects.builders.{BorderSprite, CollisionObject}
-import game.main.gameworld.gameobject.{GameObject, objects}
+import game.main.gameworld.gameobject.{GameObject, ObjectHandler, objects}
 import game.util.{Dimensions, Vector2e}
 
 import scala.collection.mutable
@@ -20,14 +20,14 @@ import scala.collection.mutable
 
 object Map {
 
+  //textures
   val border: String = GameTextures.Units.mapBorder
-
   val corner: String = GameTextures.Units.mapCorner
   val trenchCorner: String = GameTextures.Units.mapTrenchCorner
   val middleCorner: String = GameTextures.Units.mapMiddleCorner
-
   val pathPoint: String = GameTextures.Units.pathPoint
 
+  //path indexes
   object PathIndex extends Enumeration {
     type State = Value
     val down: PathIndex.Value = Value(0)
@@ -39,40 +39,37 @@ object Map {
 /**
   * Created by Frans on 06/03/2018.
   */
-class Map(val dimensions: Dimensions,
-          textures: GameTextures,
-          objectHandler: gameobject.ObjectHandler) extends GameElement {
+class Map(val owner: GameElement, objectHandler: ObjectHandler, val dimensions: Dimensions) {
 
-  private val elements: mutable.Buffer[gameobject.GameObject] = mutable.Buffer[gameobject.GameObject]()
+  private val textures = GameTextures.default
 
+  //map graphic elements, and collision boxes
+  val elements: mutable.Buffer[gameobject.GameObject] = mutable.Buffer[gameobject.GameObject]()
+  val collObjects: mutable.Buffer[objects.PhysicsObject] = mutable.Buffer[objects.PhysicsObject]()
+
+  //for collision map
   private val collAccuracy = 20 //collisionAccuracy
   private val collMap = Array.ofDim[Boolean](
     dimensions.maxWidth / collAccuracy + 1,
     dimensions.maxHeight / collAccuracy + 1)
 
-  val collObjects: mutable.Buffer[objects.PhysicsObject] = mutable.Buffer[objects.PhysicsObject]()
+  //moving path to objects
   var path: Seq[Path] = _ //will be set at initializeMap
   var pathReversed: Seq[Path] = _
   var turretPath: Seq[Path] = _
   var turretPathReversed: Seq[Path] = _
 
+  //general info about the map
+  //'dimensions' tells the rest info
   var centerX: Float = 0 //the playable areas center
   var centerY: Float = 0 //initializeMap gives right coords
 
+  //update map graphics
   val mapObject: GameObject = new GameObject()
-  objectHandler.addObject(mapObject, Level.map, update = false)
 
+  //create the map and add collisionMap
   initializeMap()
   createCollisionMap()
-
-
-  override def update(): Unit = ???
-
-  override def draw(shapeRender: ShapeRenderer): Unit = Unit
-
-  override def draw(batch: Batch): Unit = {
-    //elements.foreach(_.draw(batch))
-  }
 
   /**
     * Returns true if collided with static collision map
@@ -155,6 +152,7 @@ class Map(val dimensions: Dimensions,
 
     elements.foreach(mapObject.appendElement) //add all elements to mapobject
     collObjects.foreach(mapObject.appendElement)
+    collObjects.foreach(objectHandler.collHandler.addUnit(this.owner, _)) //adds collision to updater
 
     //adds the path
     def addPath(): Unit = {
@@ -418,8 +416,8 @@ class Map(val dimensions: Dimensions,
     }
 
     //a bit prettier way to add a collision block
-    def addBlock(collisionBody: bodies.CollisionBody): Unit = {
-      collObjects += CollisionObject(this, collisionBody, objectHandler)
+    def addBlock(collisionBody: CollisionBody): Unit = {
+      collObjects += CollisionObject(owner, collisionBody, objectHandler)
     }
 
     //calculates the middle pos of the element n
@@ -440,4 +438,5 @@ class Map(val dimensions: Dimensions,
 
 
   }
+
 }

@@ -114,7 +114,7 @@ abstract class Player(val objectHandler: ObjectHandler, index: Int)
   /** Returns true is succeeded. */
   def useCard(card: Card, posX: Float, posY: Float): Boolean = {
     //the card can be used
-    if (card.cost <= mana && !objectHandler.collHandler.map.collide(posX, posY)) {
+    if (card.cost <= mana && !objectHandler.map.collide(posX, posY)) {
       mana -= card.cost
       true
     } else false
@@ -142,7 +142,7 @@ abstract class Player(val objectHandler: ObjectHandler, index: Int)
 
 
   /** Returns the closest path from the map. */
-  def findPath(x: Float, y: Float): Option[Path] = objectHandler.collHandler.map.getPath(x, y)
+  def findPath(x: Float, y: Float): Option[Path] = objectHandler.map.getPath(x, y)
 
   /** Returns random path */
   def randomPath: Path = randomPathOption.getOrElse(new Path(Seq.empty, 0))

@@ -16,10 +16,10 @@ import scala.collection.mutable
 class Bot(objectHandler: ObjectHandler, override val colorIndex: Int) extends
   Player(objectHandler, colorIndex) {
 
-  override protected val turretPaths: Seq[Path] = objectHandler.collHandler.map.turretPathReversed
-  override protected val paths: Seq[Path] = objectHandler.collHandler.map.pathReversed
 
-  private val map: gamemap.Map = objectHandler.collHandler.map
+  private val map: gamemap.Map = objectHandler.map
+  override protected val turretPaths: Seq[Path] = map.turretPathReversed
+  override protected val paths: Seq[Path] = map.pathReversed
 
   /** When the AI should react fast */
   private val alertMapLine: Float = map.dimensions.right / 1.75f
@@ -71,11 +71,11 @@ class Bot(objectHandler: ObjectHandler, override val colorIndex: Int) extends
         var handScored = hand.filter(_.cost <= mana).map(card => (card, sumAIScore(card.aiScore, enemyScore)))
         //spawn all units as possible
         while (handScored.nonEmpty) {
-          val card = handScored.maxBy(_._2)._1.forceUse(0, 0)
+          handScored.maxBy(_._2)._1.forceUse(0, 0)
           handScored = handScored.filter(s => s._1.cost <= mana && !s._1.used)
         }
       }
-      
+
       //Debug printing
       Gdx.app.log("BOT", "Mana: " + mana + " Priority: " + priority)
       Gdx.app.log("BOT", "Hand: " + hand.map(c => c.aiScore.toString))
@@ -105,7 +105,7 @@ class Bot(objectHandler: ObjectHandler, override val colorIndex: Int) extends
   /** If need to play totally random. */
   private def randomPlay(): Unit = {
     for (i <- 0 to MathUtils.random(3)) {
-      val path = objectHandler.collHandler.map.randomPathReversed
+      val path = map.randomPathReversed
       randomCard[UnitCard]().foreach(card =>
         spawnUnit(card.unitCreator, path.head.x, path.head.y, Some(path), true))
     }

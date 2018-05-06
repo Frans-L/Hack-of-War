@@ -21,8 +21,6 @@ object CollisionObject {
 
     //collBody's origin differs from the parent obj
     obj.collBody.setOrigin(collOriginX, collOriginY)
-
-    objectHandler.addToCollHandler(owner, obj) //adds to collhandler
     obj
   }
 
