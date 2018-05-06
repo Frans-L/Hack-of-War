@@ -1,5 +1,6 @@
 package game.main.unitcreators.units
 
+import com.badlogic.gdx.Gdx
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
 import game.main.gameworld.gamemap.Path
@@ -60,6 +61,7 @@ object TankBasic extends SoldierCreator {
     val building = UnitCreator.defaultCardIcon(texture, width, height, owner, cost)
     building.pos.set(0, 0)
     icon.prependElement(building)
+    Gdx.app.log("TankBasic", "icon")
     icon
   }
 

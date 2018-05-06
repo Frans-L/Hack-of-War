@@ -55,13 +55,13 @@ class GameObject() extends GameElement with ObjectElement {
     objectParent = Some(parent) //sets the parent object
     val orgPosAngle = pos.angle //needed to keep pos angle same
     val orgOpacity = opacity //needed when parent's opacity is zero
-    val orgScaleX = parent.scale.x //needed when parent's scale is zero
-    val orgScaleY = parent.scale.y
+    val orgScaleX = scale.x //needed when parent's scale is zero
+    val orgScaleY = scale.y
 
     //sets to relative coords
     pos.setAngle(pos.angle + parent.angle)
     pos.add(parent.pos.x, parent.pos.y)
-    scale.scl(parent.scale)
+    scale.scl(parent.scale.x, parent.scale.y)
     angle += parent.angle
     opacity *= parent.opacity
 
@@ -71,10 +71,10 @@ class GameObject() extends GameElement with ObjectElement {
     pos.sub(parent.pos.x, parent.pos.y)
     angle -= parent.angle
     pos.setAngle(orgPosAngle)
-    opacity = if(opacity != 0) opacity / parent.opacity else orgOpacity
+    opacity = if (parent.opacity != 0) opacity / parent.opacity else orgOpacity
 
-    if(scale.x != 0 && parent.scale.y != 0) scale.scl(1f / parent.scale.x, 1f / parent.scale.y)
-    else scale.scl(orgScaleX, orgScaleY)
+    if (parent.scale.x != 0 && parent.scale.y != 0) scale.scl(1f / parent.scale.x, 1f / parent.scale.y)
+    else scale.set(orgScaleX, orgScaleY)
 
     //clears the parent object, so if this object is called without relativity
     //there will be no parents
@@ -84,7 +84,7 @@ class GameObject() extends GameElement with ObjectElement {
   /** Returns the parent, if it exists. */
   def getParent: Option[GameObject] = objectParent
 
-  /** Returns the parent, or itself*/
+  /** Returns the parent, or itself */
   def grandParent: GameObject = {
     objectParent.map(_.grandParent).getOrElse(this)
   }
@@ -129,13 +129,13 @@ class GameObject() extends GameElement with ObjectElement {
   override def checkParent(parent: GameObject): Unit = Unit //anything works
 
   /** Adds new deadAction */
-  def addDeleteAction(action: () => Unit): Unit ={
+  def addDeleteAction(action: () => Unit): Unit = {
     deleteActions += action
   }
 
   /** Marks that the object can be deleted. */
   override def delete(): Unit = {
-    if(!canBeDeleted) deleteActions.foreach(_()) //call each action once
+    if (!canBeDeleted) deleteActions.foreach(_ ()) //call each action once
     canBeDeleted = true
   }
 
