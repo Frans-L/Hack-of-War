@@ -4,12 +4,13 @@ import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.objects.UnitObject
+import game.main.gameworld.gameobject.objects.UnitObject.AIScore
 import game.main.gameworld.gameobject.objects.elements.unit.ai._
 import game.main.players.Player
 import game.main.unitcreators.SoldierCreator
 import game.main.unitcreators.bullet.BasicBullet
 
-object SoldierShooter extends SoldierCreator{
+object SoldierShooter extends SoldierCreator {
 
   override val cost: Int = 50
 
@@ -17,7 +18,7 @@ object SoldierShooter extends SoldierCreator{
   private val scale = 1.5f
   override protected lazy val width: Float = 100f / scale
   override protected lazy val height: Float = 75f / scale
-  private lazy val heightMin: Float = 20f /scale
+  private lazy val heightMin: Float = 20f / scale
 
   protected def collBody: CollisionBody =
     PolygonBody.trapezoidCollBody(height, heightMin, width)
@@ -55,6 +56,15 @@ object SoldierShooter extends SoldierCreator{
     obj.appendElement(new TurnToMovingDirection(turnTime))
     obj.appendElement(new MoveWhileAttacking(attackMovingMultiplier, attackStopMovingDist))
 
+  }
+
+  override val aiScore: AIScore = new AIScore {
+    override val attackLight: Float = 50
+    override val attackHeavy: Float = 30
+    override val light: Float = 0.75f
+    override val heavy: Float = 0.25f
+    override val priority: Float = 110f
+    override val string = "SoldierShooter"
   }
 
 }

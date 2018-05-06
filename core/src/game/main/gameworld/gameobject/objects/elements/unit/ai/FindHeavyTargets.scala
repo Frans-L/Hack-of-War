@@ -34,7 +34,8 @@ class FindHeavyTargets(findRange: Float) extends UnitElement {
 
     //if target exists, stop the object
     target.foreach(obj => {
-      if (!obj.canBeDeleted && parent.pos.dst2(obj.pos) <= range2) {
+      val blockingWall = parent.collHandler.collideLine(parent, parent.pos, obj.pos, parent.collHandler.mapFilter)
+      if (blockingWall.isEmpty && !obj.canBeDeleted && parent.pos.dst2(obj.pos) <= range2) {
         parent.movingForce ** 0
       } else target = None
     })

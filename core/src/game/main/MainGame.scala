@@ -71,7 +71,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () =
   players.last.enemies += players.head
 
   //sets the game timer
-  private val gameTimer: TimerSecond = new TimerSecond(125)
+  private val gameTimer: TimerSecond = new TimerSecond(120)
 
   //sets the ui
   private val gameUI: GameUI =
@@ -153,7 +153,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () =
 
     //checks if the game has the winner
     checkGameOver()
-    
+
   }
 
   /** Updates viewport when resolution changes. */

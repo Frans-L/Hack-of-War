@@ -5,9 +5,11 @@ import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.objects.elements.unit.ai._
 import game.main.gameworld.gameobject.objects.UnitObject
+import game.main.gameworld.gameobject.objects.UnitObject.AIScore
 import game.main.players.Player
 import game.main.unitcreators.SoldierCreator
 import game.main.unitcreators.bullet.BasicBullet
+
 
 object SoldierBasic extends SoldierCreator {
 
@@ -53,5 +55,14 @@ object SoldierBasic extends SoldierCreator {
     obj.appendElement(new TurnToMovingDirection(turnTime))
     obj.appendElement(new MoveWhileAttacking(attackMovingMultiplier, attackStopMovingDist))
 
+  }
+
+  override val aiScore: AIScore = new AIScore {
+    override val attackLight: Float = 40
+    override val attackHeavy: Float = 40
+    override val light: Float = 0.5f
+    override val heavy: Float = 0.5f
+    override val priority: Float = 45
+    override val string = "SoldierBasic"
   }
 }

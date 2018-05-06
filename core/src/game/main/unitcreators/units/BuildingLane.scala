@@ -5,6 +5,7 @@ import game.main.gameworld.collision.bodies.{CircleBody, CollisionBody}
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.objects.elements.unit.HealthBarElement
 import game.main.gameworld.gameobject.objects.UnitObject
+import game.main.gameworld.gameobject.objects.UnitObject.AIScore
 import game.main.gameworld.gameobject.objects.elements.unit.ai.{ShootAhead, TurnToTarget}
 import game.main.players.Player
 import game.main.unitcreators.bullet.BasicBullet
@@ -14,6 +15,7 @@ import game.main.unitcreators.{BuildingCreator, TurretCreator}
 object BuildingLane extends BuildingCreator {
 
   override val cost: Int = 10
+  override val aiScore: AIScore = UnitObject.AIScoreNone
 
   override protected lazy val texture: UnitTextures = GameTextures.Units.BuildingSmall
   override protected lazy val width: Float = 75f
@@ -24,7 +26,7 @@ object BuildingLane extends BuildingCreator {
   override protected def setStats(obj: UnitObject, owner: Player, path: Path): Unit = {
 
     obj.mass = 300
-    obj.health = 900
+    obj.health = 1000
     obj.static = true
 
     obj.appendElement(BuildingTurretSmall.create(owner, obj))

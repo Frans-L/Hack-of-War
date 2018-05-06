@@ -3,9 +3,10 @@ package game.main.unitcreators
 import com.badlogic.gdx.graphics.g2d.Sprite
 import game.loader.{GameTextures, UnitTextures}
 import game.main.gameworld.collision.bodies.{CollisionBody, PolygonBody}
-import game.main.gameworld.gameobject.{GameObject}
+import game.main.gameworld.gameobject.GameObject
 import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.ObjectHandler.Level
+import game.main.gameworld.gameobject.objects.UnitObject.AIScore
 import game.main.gameworld.gameobject.objects.elements.unit.{HealthBarElement, UnitTextureElement}
 import game.main.gameworld.gameobject.objects.elements.{IconTextureElement, ShadowElement, TextureElement}
 import game.main.gameworld.gameobject.objects.{IconObject, UnitObject}
@@ -18,6 +19,9 @@ trait UnitCreator {
   /** Cost of the unit */
   val cost: Int
 
+  /** Scoring for the AI */
+  val aiScore: AIScore
+
   /** Creates a new unit */
   def create(owner: Player,
              x: Float, y: Float,
@@ -28,7 +32,6 @@ trait UnitCreator {
 
   /** Returns the card icon of the unit */
   def cardIcon(owner: Player, cost: Int): GameObject
-
 
 }
 
@@ -50,8 +53,7 @@ object UnitCreator {
                  width: Float, height: Float,
                  update: Boolean = true): UnitObject = {
 
-    val obj = new UnitObject(owner.objectHandler.collHandler, collBody)
-    obj.owner = owner
+    val obj = new UnitObject(owner.objectHandler.collHandler, collBody, owner)
     obj.size.set(width, height)
     obj.origin.set(obj.size.x / 2f, obj.size.y / 2f)
     if (update) owner.objectHandler.addObject(obj, Level.ground, owner = owner)

@@ -12,7 +12,7 @@ import game.util.Vector2e._
 class Path(private var route: Seq[Vector2], var maxOffset: Float) {
 
   //make sure that path always exists
-  if (route == null || route.size <= 1) route = Seq(Vector2e(0, 0), Vector2e(0, 0))
+  if (route == null || route.size <= 1) route = Seq(Vector2e(0, 0), Vector2e(0, 0), Vector2e(0, 0))
 
   //how many points from the start are ignored when calculating offset
   val startPathLength = 2

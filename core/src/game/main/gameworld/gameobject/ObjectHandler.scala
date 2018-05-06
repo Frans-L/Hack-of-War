@@ -17,13 +17,11 @@ object ObjectHandler {
   object Level extends Enumeration {
     type Level = Value
 
-    val under: Value = Value(0)
-    val map: Value = Value(1)
-    val ground: Value = Value(2)
-    val high: Value = Value(3)
-    val top: Value = Value(4)
+    val map: Value = Value(0)
+    val ground: Value = Value(1)
+    val top: Value = Value(2)
 
-    val size: Int = 5
+    val size: Int = 3
   }
 
 }

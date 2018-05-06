@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, InputListener}
 import game.loader.GameTextures
 import game.main.gameworld.gameobject.GameObject
+import game.main.gameworld.gameobject.objects.UnitObject.AIScore
 import game.main.players.Player
 import game.main.ui.UICard
 
@@ -21,6 +22,7 @@ abstract class Card(owner: Player) {
 
   val icon: GameObject
   val cost: Int
+  val aiScore: AIScore
 
   var used = false
   var uiElement: Option[UICard] = None
@@ -64,13 +66,22 @@ abstract class Card(owner: Player) {
   }
 
   /** Tries to use the card */
-  private def use(x: Float, y: Float): Unit = {
+  def use(x: Float, y: Float): Unit = {
     if (usable(x, y)) {
+      if(uiElement.isEmpty) action(x, y) //if no UI element, act immediately
       uiElement.foreach(_.startUseAnim(x, y, () => action(x, y)))
     } else {
       uiElement.foreach(_.backToStart()) //back to start pos
       actionFailed(x, y)
     }
+  }
+
+  /** Tries to use the card even if it wouldn't be accepted.
+    * Useful when making AI. */
+  def forceUse(x: Float, y: Float): Unit = {
+    owner.useCard(this, x, y)
+    if(uiElement.isEmpty) forceAction(x, y) //if no UI element, act immediately
+    uiElement.foreach(_.startUseAnim(x, y, () => forceAction(x, y)))
   }
 
   /** The actions when the card is selected / drag is started. */
@@ -86,6 +97,12 @@ abstract class Card(owner: Player) {
 
   /** Card's action that is called when the card is used */
   protected def action(x: Float, y: Float): Unit = {
+    destroy()
+  }
+
+
+  /** Card's action that is called when the card is forced to be used */
+  protected def forceAction(x: Float, y: Float): Unit = {
     destroy()
   }
 

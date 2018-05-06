@@ -18,7 +18,7 @@ class AvoidObstacles(maxForceAvoid: Float, maxSeeAhead: Float) extends UnitEleme
     val obstacleFound = avoidObstacles(parent, 0, avoid)
 
     //if enough speed, try to look further away
-    if (!obstacleFound && parent.movingForce.len2() > parent.maxMovingForce / 100f) {
+    if (!obstacleFound && parent.movingForce.len2() > parent.maxMovingForce * parent.maxMovingForce / 10f) {
       avoidObstacles(parent, maxSeeAhead, avoid)
     }
 

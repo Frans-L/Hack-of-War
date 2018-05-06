@@ -8,6 +8,7 @@ import game.GameElement
 import game.loader.GameTextures
 import game.main.gameworld.collision.bodies
 import game.main.gameworld.collision.bodies.PolygonBody
+import game.main.gameworld.gamemap.Map.PathIndex
 import game.main.gameworld.gameobject
 import game.main.gameworld.gameobject.ObjectHandler.Level
 import game.main.gameworld.gameobject.objects.builders.{BorderSprite, CollisionObject}
@@ -26,6 +27,12 @@ object Map {
   val middleCorner: String = GameTextures.Units.mapMiddleCorner
 
   val pathPoint: String = GameTextures.Units.pathPoint
+
+  object PathIndex extends Enumeration {
+    type State = Value
+    val down: PathIndex.Value = Value(0)
+    val up: PathIndex.Value = Value(1)
+  }
 
 }
 

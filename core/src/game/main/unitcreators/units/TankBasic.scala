@@ -6,7 +6,7 @@ import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.GameObject
 import game.main.gameworld.gameobject.objects.elements.unit.ai._
 import game.main.gameworld.gameobject.objects.UnitObject
-import game.main.gameworld.gameobject.objects.elements.IconTextureElement
+import game.main.gameworld.gameobject.objects.UnitObject.AIScore
 import game.main.players.Player
 import game.main.unitcreators._
 import game.main.unitcreators.bullet.BasicBullet
@@ -27,19 +27,19 @@ object TankBasic extends SoldierCreator {
 
     //units stats
     obj.category = UnitObject.Category.tank
-    obj.mass = 750f
-    obj.friction = 0.4f
-    obj.health = 800f
-    obj.maxMovingForce = 25f / 1000f
+    obj.mass = 300f
+    obj.friction = 0.25f
+    obj.health = 600f
+    obj.maxMovingForce = 15f / 1000f
 
     //elements stats
-    val acceptPathPointDist = obj.collBody.getRadiusScaled * 2.5f
+    val acceptPathPointDist = obj.collBody.getRadiusScaled * 2.25f
     val steeringMass = 1000f
-    val acceleration = 12f / 1000f
-    val avoidForce = 10f / 1000f
+    val acceleration = 5f / 1000f
+    val avoidForce = 12f / 1000f
     val avoidDistance = obj.sWidth * 1.0f
     val turnSpeed = 300f
-    val stopNearBuildingDist = obj.collBody.getRadiusScaled * 5.0f
+    val stopNearBuildingDist = obj.collBody.getRadiusScaled * 4.75f
 
     //add elements
     obj.appendElement(new FollowPath(path, acceptPathPointDist))
@@ -63,6 +63,15 @@ object TankBasic extends SoldierCreator {
     icon
   }
 
+  override val aiScore: AIScore = new AIScore {
+    override val attackLight: Float = 45
+    override val attackHeavy: Float = 45
+    override val light: Float = 0f
+    override val heavy: Float = 1f
+    override val priority: Float = 105f
+    override val string = "TankBasic"
+  }
+
 }
 
 object TankTurretSmall extends TurretCreator {
@@ -74,8 +83,8 @@ object TankTurretSmall extends TurretCreator {
 
   override def setStats(turret: UnitObject, baseObj: UnitObject): Unit = {
     //element stats
-    val damage = 30f
-    val reloadTime = 600
+    val damage = 40f
+    val reloadTime = 800
     val turnSpeed = 350f
 
     val visionMinHeight = baseObj.sHeight * 2f

@@ -32,6 +32,7 @@ trait SoldierCreator extends UnitCreator {
     val correctPath = UnitCreator.findPath(obj, path, x, y, extraOffset)
     setStats(obj, owner, correctPath) //sets all the stats
 
+    obj.aiScore = aiScore //add aiScoring
     obj.appendElement(new HealthBarElement(obj.health)) //add healthBar
     obj.update()
 

@@ -4,11 +4,12 @@ import com.badlogic.gdx.math.Vector2
 import game.main.gameworld.collision
 import game.main.gameworld.collision.CollisionHandler
 import game.main.gameworld.collision.bodies.CollisionBody
+import game.main.gameworld.gameobject.objects.UnitObject.{AIScore, AIScoreNone}
 import game.main.gameworld.gameobject.objects.UnitObject.State.Value
 import game.main.players.Player
 import game.util.Vector2e
 
-object UnitObject{
+object UnitObject {
 
   val noHitTick: Long = -1
 
@@ -22,14 +23,35 @@ object UnitObject{
     type State = Value
     val none, soldier, tank, building = Value
   }
+
+  /** How AI determines which unit to use. */
+  abstract class AIScore {
+    val attackLight: Float //0-100
+    val attackHeavy: Float //0-100
+    val light: Float //0-1
+    val heavy: Float //0-1
+    val priority: Float // > 0
+
+    val string: String //easier printing
+    override def toString: String = string
+  }
+
+  val AIScoreNone: AIScore = new AIScore {
+    override val priority: Float = 0
+    override val attackLight: Float = 0
+    override val heavy: Float = 0
+    override val light: Float = 0
+    override val attackHeavy: Float = 0
+    override val string = "None"
+  }
 }
 
-class UnitObject(physWorld: CollisionHandler, collBody: CollisionBody) extends PhysicsObject(physWorld, collBody)
-{
+class UnitObject(physWorld: CollisionHandler, collBody: CollisionBody, var owner: Player) extends PhysicsObject(physWorld, collBody) {
 
-  var owner: Player = _
+   //is set by unitCreators
   var category: UnitObject.Category.Value = UnitObject.Category.none
   var state: UnitObject.State.Value = UnitObject.State.normal
+  var aiScore: AIScore = AIScoreNone
 
   //movement stats
   var maxMovingForce: Float = 0.033f
@@ -37,7 +59,7 @@ class UnitObject(physWorld: CollisionHandler, collBody: CollisionBody) extends P
   val moveTarget: Vector2 = Vector2e(0f, 0f)
 
   //basic stats & shooting
-  var health: Float = _
+  var health: Float = 100
   var lastHitTick: Long = UnitObject.noHitTick //no hit
 
   override def update(): Unit = {

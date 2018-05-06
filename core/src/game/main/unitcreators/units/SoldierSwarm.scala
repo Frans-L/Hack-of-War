@@ -6,6 +6,7 @@ import game.main.gameworld.gamemap.Path
 import game.main.gameworld.gameobject.GameObject
 import game.main.gameworld.gameobject.objects.elements.unit.ai._
 import game.main.gameworld.gameobject.objects.UnitObject
+import game.main.gameworld.gameobject.objects.UnitObject.AIScore
 import game.main.players.Player
 import game.main.unitcreators.bullet.BasicBullet
 import game.main.unitcreators.{SoldierCreator, UnitCreator}
@@ -88,6 +89,15 @@ trait SoldierSwarm extends SoldierCreator {
 
   override def cardIcon(owner: Player, cost: Int): GameObject = {
     UnitCreator.defaultCardIcon(texture, width, height, owner, cost, unitAmount)
+  }
+
+  override val aiScore: AIScore = new AIScore {
+    override val attackLight: Float = 30
+    override val attackHeavy: Float = 40
+    override val light: Float = 1f
+    override val heavy: Float = 0
+    override val priority: Float = 25f
+    override val string = "SoldierSwarm"
   }
 
 }
