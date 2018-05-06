@@ -1,12 +1,13 @@
 # Hack of War
 
 ## Description
-Tower rush mobile game made with Scala and libGDX. Inspired by Clash of Royale. Started 26.2.2018
+Tower rush mobile game made with Scala and libGDX. Inspired by Clash of Royale. 
+School project: 26.2.2018 - 6.5.2018
 
-Concept Art:
+Screenshot:
 
 <p align="center">
-  <img src="https://github.com/Frans-L/hack-of-war/blob/master/concept/ConceptArt1.png?raw=true" alt="Concept image"/>
+  <img src="https://github.com/Frans-L/hack-of-war/blob/master/concept/screenshot.png?raw=true" alt="Concept image"/>
 </p>
 
 ## Libraries
