@@ -83,8 +83,8 @@ object TankTurretSmall extends TurretCreator {
 
   override def setStats(turret: UnitObject, baseObj: UnitObject): Unit = {
     //element stats
-    val damage = 65f
-    val reloadTime = 1200
+    val damage = 55f
+    val reloadTime = 900
     val turnSpeed = 350f
 
     val visionMinHeight = baseObj.sHeight * 2f

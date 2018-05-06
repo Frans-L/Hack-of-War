@@ -32,7 +32,7 @@ object MainGame {
 class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () => Unit) extends Screen {
 
   //sets the default ticker => everything should be time dependent
-  private val ticker = new Ticker(TimeUtils.millis())
+  private val ticker = new Ticker(TimeUtils.millis()).stop()
   Ticker.defaultTicker = ticker //to future gameElements
   ticker.speed = 1f
 
@@ -71,7 +71,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () =
   players.last.enemies += players.head
 
   //sets the game timer
-  private val gameTimer: TimerSecond = new TimerSecond(120)
+  private val gameTimer: ProgressTimer = new ProgressTimer(120*1000).reverse().reset()
 
   //sets the ui
   private val gameUI: GameUI =
@@ -80,6 +80,7 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () =
   private val fPSLogger: FPSLogger = new FPSLogger
   private val backgroundColor = Color.valueOf("#44535e")
 
+  gameUI.showStartSplashScreen(() => ticker.reset(TimeUtils.millis()).run())
 
   /**
     * Called each frame by libGDX => main loop
@@ -145,7 +146,6 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () =
     if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
       gameUI.showEndSplashScreen("RESIGNED", endGame)
 
-
     cam.update()
     players.foreach(_.update())
     objectHandler.update()
@@ -176,14 +176,14 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () =
       if (winner == players.head) gameUI.showEndSplashScreen("VICTORY", endGame)
       else gameUI.showEndSplashScreen("DEFEAT", endGame)
     })
-    if (winner.isEmpty && gameTimer.isOver) gameUI.showEndSplashScreen("DRAW", endGame)
+    if (winner.isEmpty && gameTimer.isZero) gameUI.showEndSplashScreen("DRAW", endGame)
   }
 
   /** Returns the winner if it exists. */
   private def hasWinner: Option[Player] = {
-    if (players.head.score <= 0 || (gameTimer.isOver && players.last.score > players.head.score))
+    if (players.head.score <= 0 || (gameTimer.isZero && players.last.score > players.head.score))
       Some(players.last)
-    else if (players.last.score <= 0 || (gameTimer.isOver && players.head.score > players.last.score))
+    else if (players.last.score <= 0 || (gameTimer.isZero && players.head.score > players.last.score))
       Some(players.head)
     else None
   }
@@ -205,20 +205,13 @@ class MainGame(textures: GameTextures, screenDim: Dimensions, returnAction: () =
   def updateDebug(): Unit = {
     def target = MainGame.debugViewPort.unproject(Vector2e(Gdx.input.getX, Gdx.input.getY))
 
-    if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+    if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && MainGame.drawCollBox) {
       if (!debugSpacePressed) {
-        BasicBullet.create(players.head, objectHandler,
-          target, 0,
-          players.last.colorIndex, 30)
-        BasicBullet.create(players.head, objectHandler,
-          target, 90,
-          players.last.colorIndex, 30)
-        BasicBullet.create(players.head, objectHandler,
-          target, 180,
-          players.last.colorIndex, 30)
-        BasicBullet.create(players.head, objectHandler,
-          target,  270,
-          players.last.colorIndex, 30)
+        for(i <- 0 until 8){
+          BasicBullet.create(players.head, objectHandler,
+            target, i*45,
+            players.last.colorIndex, 30)
+        }
       }
       debugSpacePressed = true
     } else debugSpacePressed = false

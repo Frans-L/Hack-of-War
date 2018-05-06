@@ -7,7 +7,7 @@ import game.loader.GameTextures
 import game.main.gameworld.gameobject
 import game.main.gameworld.gameobject.objects.UnitObject
 import game.main.gameworld.gameobject.{GameObject, objects}
-import game.util.{CountdownTimer, Vector2e}
+import game.util.{ProgressTimer, Vector2e}
 
 class HealthBarElement(maxHealth: Float, showTime: Int = Int.MaxValue) extends UnitElement {
 
@@ -28,7 +28,7 @@ class HealthBarElement(maxHealth: Float, showTime: Int = Int.MaxValue) extends U
   bar.setSize(size.x, size.y)
   fill.setSize(size.x - margin.x * 2, size.y - margin.y * 2)
 
-  private val animTimer = new CountdownTimer(250).stop()
+  private val animTimer = new ProgressTimer(250).stop()
 
   override def update(p: GameObject, delta: Int): Unit = {
     val parent = p.asInstanceOf[objects.UnitObject]

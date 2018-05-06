@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Interpolation
 import game.GameElement
-import game.util.CountdownTimer
+import game.util.ProgressTimer
 
 /** Holds a path, and an icon. */
 class IconPath(private var pathOrg: Path, val icon: Sprite) extends GameElement {
@@ -14,7 +14,7 @@ class IconPath(private var pathOrg: Path, val icon: Sprite) extends GameElement 
   private var offset: Float = 0
 
   //how to draw icons info
-  val drawTimer: CountdownTimer = new CountdownTimer(500)
+  val drawTimer: ProgressTimer = new ProgressTimer(500)
   var movingSpeed: Float = 150f / 1000f
   var startPos: Float = 0f
 
@@ -51,7 +51,7 @@ class IconPath(private var pathOrg: Path, val icon: Sprite) extends GameElement 
 
   /** Draws the path if the time is still running */
   override def draw(batch: Batch): Unit = {
-    if (drawTimer.isOnReversed) {
+    if (!drawTimer.isZero) {
       icon.setAlpha(orginalAlpha * Interpolation.fade(drawTimer.progress))
       path.draw(batch, icon, iconGap, startPos)
       icon.setAlpha(orginalAlpha)

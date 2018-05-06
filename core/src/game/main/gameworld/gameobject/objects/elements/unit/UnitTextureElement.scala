@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Interpolation
 import game.main.gameworld.gameobject.{GameObject, objects}
 import game.main.gameworld.gameobject.objects.elements.TextureElement
 import game.main.gameworld.gameobject.objects.UnitObject
-import game.util.CountdownTimer
+import game.util.ProgressTimer
 
 class UnitTextureElement(texture: TextureRegion, brightness: Float, hitAnimTime: Int = 250)
   extends TextureElement(texture, brightness) with UnitElement {
@@ -15,7 +15,7 @@ class UnitTextureElement(texture: TextureRegion, brightness: Float, hitAnimTime:
   val normalColor: Color = color.cpy()
   val hitColor: Color = color.cpy().add(1, 1, 1, 0f)
 
-  private val animTimer = new CountdownTimer(hitAnimTime).stop()
+  private val animTimer = new ProgressTimer(hitAnimTime).stop()
   private var lastHitTick: Long = UnitObject.noHitTick
 
   override def update(p: GameObject, delta: Int): Unit = {

@@ -8,7 +8,7 @@ import game.loader.GameTextures
 
 
 /** Temporary splash screen for testing purposes... */
-class EndSplashScreen(resultText: String, width: Float, height: Float, endAction: () => Unit) extends Actor {
+class SplashScreen(resultText: String, width: Float, height: Float, endAction: () => Unit) extends Actor {
 
   this.setBounds(-width / 2, -height / 2, width, height)
 
@@ -30,6 +30,7 @@ class EndSplashScreen(resultText: String, width: Float, height: Float, endAction
 
     override def touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Unit = {
       endAction()
+      SplashScreen.this.remove() //remove itself
     }
   })
 

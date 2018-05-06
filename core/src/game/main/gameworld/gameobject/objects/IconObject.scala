@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Interpolation
 import game.main.gameworld.gameobject.GameObject
 import game.main.gameworld.gameobject.objects.elements.RelativeTextureElement
 import game.main.players.Player
-import game.util.CountdownTimer
+import game.util.ProgressTimer
 
 /** Updates the color whether player has enough mana or not.*/
 class IconObject(var owner: Player, var cost: Int) extends GameObject {
@@ -17,7 +17,7 @@ class IconObject(var owner: Player, var cost: Int) extends GameObject {
   val inactiveColor: Color = new Color(brightness, brightness, brightness, 0.3f)
 
   val color: Color = new Color(1f, 1f, 1f, 1f)
-  val animTimer: CountdownTimer = new CountdownTimer(400).stop()
+  val animTimer: ProgressTimer = new ProgressTimer(400).stop()
 
   override def update(): Unit = {
     if (owner.mana >= cost) animTimer.forward().start()

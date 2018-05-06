@@ -25,7 +25,7 @@ object BuildingMain extends BuildingCreator {
   override protected def setStats(obj: UnitObject, owner: Player, path: Path): Unit = {
 
     obj.mass = 300
-    obj.health = 1500
+    obj.health = 1250
     obj.static = true
 
     obj.appendElement(BuildingTurretMain.create(owner, obj))
@@ -47,7 +47,7 @@ object BuildingTurretMain extends TurretCreator {
 
   override def setStats(turret: UnitObject, baseObj: UnitObject): Unit = {
     //element stats
-    val damage = 20f
+    val damage = 15f
     val reloadTime = 300
     val turnSpeed = 350f
     val visionMaxDist = baseObj.sWidth * 4.25f

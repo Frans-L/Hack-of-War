@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.{Batch, BitmapFont, GlyphLayout}
 import com.badlogic.gdx.scenes.scene2d.Actor
 import game.loader.GameTextures
-import game.util.TimerSecond
+import game.util.ProgressTimer
 
-class UITimer(timer: TimerSecond) extends Actor {
+class UITimer(timer: ProgressTimer) extends Actor {
 
   private val font: BitmapFont = GameTextures.defaultUI.Fonts.normal
   private val textLayout: GlyphLayout = new GlyphLayout()

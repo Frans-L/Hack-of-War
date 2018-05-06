@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.viewport.{ExtendViewport, Viewport}
 import game.loader.GameTextures
 import game.GameElement
 import game.main.players.Player
-import game.util.{Dimensions, TimerSecond}
+import game.util.{ProgressTimer, Dimensions}
 
 
 /**
@@ -18,7 +18,7 @@ import game.util.{Dimensions, TimerSecond}
   */
 class GameUI(dimensions: Dimensions, viewport: Viewport,
              player: Player, shapeRenderer: ShapeRenderer,
-             gameTimer: TimerSecond) extends GameElement {
+             gameTimer: ProgressTimer) extends GameElement {
 
   private val stage: Stage = new Stage(viewport)
   private val manaBar: ManaBar = new ManaBar(player)
@@ -88,14 +88,21 @@ class GameUI(dimensions: Dimensions, viewport: Viewport,
   }
 
 
+  /** Shows the start splash screen */
+  def showStartSplashScreen(action: () => Unit): Unit = {
+    val splashScreen: SplashScreen =
+      new SplashScreen("READY?", dimensions.maxWidth, dimensions.maxHeight, action)
+    stage.addActor(splashScreen)
+  }
+
   //temporary solution
   private var endScreenOn: Boolean = false
 
   /** Shows the end splash screen. */
   def showEndSplashScreen(result: String, endAction: () => Unit): Unit = {
     if (!endScreenOn) {
-      val splashScreen: EndSplashScreen =
-        new EndSplashScreen(result, dimensions.maxWidth, dimensions.maxHeight, endAction)
+      val splashScreen: SplashScreen =
+        new SplashScreen(result, dimensions.maxWidth, dimensions.maxHeight, endAction)
       stage.addActor(splashScreen)
     }
     endScreenOn = true

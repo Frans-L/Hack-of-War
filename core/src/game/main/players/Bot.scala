@@ -34,7 +34,7 @@ class Bot(objectHandler: ObjectHandler, override val colorIndex: Int) extends
   override def update(): Unit = {
     super.update()
 
-    if (Ticker.defaultTicker.interval2) {
+    if (ticker.interval2) {
       val units = objectHandler.updateObjects(ObjectHandler.Level.ground.id)
       val enemies =
         units.filter(u => u.isInstanceOf[UnitObject] && this.enemies.contains(u.asInstanceOf[UnitObject].owner))
@@ -75,11 +75,10 @@ class Bot(objectHandler: ObjectHandler, override val colorIndex: Int) extends
           handScored = handScored.filter(s => s._1.cost <= mana && !s._1.used)
         }
       }
-
+      
       //Debug printing
       Gdx.app.log("BOT", "Mana: " + mana + " Priority: " + priority)
-      Gdx.app.log("Bot", "Hand: " + hand.map(c => c.aiScore.toString))
-
+      Gdx.app.log("BOT", "Hand: " + hand.map(c => c.aiScore.toString))
     }
 
   }
