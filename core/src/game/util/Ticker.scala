@@ -5,7 +5,7 @@ object Ticker {
 
   //null value at start =>
   //errors will appear when game starts, if this not set to be something
-  var defaultTicker: Ticker = _
+  var defaultTicker: Ticker = new Ticker(0)
 
 }
 

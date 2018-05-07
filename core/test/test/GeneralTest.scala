@@ -2,10 +2,13 @@ package test
 
 import com.badlogic.gdx.math.Intersector.MinimumTranslationVector
 import com.badlogic.gdx.math.{Intersector, Polygon}
+import game.loader.GameTextures
 import game.main.gameworld.collision.bodies
+import game.main.gameworld.gameobject.GameObject
+import game.main.gameworld.gameobject.objects.elements.BulletCollision
+import game.util.{Ticker, Vector2e}
 import org.junit.Test
 import org.junit.Assert._
-import game.main.physics.collision._
 
 
 class GeneralTest extends GameTest {
@@ -71,7 +74,7 @@ class GeneralTest extends GameTest {
   /** Polygon intersects Polygon */
   @Test def polygonOverLapsPolygon2() {
     val p = new bodies.PolygonBody(Array(0, 0, 10, 0, 10, 10, 0, 10), 2)
-    val o = new bodies.PolygonBody(Array(0, 0, 3, 3/2f, 0, 3), 2)
+    val o = new bodies.PolygonBody(Array(0, 0, 3, 3 / 2f, 0, 3), 2)
 
     val mtv = new MinimumTranslationVector()
     val mtv2 = new MinimumTranslationVector()
@@ -81,6 +84,58 @@ class GeneralTest extends GameTest {
     assertEquals(true, o.overlaps(p, mtv))
     assertEquals(5, mtv.depth, 0.1f)
 
+  }
+
+  /** Should be able to chain objects */
+  @Test def gameObjectElementTest() {
+
+    val a = new GameObject()
+    val b = new GameObject()
+    val c = new GameObject()
+    b.appendElement(c)
+    a.prependElement(b)
+    a.pos.set(5, 5)
+    b.pos.set(2, 2)
+    c.pos.set(1, 1)
+    a.update()
+
+    assertEquals(c.pos.x, 1, 0.01f)
+    assertEquals(c.pos.y, 1, 0.01f)
+
+
+  }
+
+  /** Shouldn't be able to chain wrong elements. */
+  @Test def gameObjectElementTest2() {
+
+    val a = new GameObject()
+    val b = new GameObject()
+    val c = new GameObject()
+    b.appendElement(c)
+    a.prependElement(b)
+    a.update()
+
+    try {
+      c.appendElement(BulletCollision)
+      a.update()
+      assert(false)
+    } catch {
+      case e: IllegalArgumentException => assert(true)
+      case _: Throwable => assert(false)
+    }
+
+
+  }
+
+  /** Should work with implicit methods */
+  @Test def vector2e(): Unit = {
+    import game.util.Vector2e._
+
+    val v = Vector2e(10, 10)
+    v ** 10 / 2 -- Vector2e(30, 25)
+
+    assertEquals(v.width, 20, 0.01f)
+    assertEquals(v.height, 25, 0.01f)
   }
 
 }
