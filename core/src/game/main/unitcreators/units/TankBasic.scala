@@ -61,7 +61,6 @@ object TankBasic extends SoldierCreator {
     val building = UnitCreator.defaultCardIcon(texture, width, height, owner, cost)
     building.pos.set(0, 0)
     icon.prependElement(building)
-    Gdx.app.log("TankBasic", "icon")
     icon
   }
 
