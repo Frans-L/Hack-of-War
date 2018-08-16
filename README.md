@@ -1,7 +1,7 @@
 # Hack of War
 
 ## Description
-A tower-rush mobile game made with ScalaX. Inspired by Clash of Royale.
+A tower-rush mobile game made with Scala. Inspired by Clash of Royale.
 
 The player tries to destroy the base of the enemy while keeping own base secured. The player can summon units by dragging cards into to the field. The units move and fight automatically, so players can focus on strategical decision. 
 
