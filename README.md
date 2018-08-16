@@ -13,7 +13,7 @@ Gameplay:
 
 ## Features
 
-The game has a own game engine. The engine has custom e.g collision and object engine and crowd pathfinding. Simply, the reason why the game doesn't use premade collision or object engines was just to learn more :)
+The game has its own game engine. The engine has custom e.g collision and object engine and crowd pathfinding.
 
 Here is a clip from the crowd pathfinding:
 
@@ -24,7 +24,7 @@ Here is a clip from the crowd pathfinding:
 The object engine is compltelty modular. So, even the AI of an unit is built modularly:
 
 <p align="center">
-  <img src="https://github.com/Frans-L/hack-of-war/blob/master/concept/modular.png?raw=true" alt=" Screenshot From Modularity"/>
+  <img src="https://github.com/Frans-L/hack-of-war/blob/master/concept/modular.PNG?raw=true" alt=" Screenshot From Modularity"/>
 </p>
 
 ## State
