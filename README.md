@@ -3,7 +3,7 @@
 ## Description
 A tower-rush mobile game made with Scala and libGDX. Inspired by Clash of Royale.
 
-The player tries to destroy the base of the enemy while keeping own base secured. The player can summon units by dragging cards into to the field. The units move and fight automatically, so the player is only able to control when and which units should be summoned on the field. 
+The player tries to destroy the base of the enemy while keeping own base secured. The player can summon units by dragging cards into to the field. The units move and fight automatically, so the player is only able to control when and which units should be summoned. 
 
 Screenshot:
 
