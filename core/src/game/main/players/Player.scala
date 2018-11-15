@@ -19,7 +19,7 @@ import scala.reflect.ClassTag
 object Player {
 
   val maxMana: Float = 100f
-  val manaSpeed: Float = 5f / 1000f
+  val manaSpeed: Float = 15f / 1000f
 
 }
 
@@ -64,13 +64,13 @@ abstract class Player(val objectHandler: ObjectHandler, index: Int)
 
     //add cards to deck
     val basicAmount = 3
-    val swarm1Amount, swarm3Amount, swarm5Amount = 1
+    val swarm3Amount, swarm5Amount, swarm6Amount = 1
     val tankAmount, shooterAmount = 2
 
     for (i <- 0 until basicAmount) deck += new UnitCard(this, SoldierBasic)
-    for (i <- 0 until swarm1Amount) deck += new UnitCard(this, SoldierSwarm1)
     for (i <- 0 until swarm3Amount) deck += new UnitCard(this, SoldierSwarm3)
     for (i <- 0 until swarm5Amount) deck += new UnitCard(this, SoldierSwarm5)
+    for (i <- 0 until swarm5Amount+3) deck += new UnitCard(this, SoldierSwarm6)
     for (i <- 0 until tankAmount) deck += new UnitCard(this, TankBasic)
     for (i <- 0 until shooterAmount) deck += new UnitCard(this, SoldierShooter)
 

@@ -11,25 +11,25 @@ import game.main.players.Player
 import game.main.unitcreators.bullet.BasicBullet
 import game.main.unitcreators.{SoldierCreator, UnitCreator}
 
-object SoldierSwarm1 extends SoldierSwarm {
-
-  /** Cost of the unit */
-  override val cost: Int = 10
-  override val unitAmount: Int = 1
-}
-
-
 object SoldierSwarm3 extends SoldierSwarm {
 
   /** Cost of the unit */
-  override val cost: Int = 30
+  override val cost: Int = 20
   override val unitAmount: Int = 3
 }
 
+
 object SoldierSwarm5 extends SoldierSwarm {
 
-  override val cost: Int = 50
+  /** Cost of the unit */
+  override val cost: Int = 30
   override val unitAmount: Int = 5
+}
+
+object SoldierSwarm6 extends SoldierSwarm {
+
+  override val cost: Int = 40
+  override val unitAmount: Int = 6
 }
 
 trait SoldierSwarm extends SoldierCreator {
@@ -60,13 +60,13 @@ trait SoldierSwarm extends SoldierCreator {
     obj.mass = 50f
     obj.friction = 0.25f
     obj.health = 50f
-    obj.maxMovingForce = 40f / 1000f
+    obj.maxMovingForce = 70f / 1000f
 
     //elements stats
     val damage = 30f
     val reloadTime = 200
     val steeringMass = 75f
-    val acceleration = 10f / 1000f
+    val acceleration = 13f / 1000f
 
     val acceptPathPointDist = obj.collBody.getRadiusScaled * 1.5f
     val avoidForce = 40f / 1000f
@@ -78,7 +78,7 @@ trait SoldierSwarm extends SoldierCreator {
     val attackMovingMultiplier = 0.9f
     val attackStopMovingDist = visionMaxDist / 1.1f
 
-    //add elements
+    //add ai elements
     obj.appendElement(new FollowPath(path, acceptPathPointDist))
     obj.appendElement(new ShootAhead(attackVision, damage, reloadTime, BasicBullet))
     obj.appendElement(new Steering(steeringMass, acceleration))

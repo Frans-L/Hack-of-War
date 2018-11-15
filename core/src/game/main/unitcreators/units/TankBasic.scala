@@ -31,12 +31,12 @@ object TankBasic extends SoldierCreator {
     obj.mass = 300f
     obj.friction = 0.25f
     obj.health = 600f
-    obj.maxMovingForce = 20f / 1000f
+    obj.maxMovingForce = 40f / 1000f
 
     //elements stats
     val acceptPathPointDist = obj.collBody.getRadiusScaled * 2.25f
     val steeringMass = 1000f
-    val acceleration = 6f / 1000f
+    val acceleration = 8f / 1000f
     val avoidForce = 18f / 1000f
     val avoidDistance = obj.sWidth * 1.0f
     val turnSpeed = 300f
